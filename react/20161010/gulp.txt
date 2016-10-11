@@ -1,0 +1,95 @@
+// 载入外挂
+var gulp = require('gulp'),
+  browserify = require('browserify'), //这里用不上，管理js依赖的
+  source = require('vinyl-source-stream'), //同样这里用不上，和上面那个一起的
+  uglify = require('gulp-uglify'), //混淆js
+  clean = require('gulp-clean'), //清理文件
+  notify = require('gulp-notify'), //加控制台文字描述用的
+  buffer = require('vinyl-buffer'),
+  less = require('gulp-less'), //转换less用的
+  autoprefixer = require('gulp-autoprefixer'), //增加私有变量前缀
+  minifycss = require('gulp-minify-css'), //压缩
+  concat = require('gulp-concat'), //合并
+  fileinclude = require('gulp-file-include'), // include 文件用
+  template = require('gulp-template'), //替换变量以及动态html用
+  rename = require('gulp-rename'), //重命名
+  webserver = require('gulp-webserver'), //一个简单的server，用python的SimpleHttpServer会锁文件夹
+  imagemin = require('gulp-imagemin'), //图片压缩
+  gulpif = require('gulp-if'), //if判断，用来区别生产环境还是开发环境的
+  rev = require('gulp-rev'), //加MD5后缀
+  revReplace = require('gulp-rev-replace'), //替换引用的加了md5后缀的文件名，修改过，用来加cdn前缀
+  addsrc = require('gulp-add-src'), //pipeline中途添加文件夹，这里没有用到
+  del = require('del'), //也是个删除··· 
+  vinylPaths = require('vinyl-paths'), //操作pipe中文件路径的，加md5的时候用到了
+  runSequence = require('run-sequence'); //控制task顺序
+
+
+
+
+
+var gulp = require('gulp'),
+    gulpif = require('gulp-if'),
+    del = require('del'),
+    runSequence = require('run-sequence'),
+    connect = require('gulp-connect'),
+    uglify = require('gulp-uglify'),
+    minifyHtml = require('gulp-minify-html'),
+    minifyCss = require('gulp-minify-css');
+
+
+console.log(process.argv.slice(2));
+var argv = process.argv.slice(2)[0] === 'build' ? true : false;
+
+console.dir(argv);
+
+gulp.task('webserver', function() {
+  connect.server({
+    livereload: true,
+    port: 3000
+  });
+});
+
+//del(['dist']).then(paths => {
+//    console.log('Deleted files and folders:\n', paths.join('\n'));
+//});
+
+gulp.task('clean',function(){
+    del(['dist']);
+});
+
+gulp.task('js', function() {
+  gulp.src('src/js/*.js')
+      .pipe(gulpif(argv, uglify()))
+      .pipe(gulp.dest('dist/js'));
+});
+
+gulp.task('css', function() {
+    gulp.src('src/css/*.css')
+        .pipe(gulpif(argv, minifyCss()))
+        .pipe(gulp.dest('dist/css'));
+});
+
+gulp.task('h5', function() {
+    gulp.src('src/*.html')
+        .pipe(gulpif(argv, minifyHtml()))
+        .pipe(gulp.dest('dist'));
+});
+
+gulp.task('img', function() {
+    gulp.src(['src/img/*'])
+        .pipe(gulp.dest('dist/img'));
+});
+
+gulp.task('auto', function() {
+  gulp.watch('js/*.js', ['script']);
+  //gulp.watch('sass/**/*.scss', ['sass']);
+});
+
+gulp.task('default', function(){
+    runSequence('clean','webserver','js','css','h5','img','auto');
+});
+
+
+gulp.task('build', function(){
+    runSequence('clean','js','css','h5','img');
+});
