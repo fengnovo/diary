@@ -1,0 +1,31 @@
+{
+  "name": "runoob-react-test",
+  "version": "1.0.0",
+  "description": "根据菜鸟学习react",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --progress --colors --hot --inline -d ",
+    "build": "NODE_ENV=production webpack --progress --colors -p"
+  },
+  "author": "fengnovo",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "^6.14.0",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1"
+  },
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "css-loader": "^0.25.0",
+    "file-loader": "^0.9.0",
+    "node-sass": "^3.10.0",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.15.1"
+  }
+}
