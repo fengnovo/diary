@@ -1,0 +1,14 @@
+{
+  "name": "test1",
+  "version": "1.0.0",
+  "description": "gulp task",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "fengnovo",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
