@@ -1,4 +1,5 @@
 $(function(){
+	var buildUrl = 'https://raw.githubusercontent.com/fengnovo/diary/master/plugins-test/iscroll/ajax-json/';
 	var myScroll,
 		pullDownEl, pullDownOffset,
 		pullUpEl, pullUpOffset;
@@ -31,7 +32,7 @@ $(function(){
 	}
 
 	var loadData = function(){
-		url = 'http://10.2.130.20:9000/list/live/column/57e1f9204cb4c19258cf1f7d?page=1&pageSize=10';
+		url = buildUrl+'1.json';
 		$.ajax({        //资讯详情接口
             url: url,
             type: 'GET',
@@ -63,7 +64,7 @@ $(function(){
 	function pullDownAction () {
 		if(canPullDown) {
 			canPullDown = false;//57e1f9204cb4c19258cf1f7d
-			url = 'http://10.2.130.20:9000/list/live/column/57e1f9204cb4c19258cf1f7d?page=1&pageSize=10';
+			url = buildUrl+'1.json';
 			$.ajax({        //资讯详情接口
 	            url: url,
 	            type: 'GET',
@@ -92,7 +93,7 @@ $(function(){
 	function pullUpAction () {
 		if(canLoad){
 			canLoad = false;
-			url = 'http://10.2.130.20:9000/list/live/column/57e1f9204cb4c19258cf1f7d?page='+page+'&pageSize=10';
+			url = buildUrl+page+'.json';
 			$.ajax({        //资讯详情接口
 	            url: url,
 	            type: 'GET',

@@ -29,13 +29,12 @@ var AUTO_PREFIXER_RULES = [
 
 gulp.task('browser-sync', function () {
     var proxyMiddleware = require('http-proxy-middleware');
-    var proxy1 = proxyMiddleware('/list', {target: 'http://10.2.130.20:9000/'});
-    var proxy2 = proxyMiddleware('/action', {target: 'http://10.2.130.20:9000/'});
-    var proxy3 = proxyMiddleware('/read', {target: 'http://10.2.130.20:9000/'});
+    var proxy1 = proxyMiddleware('https://raw.githubusercontent.com/fengnovo/diary/master/plugins-test/iscroll/ajax-json',
+        {target: 'https://raw.githubusercontent.com/fengnovo/diary/master/plugins-test/iscroll/ajax-json/'});
     browserSync.init({
         server: {
             baseDir: DIST_DIR,
-            middleware: [historyApiFallback(), proxy1,proxy2,proxy3]
+            middleware: [historyApiFallback(), proxy1]
         }
     });
 });
