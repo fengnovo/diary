@@ -1,9 +1,10 @@
 # iscroll练习  
 工作中经常用到iscroll，在这里做个记录的demo  
-＃ development && 运行  
+
+# development && 运行  
 ```
 npm install  
-gulp  
+gulp 或者 npm start 
 ```  
 打开src的index.html
 **因为访问Github上的json数据，所以会比较慢  
@@ -23,4 +24,14 @@ gulp.task('browser-sync', function () {
         }
     });
 });  
+```  
 ```
+if((this.y < this.maxScrollY) && (this.pointY < 1)){
+  	this.scrollTo(0, this.maxScrollY, 400);
+  	return;
+} else if (this.y > 0 && (this.pointY > window.innerHeight - 1)) {
+  	this.scrollTo(0, 0, 400);
+  	return;
+}
+```
+这是为决解iscroll在ios滑动到边缘无法回弹的问题

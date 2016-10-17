@@ -1,19 +1,13 @@
 {
-  "name": "runoob-react-test",
+  "name": "iscroll",
   "version": "1.0.0",
-  "description": "资讯",
+  "description": "iscroll demo",
   "main": "main.js",
   "scripts": {
     "start": "gulp clean && gulp",
-    "pub": "gulp build --pub"
   },
   "author": "fengnovo",
   "license": "ISC",
-  "dependencies": {
-    "n-zepto": "^1.2.0",
-    "react": "^15.3.1",
-    "react-dom": "^15.3.1"
-  },
   "devDependencies": {
     "del": "^2.2.2",
     "browser-sync": "^2.14.0",

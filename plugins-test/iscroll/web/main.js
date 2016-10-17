@@ -11,11 +11,11 @@ $(function(){
 	function returnHtml(list){
 		Date.prototype.Format = function (fmt) { //author: meizz
 			var o = {
-				"M+": this.getMonth() + 1, //月份
-				"d+": this.getDate(), //日
-				"h+": this.getHours(), //小时
-				"m+": this.getMinutes(), //分
-				"s+": this.getSeconds(), //秒
+				"M+": this.getMonth() + 1, 	//月份
+				"d+": this.getDate(), 		//日
+				"h+": this.getHours(), 		//小时
+				"m+": this.getMinutes(), 	//分
+				"s+": this.getSeconds(), 	//秒
 				"q+": Math.floor((this.getMonth() + 3) / 3), //季度
 				"S": this.getMilliseconds() //毫秒
 			};
@@ -33,7 +33,7 @@ $(function(){
 
 	var loadData = function(){
 		url = buildUrl+'1.json';
-		$.ajax({        //资讯详情接口
+		$.ajax({        
             url: url,
             type: 'GET',
             dataType: "json",
@@ -58,14 +58,13 @@ $(function(){
 
 
 	/**
-	 * 下拉刷新 （自定义实现此方法）
-	 * myScroll.refresh();		// 数据加载完成后，调用界面更新方法
+	 * 下拉刷新数据
 	 */
 	function pullDownAction () {
 		if(canPullDown) {
-			canPullDown = false;//57e1f9204cb4c19258cf1f7d
+			canPullDown = false;	
 			url = buildUrl+'1.json';
-			$.ajax({        //资讯详情接口
+			$.ajax({        		
 	            url: url,
 	            type: 'GET',
 	            dataType: "json",
@@ -87,14 +86,13 @@ $(function(){
 		}
 	}
 	/**
-	 * 滚动翻页 （自定义实现此方法）
-	 * myScroll.refresh();		// 数据加载完成后，调用界面更新方法
+	 * 上拉加载下一页数据
 	 */
 	function pullUpAction () {
 		if(canLoad){
 			canLoad = false;
 			url = buildUrl+page+'.json';
-			$.ajax({        //资讯详情接口
+			$.ajax({        
 	            url: url,
 	            type: 'GET',
 	            dataType: "json",  
@@ -129,7 +127,7 @@ $(function(){
 		pullUpOffset = pullUpEl.offsetHeight;
 
 		myScroll = new iScroll('wrapper', {
-			scrollbarClass: 'myScrollbar', /* 重要样式 */
+			scrollbarClass: 'myScrollbar', 				/* 重要样式 */
 			useTransition: false,
 			topOffset: pullDownOffset,
 			onRefresh: function () {
@@ -159,16 +157,23 @@ $(function(){
 					pullUpEl.querySelector('.pullUpLabel').innerHTML = '上拉加载更多...';
 					this.maxScrollY = pullUpOffset;
 				}
+				if((this.y < this.maxScrollY) && (this.pointY < 1)){
+				  	this.scrollTo(0, this.maxScrollY, 400);
+				  	return;
+				} else if (this.y > 0 && (this.pointY > window.innerHeight - 1)) {
+				  	this.scrollTo(0, 0, 400);
+				  	return;
+				}
 			},
 			onScrollEnd: function () {
 				if (pullDownEl.className.match('flip')) {
 					pullDownEl.className = 'loading';
 					pullDownEl.querySelector('.pullDownLabel').innerHTML = '刷新中...';
-					pullDownAction();	// Execute custom function (ajax call?)
+					pullDownAction();	
 				} else if (pullUpEl.className.match('flip')) {
 					pullUpEl.className = 'loading';
 					pullUpEl.querySelector('.pullUpLabel').innerHTML = '加载中...';
-					pullUpAction();	// Execute custom function (ajax call?)
+					pullUpAction();	
 				}
 			}
 		});
