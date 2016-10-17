@@ -1,0 +1,38 @@
+{
+  "name": "runoob-react-test",
+  "version": "1.0.0",
+  "description": "资讯",
+  "main": "main.js",
+  "scripts": {
+    "start": "gulp clean && gulp",
+    "pub": "gulp build --pub"
+  },
+  "author": "fengnovo",
+  "license": "ISC",
+  "dependencies": {
+    "n-zepto": "^1.2.0",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1"
+  },
+  "devDependencies": {
+    "del": "^2.2.2",
+    "browser-sync": "^2.14.0",
+    "connect-history-api-fallback": "^1.3.0",
+    "gulp": "^3.9.1",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-uglify": "^2.0.0",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.3.5",
+    "http-proxy-middleware": "^0.17.1",
+    "json-loader": "^0.5.4",
+    "minimist": "^1.2.0",
+    "node-notifier": "^4.5.0",
+    "normalize.css": "^4.2.0",
+    "path": "^0.12.7",
+    "run-sequence": "^1.2.2"
+  }
+}
