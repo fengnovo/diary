@@ -1,5 +1,6 @@
 # iscroll练习  
 工作中经常用到iscroll，在这里做个记录的demo  
+演示地址：http://htmlpreview.github.io/?https://github.com/fengnovo/diary/blob/master/plugins-test/iscroll/web/index.html
 
 # development && 运行  
 ```
