@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>backbone-test</title>
+</head>
+
+<!-- <script src="http://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>		
+<script src="http://cdn.bootcss.com/underscore.js/1.1.2/underscore-min.js"></script>
+<script src="http://cdn.bootcss.com/backbone.js/1.1.0/backbone-min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<script src="http://ajax.cdnjs.com/ajax/libs/underscore.js/1.1.6/underscore-min.js"></script>
+<script src="http://ajax.cdnjs.com/ajax/libs/backbone.js/0.3.3/backbone-min.js"></script>
+<body>
+<script type="text/javascript">
+	var ToDoItem = Backbone.Model.extend({
+
+	});
+	var toDoItem = new ToDoItem({
+		'title': 'task1',
+		'description': 'description1'
+	});
+	var ToDoItemView = Backbone.View.extend({
+		tagName: 'p',
+		id: 'header',
+		render: function(){
+			$(this.el).html('<span>header</sapn>');
+			return this;
+		}
+	});
+	var toDoItemView = new ToDoItemView();
+	$(toDoItemView.render().el).appendTo($('body'));
+
+</script>
+
+</body>
+</html>
