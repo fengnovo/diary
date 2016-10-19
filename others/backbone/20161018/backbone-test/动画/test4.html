@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>backbone-test</title>
+</head>
+
+<script src="lib/jquery.min.js"></script>
+<script src="lib/json2.js"></script>
+<script src="lib/underscore-min.js"></script>
+<script src="lib/backbone-min.js"></script>
+<body>
+<div class="box">
+  <h1>APP主题界面设计大赛</h1>
+  <div class="content">
+    <p>故事从很久很久以前开始，远在宇宙的另一端有一个星球，叫作柚柚星（UU Star）。柚柚星人他们每天过着精彩而又快乐的生活，他们长的就像一只圆圆甜甜的柚子。他们出门或是买东西都开UU飞船，地球人管它叫UFO。他们有很多的圈子，都在这个星球附近，他们有的时候走到这里看看，有时又到那里瞧瞧。柚柚星人很勤劳，为什么这么说呐，因为他们喜欢做记录，无论好坏，总之记录就这么诞生了。他们最爱吃的是柚果，别看柚果不大，那里面有很多很多的能量哦。他们每天起床都会按一下闹钟，新的一天开始了，然后查看火箭有没有送来什么意外的惊喜。如果什么都没有的话，他们的卫星就会重新搜索。故事听到这里是不是觉得很神奇，那我们现在就去柚柚星看看吧！
+    </p>
+  </div>
+</div>
+<div class="opera">
+  <span id="btn">
+    <i class="iconfont"></i> 点击
+  </span>
+</div>
+<script type="text/javascript">
+(function ($) {
+  $.extend({
+    tipsBox: function (options) {
+      options = $.extend({
+        obj: null, //jq对象，要在那个html标签上显示
+        str: "+1", //字符串，要显示的内容;也可以传一段html，如: "<b style='font-family:Microsoft YaHei;'>+1</b>"
+        startSize: "12px", //动画开始的文字大小
+        endSize: "30px", //动画结束的文字大小
+        interval: 600, //动画时间间隔
+        color: "red", //文字颜色
+        callback: function () { } //回调函数
+      }, options);
+      $("body").append("<span class='num'>" + options.str + "</span>");
+      var box = $(".num");
+      var left = options.obj.offset().left + options.obj.width() / 2;
+      var top = options.obj.offset().top - options.obj.height();
+      box.css({
+        "position": "absolute",
+        "left": left + "px",
+        "top": top + "px",
+        "z-index": 9999,
+        "font-size": options.startSize,
+        "line-height": options.endSize,
+        "color": options.color
+      });
+      box.animate({
+        "font-size": options.endSize,
+        "opacity": "0",
+        "top": top - parseInt(options.endSize) + "px"
+      }, options.interval, function () {
+        box.remove();
+        options.callback();
+      });
+    }
+  });
+})(jQuery);
+function niceIn(prop){
+  prop.find('i').addClass('niceIn');
+  setTimeout(function(){
+    prop.find('i').removeClass('niceIn');  
+  },1000);    
+}
+$(function () {
+  $("#btn").click(function () {
+    $.tipsBox({
+      obj: $(this),
+      str: "+1",
+      callback: function () {
+      }
+    });
+    niceIn($(this));
+  });
+});
+</script>
+
+</body>
+</html>

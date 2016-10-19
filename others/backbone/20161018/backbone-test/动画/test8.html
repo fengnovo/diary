@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>backbone-test</title>
+</head>
+<style type="text/css">
+body{
+ margin:10px;
+ padding:10px;
+}
+a:link { text-decoration: none;color: blue} 
+a:active { text-decoration:blink} 
+a:hover { text-decoration:underline;color: red} 
+a:visited { text-decoration: none;color: green} 
+body,td,div,span,li{
+ font-size:12px;
+}
+.title01,.title02{
+ color:#00b;
+ font-weight:bold;
+}
+#DoorP{
+ width:200px;
+ height:300px;
+ padding:0px;
+ background:#FFFCF2;
+}
+.title01{
+ width:100%;
+ height:25px;
+ background:#FFFCF2;
+ cursor:pointer;
+}
+.title02{
+ width:100%;
+ height:25px;
+ background:#FFFCF2;
+ cursor:pointer;
+}
+.content{
+ background:#FFFCF2;
+ border-bottom:2px solid #fff;
+ overflow:hidden;
+ color:#666;
+ padding-left:4px;
+ padding-right:4px;
+ line-height:18px;
+}
+.curved { 
+ width:202px; 
+ } 
+.curved .b1, .curved .b2, .curved .b3, .curved .b4 { 
+ font-size:1px; 
+ display:block; 
+ background:#FFFCF2; 
+overflow: hidden; 
+} 
+.curved .b1, .curved .b2, .curved .b3 { 
+ height:1px; 
+ } 
+.curved .b2, .curved .b3, .curved .b4 { 
+ background:#FFFCF2; 
+ border-left:1px solid #C7BC98; 
+ border-right:1px solid #C7BC98; 
+ } 
+.curved .b1 { 
+ margin:0 4px; 
+ background:#C7BC98; 
+ } 
+.curved .b2 { 
+ margin:0 2px; 
+ border-width:0 2px; 
+ } 
+.curved .b3 { 
+ margin:0 1px; 
+ } 
+.curved .b4 { 
+ height:2px; 
+ margin:0; 
+ } 
+.curved .c1 { 
+ margin:0 5px; 
+ background:#C7BC98; 
+ } 
+.curved .c2 { 
+ margin:0 3px; 
+ border-width:0 2px; 
+ } 
+.curved .c3 { 
+ margin:0 2px; 
+ } 
+.curved .c4 { 
+ height:2px; 
+ margin: 0 1px; 
+ } 
+.curved .boxcontent { 
+ display:block; 
+ background:transparent; 
+ border-left:1px solid #C7BC98; 
+ border-right:1px solid #C7BC98; 
+ font-size:0.9em; 
+ text-align:justify; 
+ } 
+</style>
+<div class="curved"> 
+ <b class="b1 c1"></b> 
+ <b class="b2 c2"></b> 
+ <b class="b3 c3"></b> 
+ <b class="b4 c4"></b> 
+ <div class="boxcontent"> 
+<div id="DoorP">
+ <table>
+ <tr>
+  <td align="center">
+   第一层信息
+  </td>
+ </tr>
+ </table>
+ <div class="content" align="center">
+ <a href="#">二层</a><br/>
+ 二层<br/>
+ 二层<br/>
+ </div>
+  <b class="b1"></b> 
+  <b class="b2"></b> 
+  <b class="b3"></b> 
+  <b class="b4"></b> 
+ <table>
+ <tr>
+  <td align="center">
+  第二层信息
+  </td>
+ </tr>
+ </table>
+<div class="content" align="center">
+ <a href="#">二层</a><br/>
+ 二层<br/>
+ 二层<br/>
+ </div>
+  <b class="b1"></b> 
+  <b class="b2"></b> 
+  <b class="b3"></b> 
+  <b class="b4"></b> 
+ <table>
+ <tr>
+  <td align="center">
+  第三层信息
+  </td>
+ </tr>
+ </table>
+<div class="content" align="center">
+ <a href="#">二层</a><br/>
+ 二层<br/>
+ 二层<br/>
+ </div>
+</div></div> 
+ <b class="b4 c4"></b> 
+ <b class="b3 c3"></b> 
+ <b class="b2 c2"></b> 
+ <b class="b1 c1"></b> 
+<script type="text/javascript">
+ var open = 2;
+ var openState = new Array();
+ var closeState = new Array();
+ var dH = 220;
+ function $(id){
+ if(document.getElementById(id))
+ {
+  return document.getElementById(id);
+ }
+ else
+ {
+  alert("没有找到!");
+ }
+ }
+ function $tag(id,tagName){
+ return $(id).getElementsByTagName(tagName)
+ }
+ function closeMe(Cid,Oid){  
+ var h = parseInt(Ds[Cid].style.height);
+ //alert(h);
+ if(h > 2)
+ {
+  h = h - Math.ceil(h/3);  
+  Ds[Cid].style.height = h+"px";
+ }
+ else
+ { 
+  openMe(Oid);
+  clearTimeout(closeState[Cid]);
+  return false;
+ }
+ closeState[Cid] = setTimeout("closeMe("+Cid+","+Oid+")");
+ }
+ function openMe(Oid){
+ var h = parseInt(Ds[Oid].style.height); 
+ //alert(h);
+ if(h < dH)
+ {
+  h = h + Math.ceil((dH-h)/3);  
+  Ds[Oid].style.height = h+"px";
+ }
+ else
+ { 
+  clearTimeout(openState[Oid]);  
+  return false;
+ }
+ openState[Oid] = setTimeout("openMe("+Oid+")");
+ }
+ var Ds = $tag("DoorP","div");
+ var Ts = $tag("DoorP","table");
+ if(Ds.length != Ts.length)
+ {
+ alert("标题和内容数目不相同!");
+ }
+ for(var i = 0 ; i < Ds.length ; i++)
+ { 
+ if(i==open)
+ {
+  Ds[i].style.height = dH+"px";
+  Ts[i].className="title01";
+ }
+ else
+ {
+  Ds[i].style.height = "0px";
+  Ts[i].className="title02";
+ }
+ Ts[i].value = i;
+ Ts[i].onclick = function(){
+  if(open==this.value)
+  {
+  return false;
+  }
+  Ts[open].className="title02";
+  Ts[this.value].className="title01";
+  for(var i = 0 ; i < openState.length ; i++)
+  {
+  clearTimeout(openState[i]);
+  clearTimeout(closeState[i]);
+  }
+  closeMe(open,this.value);
+  //openMe(this.value);
+  open = this.value;
+ }
+ } 
+ function showDiv(id){ 
+ Ds[id].style.height=dH+"px";
+ Ds[open].style.height="0px";
+ open = id;
+ }
+</script>
+</body>
+</html>
