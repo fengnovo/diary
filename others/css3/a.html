@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="description" content="gf-info simple">
+    <meta name="viewport" content="width=device-width, maximum-scale=1, minimum-scale=1, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="x5-orientation" content="portrait">
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+	<title>test</title>
+</head>
+<style type="text/css">
+	body {
+		margin: 0;
+		padding: 0;
+	}
+	ul, li {
+	  list-style: none;
+	  margin: 0;
+	  padding: 0;
+	}
+	li {
+		height: 3rem;
+	}
+	ul {
+		background-color: gray;
+	}
+	.temp-wh{
+		height: 100rem;
+	    width: 4.011rem;
+	    text-align: center;
+	    padding: 40%;
+	}
+	.favor-icon {
+	    display: inline-block;
+	    height: 4.011rem;
+	    width: 4.011rem;
+	    background-image: url(./img/favor.png);
+	    background-size: contain;
+	    -webkit-tap-highlight-color:rgba(255,255,255,0);
+	    -webkit-animation-name: skyset;
+	    -webkit-animation-duration: 1000ms;
+	    //-webkit-animation-iteration-count: infinite; /*无限循环*/
+	    -webkit-animation-timing-function: linear;
+	  }
+	.no-favor-icon {
+	    display: inline-block;
+	    height: 4.011rem;
+	    width: 4.011rem;
+	    background-image: url("./img/no-favor.png");
+	    background-size: contain;
+	    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+	    -webkit-animation-name: skyset;
+	    -webkit-animation-duration: 1000ms;
+	    -webkit-animation-timing-function: linear;
+	}
+	 @-webkit-keyframes skyset {
+	    0% { width: 4.011rem;height: 4.011rem;}
+	    50%{ width: 0;height: 0;}
+	    100% { width: 4.011rem;height: 4.011rem;}
+	  }
+</style>
+<body>
+<div>
+	<p class="temp-wh"><i id="test" onclick="change()" class="no-favor-icon"></i></p>
+	<ul>
+		<li>test1</li>
+		<li>test2</li>
+		<li>test3</li>
+		<li>test4</li>
+		<li>test5</li>
+		<li>test6</li>
+	</ul>
+</div>
+<script type="text/javascript">
+	function change(){
+		var temp = document.getElementById('test');
+		if(temp.className == 'no-favor-icon'){
+			temp.className = '';
+			setTimeout(function(){
+				temp.className = 'favor-icon';
+			},50);
+		}else{
+			temp.className = '';
+			setTimeout(function(){
+				temp.className = 'no-favor-icon';
+			},50);
+		}
+	}
+</script>
+
+</body>
+</html>
