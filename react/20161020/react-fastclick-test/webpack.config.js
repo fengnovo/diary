@@ -7,7 +7,6 @@ module.exports = {
 	},
 	devServer: {
 		inline: true,
-		port: 7777
 	},
 	plugins: [new webpack.ProvidePlugin({
 		$: 'n-zepto'

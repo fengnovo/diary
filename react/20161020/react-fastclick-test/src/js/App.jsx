@@ -11,6 +11,7 @@ let App = React.createClass({
         }else{
             $s.addClass("sharebg-active");
         }
+        
         $(".sharebg-active,.share_btn").click(function(){
             $('#content').removeClass('cannot-scroll');
             $(".am-share").removeClass("am-modal-active");

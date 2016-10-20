@@ -3,6 +3,10 @@
     margin: 0;
 }
 
+html, body {
+  -webkit-tap-highlight-color: transparent;
+}
+
 body, #app{
     height: 100%;
 }
