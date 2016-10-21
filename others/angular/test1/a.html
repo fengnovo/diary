@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="description" content="gf-info simple">
+    <meta name="viewport" content="width=device-width, maximum-scale=1, minimum-scale=1, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="x5-orientation" content="portrait">
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+	<title>test</title>
+</head>
+<style type="text/css">
+	body,table,tbody,tr,td{
+		margin: 0;
+		padding: 0;
+	}
+	
+	.container {
+		font-family: 'Microsoft YaHei', Arial, Helvetica, sans-serif;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+	    height: 100%;
+	    display: flex;
+	    flex-direction: column;
+	}
+	table.swipe {
+		width: 100% !important;
+	}
+	table {
+	    border-collapse: collapse;
+	    border-spacing: 0;
+	}
+	.cell {
+		font-size: 1rem;
+		text-align: center;
+		width: 33.33%;
+		height: 33.33vw;
+		position: relative;
+	}
+	.cell:before {
+		position: absolute;
+		top: 0;
+		right: -1px;
+		width: 1px;
+		height: 100%;
+		-webkit-transform: scale(.5,1);
+		transform: scale(.5,1);
+		-webkit-transform-origin: 0 0;
+		transform-origin: 0 0;
+		content: '';
+		border-right: 1px solid #ddd;
+		z-index: 1;
+	}
+	.cell:after {
+		position: absolute;
+		bottom: -1px;
+		left: 0;
+		width: 100%;
+		height: 1px;
+		-webkit-transform: scale(1,.5);
+		transform: scale(1,.5);
+		-webkit-transform-origin: 0 0;
+		transform-origin: 0 0;
+		content: '';
+		border-bottom: 1px solid #ddd;
+	}
+
+	.cell:active {
+		background-color: #f0eff5;
+	}
+
+	.cell:last-child:before{
+		width: 0px;
+		height: 0px;
+	}
+
+	.cell img {
+		width: 20%;
+		height: 20%;
+		display: block;
+		margin: 0 auto;
+	}
+	.cell .name {
+		margin-top: 2rem;
+		width: 6em;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: inline-block;
+		vertical-align: middle;
+		color: #000000;
+	}
+	.new-hot{
+		background-size: 2rem;
+		background-image: url(./img/hot.png);
+		background-position: left top;
+		background-repeat: no-repeat;
+	}
+
+
+</style>
+<body>
+<div class="container">
+	<table class="swipe" id="swipeview">
+	<tr>
+		<td class="cell new-hot">
+			<div>
+				<img src="img/1.png" class="nocallout">
+				<span class="name">国内财经</span>
+			</div>
+		</td>
+		<td class="cell">
+			<div>
+				<img src="img/2.png" class="nocallout">
+				<span class="name">国内财经</span>
+			</div>
+		</td>
+		<td class="cell">
+			<div>
+				<img src="img/3.png" class="nocallout">
+				<span class="name">国内财经</span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td class="cell">
+			<div>
+				<img src="img/4.png" class="nocallout">
+				<span class="name">国内财经</span>
+			</div>
+		</td>
+		<td class="cell">
+			<div>
+				<img src="img/5.png" class="nocallout">
+				<span class="name">国内财经</span>
+			</div>
+		</td>
+		<td class="cell">
+			<div>
+				<img src="img/6.png" class="nocallout">
+				<span class="name">国内财经</span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td class="cell">
+			<div>
+				<img src="img/7.png" class="nocallout">
+				<span class="name">国内财经</span>
+			</div>
+		</td>
+		<td class="cell">
+			<div>
+				<img src="img/8.png" class="nocallout">
+				<span class="name">国内财经</span>
+			</div>
+		</td>
+		<td class="cell">
+			<div>
+				<img src="img/9.png" class="nocallout">
+				<span class="name">国内财经</span>
+			</div>
+		</td>
+	</tr>
+</table>
+</div>
+
+</body>
+</html>
