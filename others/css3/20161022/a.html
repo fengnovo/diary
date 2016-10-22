@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="description" content="gf-info simple">
+    <meta name="viewport" content="width=device-width, maximum-scale=1, minimum-scale=1, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="x5-orientation" content="portrait">
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+	<title>test</title>
+</head>
+<style type="text/css">
+	body {
+		margin: 0;
+		padding: 0;
+	}
+	.download-a {
+	    width: 100%;
+	    background: #f2f2f2;
+	  }
+  .download-b {
+    display: inline-block;
+    width: 3rem;
+    height: 3rem;
+    background: url(./img/gf-icon.png);
+    background-size: cover;
+    margin: .5rem 1rem .5rem 1rem;
+  }
+  .download-c {
+    display: inline-block;
+    width: 38%;
+    position: relative;
+    top: -1rem;
+    span {
+      font-size: 1rem;
+      color: #333;
+    }
+    p {
+      font-size: .7rem;
+      color: #666;
+      width: 10rem;
+      overflow: hidden;
+    }
+  }
+  .download-d {
+    display: inline-block;
+    width: 25%;
+    height: 2rem;
+    margin-top: 1rem;
+    background: #0061b3;
+    line-height: 2rem;
+    border-radius: 2rem;
+    text-align: center;
+    vertical-align: top;
+    margin-left: 1rem;
+  }
+  .download-f {
+    display: inline-block;
+    font-size: 1rem;
+    color: white;
+  }
+  .download-e {
+    display: inline-block;
+    width: .8rem;
+    height: .8rem;
+    background: url(./img/close.png);
+    background-size: cover;
+    position: relative;
+    top: -1.5rem;
+    left: .5rem;
+  }
+
+  .wxtip {
+    background: rgba(0, 0, 0, 0.8);
+    text-align: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 998;
+    display: none;
+  }
+  .wxtip-icon {
+    width: 52px;
+    height: 67px;
+    display: block;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+  }
+  .wxtip-txt {
+    width: 80%;
+    height: 40%;
+    top: 3%;
+    position: fixed;
+    right: 5%;
+  }
+</style>
+<body>
+<div class="download-a">
+    <div class="download-b"></div>
+    <div class="download-c"><span>某某App</span>
+        <p>使用APP,内容更全面</p><p></p></div>
+    <div class="download-d">
+        <span class="download-f" onClick="ShowWxDownloadIip();">立即下载</span>
+    </div>
+    <i class="download-e" onClick="closeDownload();"></i>
+</div>
+<div id="test" class="wxtip" id="JweixinTip" onClick="ShowWxDownloadIip();">
+    <span class="wxtip-icon"></span>
+    <img class="wxtip-txt" src="img/wx-bg.png" />
+</div>
+<script type="text/javascript">
+	function ShowWxDownloadIip(){
+		var temp = document.getElementById('test');
+		if(temp.style.display == 'none'){
+			temp.style.display = 'block';
+		}else{
+			temp.style.display = 'none';
+		}
+	}
+</script>
+
+</body>
+</html>
