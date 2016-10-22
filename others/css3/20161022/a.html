@@ -24,7 +24,7 @@
     display: inline-block;
     width: 3rem;
     height: 3rem;
-    background: url(./img/gf-icon.png);
+    background: url(http://cdn-img.easyicon.net/png/12058/1205860.gif);
     background-size: cover;
     margin: .5rem 1rem .5rem 1rem;
   }
@@ -32,21 +32,22 @@
     display: inline-block;
     width: 38%;
     position: relative;
-    top: -1rem;
-    span {
+    top: .8rem;
+    
+  }
+  .download-c span {
       font-size: 1rem;
       color: #333;
     }
-    p {
+  .download-c  p {
       font-size: .7rem;
       color: #666;
       width: 10rem;
       overflow: hidden;
     }
-  }
   .download-d {
     display: inline-block;
-    width: 25%;
+    width: 20%;
     height: 2rem;
     margin-top: 1rem;
     background: #0061b3;
@@ -100,7 +101,7 @@
   }
 </style>
 <body>
-<div class="download-a">
+<div class="download-a" id="download">
     <div class="download-b"></div>
     <div class="download-c"><span>某某App</span>
         <p>使用APP,内容更全面</p><p></p></div>
@@ -111,7 +112,7 @@
 </div>
 <div id="test" class="wxtip" id="JweixinTip" onClick="ShowWxDownloadIip();">
     <span class="wxtip-icon"></span>
-    <img class="wxtip-txt" src="img/wx-bg.png" />
+    <img class="wxtip-txt" src="img/wx-bg.png"/>
 </div>
 <script type="text/javascript">
 	function ShowWxDownloadIip(){
@@ -122,6 +123,40 @@
 			temp.style.display = 'none';
 		}
 	}
+	function closeDownload(){
+		document.getElementById('download').style.display = 'none';
+	}
+	function wxDownload(){
+        var ua = navigator.userAgent;
+        var isWeixin = !!/MicroMessenger/i.test(ua);
+        if(!isWeixin){
+            var isAndroid = ua.indexOf('Android') > -1 || ua.indexOf('Adr') > -1;   //android终端
+            var isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);                //ios终端
+            if(isiOS){
+                window.location = "ytjapp://gf_ios?dest_url=https%3A%2F%2Fgold.gf.com.cn%2F%23%2Fportfolio%2Fb2d53460-9372-11e5-ab9c-9f77b86d5254%2F";
+                var loadDateTime = new Date();
+                window.setTimeout(function() {
+                    var timeOutDateTime = new Date();
+                    if (timeOutDateTime - loadDateTime < 5000) {
+                        location.href = "https://itunes.apple.com/cn/app/guang-fa-zheng-quan-yi-tao-jin/id705795925?l=zh&amp;ls=1&amp;mt=8";
+                    } else {
+                        window.close();
+                    }
+                },500);
+
+            }
+            if(isAndroid){
+                try {
+                    window.location = 'gfzqapp://gf_android?dest_url=https://gold.gf.com.cn/#/portfolio/b2d53460-9372-11e5-ab9c-9f77b86d5254/';
+                    setTimeout(function(){
+                        location.href = "http://download.gf.com.cn/mobile_latest/android/gf_android_ytj.apk";
+                    },500);
+                } catch(e) {}
+            }
+        }
+    }
+    wxDownload();
+
 </script>
 
 </body>
