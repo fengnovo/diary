@@ -1,0 +1,45 @@
+html{
+    font-size: 62.5%;
+    font-family: sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-text-size-adjust: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height:100%
+}
+
+p,ul,li{
+    padding:0;
+    margin:0;
+}
+ul,li{
+    list-style: none;
+}
+em,i,h1,h2,h3,h4,h5,h6{
+    font-style:normal;
+}
+a{
+    text-decoration:none;
+    color:#000;
+}
+textarea{
+    outline: none;
+}
+input{
+    outline:none;
+    height:2rem;
+    font-size:1.6rem;
+    padding: 0;
+    margin: 0;
+    -webkit-appearance: none;
+}
+button {
+    display: block;
+    outline: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
