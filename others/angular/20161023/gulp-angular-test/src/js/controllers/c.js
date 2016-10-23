@@ -1,17 +1,17 @@
-!(function(Action,$){
+!(function(Action){
     'use strict';
-    Action.commentList = function ($scope, $timeout, $window, $routeParams, AudioLecture) {
+    Action.c = function ($scope, $timeout, $window, $routeParams) {
         var xx = 'c页面';
     };
-    angular.module('app').directive('gfAudioComment', ['$timeout', '$routeParams', '$window', 'AudioLecture', 
-        function ($timeout, $routeParams, $window, AudioLecture) {
+    angular.module('app').directive('c', ['$timeout', '$routeParams', '$window', 
+        function ($timeout, $routeParams, $window) {
             return {
                 restrict: 'A',
                 scope: false,
                 link: function ($scope, $element, $attr) {
-                    Action.commentList($scope, $timeout, $window, $routeParams, AudioLecture);
+                    Action.c($scope, $timeout, $window, $routeParams);
                 }      
             };     
         }
     ]);
-}) (window.Action || (window.Action = {}),$);
+}) (window.Action || (window.Action = {}));

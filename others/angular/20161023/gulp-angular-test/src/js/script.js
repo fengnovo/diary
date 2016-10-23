@@ -49,94 +49,24 @@ var module = angular.module('app', ['dao_service'])
 				}
 				return response;
 			}, function(response) {
-				//非200的请求统计信息写在这
 				return $q.reject(response);
 			});
 		};
 	}])
 	.config(['$httpProvider', function($httpProvider) {
-		//$httpProvider.responseInterceptors.push('globalAjaxError');
 		$httpProvider.responseInterceptors.push('statInterceptor');
 	}])
-//这个AppCtrl 独立于 module.config中的$routeProvider
 module.controller('AppCtrl', ['$scope', '$location', '$routeParams', function($scope, $location, $routeParams ) {
-	var customHistory = window.CUSTOM_HISTORY = [];
-	var homePage = window.location.href;
-	var defaultCategory = '资讯中心';
-	var setCategory = function(category){
-		$scope.category = category || $scope.category || defaultCategory;
-		document.title = $scope.category;
-	};
-
-	$scope.reload = function(){
-		if(window.RELOAD){
-			window.RELOAD();
-			$('#errorMsgContainer').hide();
-		}
-	};
-
-	$scope.close = function(){
-		$('#errorMsgContainer').hide();
-	};
-
-	var back = function(){
-		var url;
-		var result;
-		while(url = customHistory.pop()){
-			if(url != $location.absUrl()){
-				result = url;
-				break;				
-			}
-		}
-		return result;
-	}
-
-	$scope.back = function() {
-		var url = back();
-		if(url){
-			window.location.href = url;
-		}
-	}
-
-	window.back = function(){ //这个给到了news.js中使用
-		var url = back();
-		if(url){
-			window.location.href = url;
-			return true
-		}else{
-			customHistory.push(homePage);
-			return false;
-		}
-	};
-
-	window.defultBackFun = window.back;
-
-	$scope.category = defaultCategory;
-
-	$scope.$on('$routeChangeSuccess', function(){
-		var url = $location.absUrl();
-		if(!~customHistory.indexOf(url)){
-			if($location.path() == '/home'){
-				setCategory(defaultCategory);
-			}else{
-				setCategory($routeParams.category);
-			}
-			customHistory.push(url);
-
-			var backUrl = customHistory[customHistory.length - 2] || '';
-			document.back = backUrl;  //这儿用了document.back 函数 ,在news.js中又用window.back 都没使用
-		}
-	});
+	var xx = '入口文件';
 }]);
 
 module.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 	var version = '201507151733'
 	$routeProvider
-		.when('/home', {templateUrl: 'partials/home.html?v=' + version, controller : App.NavigationCtrl})
-		.when('/news', {templateUrl: 'partials/news.html?v=' + version, controller : App.NewsCtrl, reloadOnSearch: false})//这有设置了reloadOnSearch  '$routeUpdate' 才会起作用
-		.when('/category',{templateUrl:'partials/audio_info.html',controller:Action.categoryList})
-		.when('/play_comment',{templateUrl:'partials/play_comment.html',controller:Action.playComment})
-		.otherwise({redirectTo: '/home'});
+		.when('/a', {templateUrl: 'page/a.html?v=' + version, controller : App.a})
+		.when('/b', {templateUrl: 'page/b.html?v=' + version, controller : App.b})
+		.when('/c', {templateUrl: 'page/c.html?v=' + version, controller : Action.c})
+		.otherwise({redirectTo: '/a'});
 }]);
 
 angular.element(document).ready(function() {
