@@ -1,0 +1,60 @@
+{
+    "errCode": 0,
+    "errMsg": "",
+    "costTime": 0,
+    "data": {
+        "source": 2,
+        "id": "580d71733ecde020ed2cf57d",
+        "title": "桂浩明:解决B股问题需搞好顶层设计 明确其定位",
+        "subtitle": "",
+        "media": "东方财富网",
+        "content": "",
+        "privilege": 0,
+        "status": 40,
+        "dataFlag": 0,
+        "createTime": 0,
+        "updateTime": 1477112816,
+        "publishTime": 1477112493,
+        "categories": [
+            "市场研究",
+            "B股"
+        ],
+        "columns": [
+            "57e4e49af5a4652492d58f30"
+        ],
+        "picUrl": "",
+        "bigPicUrl": "",
+        "roundup": "",
+        "keywords": [],
+        "authors": [
+            {
+                "name": "桂浩明",
+                "certiCode": ""
+            }
+        ],
+        "stocks": [{
+            "name": "广发证券",
+            "market": "SZ",
+            "code": "000776"
+        }],
+	    "attachments": [{
+            "url": "http://10.2.130.19:9000/public/file/5806e8bbd22126000a75f94e.xls",
+            "name": "2016年日历A4纸打印(含阴历).xls",
+            "format": "XLS",
+            "size": "0"
+        },{
+            "url": "http://10.2.130.19:9000/public/file/5806e839d22126000a75f94d.doc",
+            "name": "测试文档.doc",
+            "format": "DOC",
+            "size": "0"
+        },{
+            "url": "http://10.2.130.19:9000/public/file/58005171d22126000a75f7cd.pdf",
+            "name": "git-cheatsheet.pdf",
+            "format": "PDF",
+            "size": "2000"
+        }],
+        "sourceName": "贝格"
+    }
+}
+
+
