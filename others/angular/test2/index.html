@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <title>ngJquery</title>
+  <script type="text/javascript" src="zepto.min.js"></script>
+  <!-- <script type="text/javascript" src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script> -->
+<script src="http://cdn.bootcss.com/angular.js/1.2.15/angular.min.js"></script>
+</head>
+<body>
+ <h1>Angular使用Jquery</h1>
+ <div ng-app="myApp">
+     <div ng-controller="firstController" ng-init="name='123'">
+         <div id="obj1"></div>
+         {{name}}
+     </div>
+</div>
+<script type="text/javascript">
+ var app = angular.module("myApp",[]);
+ app.controller("firstController", function ($scope) {
+     $scope.name = "张三";
+     $("#obj1").html("<span>111111111111</span>");
+
+        // var obj1 = document.getElementById("obj1");
+         // angular.element(obj1).html("<span>这是AngularJS 内置的jqlite</span>");//不引入jq的情况下可以使用jqlite，但是功能比jq少。详情参考jqlite的文档
+});
+ </script>
+</body>
+
+</html>
