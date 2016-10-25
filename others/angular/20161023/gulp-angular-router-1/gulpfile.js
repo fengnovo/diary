@@ -65,7 +65,7 @@ gulp.task('css', function() {
 
 // 合并、压缩js文件
 gulp.task('lib_js', function() {
-  return gulp.src(['src/js/vendor/jquery.js','src/js/vendor/angular.min.js','src/js/vendor/angular-route.js'])
+  return gulp.src(['src/js/vendor/jquery.js','src/js/vendor/angular.js'])
     .pipe(concat('lib.js'))
     .pipe(gulp.dest('web/js/'))
     .pipe(notify({ message: 'js task ok' }));
