@@ -27,17 +27,16 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-   <div ng-app="Demo" ng-controller="testCtrl as ctrl">
-      <a href="#/index/page1">page1</a> - <a href="#/index/page2">page2</a> - <a href="javascript:void(0)" ng-click="ctrl.reload()">reload</a> - <a href="lavascript:void(0)" ng-click="ctrl.update()">update</a>
-      <div ng-view></div>
-      <script type="text/ng-template" id="page1.tpl">
-          this is page1.{{fisrtCtrl.value}}
-      </script>
-      <script type="text/ng-template" id="page2.tpl">
-          this is page2.{{secondCtrl.value}}
-      </script>
-   </div>
-   <script src="js/lib.js"></script>
-   <script src="js/main.js"></script>
+    <div ng-app="App" ng-controller="a" class="container">
+        <div id="navigation">  
+          <a href="#/a">A</a>
+          <a href="#/b">B</a>
+          <a href="#/c">C</a>
+        </div>
+      <div ng-view="">
+      </div>
+    </div>
+<script src="js/lib.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>

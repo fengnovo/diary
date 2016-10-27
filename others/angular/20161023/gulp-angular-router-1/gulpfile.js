@@ -24,12 +24,16 @@ var gulp = require('gulp'),
 
 gulp.task('browser', function () {
   var proxyMiddleware = require('http-proxy-middleware');
-  var proxy = proxyMiddleware('/api', {target: 'http://10.2.124.210:9771'});
+  var proxy = proxyMiddleware('/api', {target: 'http://pod.gf.com.cn/api/information/podcastserver/1.0.0/categories/'});
+  var proxy1 = proxyMiddleware('/list', {target: 'http://php.weather.sina.com.cn/iframe/index/w_cl.php?code=js&day=0&city=&dfc=1&charset=utf-8/'});
+  var proxy2 = proxyMiddleware('/action', {target: 'http://10.2.130.20:9000/'});
+  var proxy3 = proxyMiddleware('/read', {target: 'http://10.2.130.20:9000/'});
   browserSync.init({
         server: {
             baseDir: "./" + BUILD_DIR,
             port: 3000,
-            middleware: [proxy]
+            // middleware: [proxy]
+            middleware: [proxy, proxy1,proxy2,proxy3]
         }
   });
 });
@@ -65,7 +69,7 @@ gulp.task('css', function() {
 
 // 合并、压缩js文件
 gulp.task('lib_js', function() {
-  return gulp.src(['src/js/vendor/jquery.js','src/js/vendor/angular.js'])
+  return gulp.src(['src/js/vendor/jquery.js','src/js/vendor/angular.min.js','src/js/vendor/angular-route.js'])
     .pipe(concat('lib.js'))
     .pipe(gulp.dest('web/js/'))
     .pipe(notify({ message: 'js task ok' }));

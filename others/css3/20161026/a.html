@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="description" content="gf-info simple">
+    <meta name="viewport" content="width=device-width, maximum-scale=1, minimum-scale=1, initial-scale=1, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="x5-orientation" content="portrait">
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+	<title>test</title>
+     <script src="jquery.js"></script>
+</head>
+<style>
+    header, footer, main {
+        display: block;
+    }
+ 
+    header {
+        position: fixed;
+        height: 50px;
+        left: 0;
+        right: 0;
+        top: 0;
+    }
+ 
+    footer {
+        position: fixed;
+        height: 34px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+ 
+    main {
+        /* main绝对定位，进行内部滚动 */
+        position: absolute;
+        top: 50px;
+        bottom: 34px;
+        /* 使之可以滚动 */
+        overflow-y: scroll;
+    }
+ 
+    main .content {
+        height: 2000px;
+    }
+    /* 元素内的滚动非常不流畅，滑动的手指松开后，滚动立刻停止，失去了原本的流畅滚动特性，给main加上如下代码即可。 */
+    main {
+    /* main绝对定位，进行内部滚动 */
+    position: absolute;
+    top: 50px;
+    bottom: 34px;
+    /* 使之可以滚动 */
+    overflow-y: scroll;
+    /* 增加该属性，可以增加弹性 */
+    -webkit-overflow-scrolling: touch;
+}
+</style>
+<body class="layout-scroll-fixed">
+    <!-- fixed定位的头部 -->
+    <header>
+ 
+    </header>
+ 
+    <!-- 可以滚动的区域 -->
+    <main>
+        <div class="content">
+        <!-- 内容在这里... -->
+        </div>
+    </main>
+ 
+    <!-- fixed定位的底部 -->
+    <footer>
+        <input type="text" placeholder="Footer..."/>
+        <button class="submit">提交</button>
+    </footer>
+ <script>
+ /**
+ * 禁止浏览器下拉回弹
+ */
+function stopDrop() {
+    var lastY;//最后一次y坐标点
+    $(document.body).on('touchstart', function(event) {
+        lastY = event.originalEvent.changedTouches[0].clientY;//点击屏幕时记录最后一次Y度坐标。
+    });
+    $(document.body).on('touchmove', function(event) {
+        var y = event.originalEvent.changedTouches[0].clientY;
+        var st = $(this).scrollTop(); //滚动条高度
+        console.log("st = "+st);
+        if (y >= lastY && st <= 0) {//如果滚动条高度小于0，可以理解为到顶了，且是下拉情况下，阻止touchmove事件。
+            lastY = y;
+            event.preventDefault();
+        }
+        lastY = y;
+
+        //方法三
+        // var abc=$(document.body).scrollTop();
+        // console.log("abc = "+abc);
+        // if (abc>0) {
+        //   $(document.body).scrollTop(0);
+        // }
+    });
+}
+stopDrop();
+ </script>
+</body>
+</html>
