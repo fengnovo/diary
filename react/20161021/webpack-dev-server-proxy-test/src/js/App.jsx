@@ -8,7 +8,7 @@ let App = React.createClass({
         } 
     },
     componentDidMount: function(){
-        fetch('/list/column')
+        fetch('/categories')
             .then((response) => {
                 return response.json();
             })

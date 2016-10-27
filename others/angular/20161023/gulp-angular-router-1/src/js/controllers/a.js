@@ -10,7 +10,7 @@
                 window.history.back();
                 return true;
             }
-            $.getJSON('/list/',function(data){
+            $.getJSON('/read/article/5811bf173ecde020ed30d80d',function(data){
                 $('#tip1').html(JSON.stringify(data));
             });
             $('#btn1').click(function(){
@@ -19,6 +19,9 @@
         }) .controller('b', function ($scope, $route) { 
             $scope.$route = $route;
             $('#tip2').html('alert2');
+            $.getJSON('/episodes/category/57959fd6b05063000b284f58?page_no=1&page_size=10',function(data){
+                $('#tip2').html(JSON.stringify(data));
+            });
             window.back = function(){
                 window.history.back();
                 return true;

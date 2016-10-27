@@ -24,7 +24,7 @@ var gulp = require('gulp'),
 
 gulp.task('browser', function () {
   var proxyMiddleware = require('http-proxy-middleware');
-  var proxy = proxyMiddleware('/api', {target: 'http://pod.gf.com.cn/api/information/podcastserver/1.0.0/categories/'});
+  var proxy = proxyMiddleware('/episodes', {target: 'http://pod.gf.com.cn/api/information/podcastserver/1.0.0/'});
   var proxy1 = proxyMiddleware('/list', {target: 'http://php.weather.sina.com.cn/iframe/index/w_cl.php?code=js&day=0&city=&dfc=1&charset=utf-8/'});
   var proxy2 = proxyMiddleware('/action', {target: 'http://10.2.130.20:9000/'});
   var proxy3 = proxyMiddleware('/read', {target: 'http://10.2.130.20:9000/'});
