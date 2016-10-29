@@ -22,7 +22,8 @@ define(['app','telBox'], function(app){
             //   $scope.toggleShow = function() {
             //         $scope.boxShow = !$scope.boxShow;
             //   };
-             $rootScope.headTitle = $rootScope.title = "商户列表";
+            
+            $rootScope.headTitle = $rootScope.title = "营业网点";
             $rootScope.favBol = false;
             $rootScope.backBol = false;
 
@@ -33,11 +34,8 @@ define(['app','telBox'], function(app){
             $http.get('./src/list.json').
               success(function(data) {
 
-                $scope.shops = data.shops;
-                $scope.areas = data.areas;
-                $scope.types = data.types;
-                $scope.orders = data.orders;
-                $scope.$emit('dataloaded');//发送数据加载完成信号
+                $scope.branchs = data.branchs;
+                
               });
 
 
