@@ -27,15 +27,7 @@ require.config({
 
       "app" : "controllers/app",
       "loadingInterceptor" : "controllers/loadingInterceptor",
-      "wdListCtrl" : "controllers/wdListCtrl",
-      "wdxqCtrl" : "controllers/wdxqCtrl",
-      "shxqCtrl" : "controllers/shxqCtrl",
-      "shListCtrl" : "controllers/shListCtrl",
-      "listimgCtrl" : "controllers/listimgCtrl",
-      "jrListCtrl" : "controllers/jrListCtrl",
-      "lcxqCtrl" : "controllers/lcxqCtrl",
-      "jjxqCtrl" : "controllers/jjxqCtrl",
-
+      "contrl" : "controllers/contrl",
       "route" : "routes/appRoute",
     },
     shim: {
@@ -66,7 +58,7 @@ require.config({
 });
 
 
-require(['jquery','angular','angular-route','angular-sanitize','app','loadingInterceptor','route','telBox','fav','geo','geoFactory','wdListCtrl','wdxqCtrl','shxqCtrl','shListCtrl','listimgCtrl','jrListCtrl','lcxqCtrl','jjxqCtrl','blocksit','backButton','fliterBox','idTabs','jrTab','stickUp','fixBar'],function ($,angular){
+require(['jquery','angular','angular-route','angular-sanitize','app','loadingInterceptor','route','telBox','fav','geo','geoFactory','contrl','blocksit','backButton','fliterBox','idTabs','jrTab','stickUp','fixBar'],function ($,angular){
 
       $(function () {
 
