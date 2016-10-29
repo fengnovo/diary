@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+    <meta http-equiv="Content-Security-Policy">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <meta content="telephone=no, address=no" name="format-detection">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/> 
+    <link rel="stylesheet" href="./src/css/base.css" type="text/css" />
+</head>
+<body>
+    <div class="header">
+        <a href back-button class="btn-back" ng-show="backBol"><span> </span></a>
+        <h2 class="title"><span ng-bind="title"></span></h2>
+        <fav-btn></fav-btn>
+    </div>
+    <div ng-view></div>
+    <loading></loading>
+
+<script data-main="./src/js/main" src="./src/js/libs/require.js"></script>
+<script type="text/javascript">
+    
+</script>
+
+</body>
+</html>
