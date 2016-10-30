@@ -14,7 +14,7 @@ define(['jquery','angular'], function($,angular){
         replace: true,
         restrict: 'AE',
         template:'<div class="back-layer"><div class="loading">'
-                +'<img src="images/729.GIF">'
+                +'<img src="src/images/loading.gif">'
                 +'</div></div>',
         link: function($scope, $element, attrs) {
             var top = $(window).height()/2 - 25;

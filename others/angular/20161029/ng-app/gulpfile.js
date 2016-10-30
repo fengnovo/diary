@@ -9,7 +9,7 @@ gulp.task('browser-sync',function(){
 	//http://localhost:3000/api/information/podcastserver/1.0.0/category/57959fd6b05063000b284f58/top
 	//-->http://pod.gf.com.cn/api/information/podcastserver/1.0.0/category/57959fd6b05063000b284f58/top
 	var p1 = httpProxyMiddleware(['/api'], {
-		target: 'http://pod.gf.com.cn', 
+		target: 'https://cnodejs.org', 
 		changeOrigin: true});
 	browserSync.init({
 		server: {

@@ -1,25 +1,27 @@
 <link rel="stylesheet" href="src/css/list.css" type="text/css" />
-<div class="search-box">
-      <b class="dw"><img src="src/images/dingwei.png"></b>
-      <input type="search" class="search-input" placeholder="输入书本地址或名称">
-      <button class="btn">搜索</button>
+    <div class="search-box">
+      <button class="btn select-box-one" ng-click="select(0)">全部</button>
+      <button class="btn" ng-click="select(1)">精华</button>
+      <button class="btn" ng-click="select(2)">分享</button>
+      <button class="btn" ng-click="select(3)">问答</button>
+      <button class="btn" ng-click="select(4)">招聘</button>
     </div>
     <div class="list-box" >
        <ul>
-        <li ng-repeat="branch in branchs">
-          <a href="#/wdxq">
+        <li ng-repeat="item in data">
+          <a href="#/detail?id="{{item.id}}>
            <dl>
             <dt class="search-key-img">
-              <img ng-src="{{branch.branch_logo}}">
+              <img ng-src={{item.author.avatar_url}}>
             </dt> 
             <dd class="search-key-title">
-               <p>{{branch.branch_name}}</p>
+               <p>{{item.title}}</p>
               </dd>
               <dd class="search-key-info">
-               <p>{{branch.branch_type}}</p>
+               <p>{{item.create_at}}</p>
               </dd>
               <dd class="search-key-tag">
-                <p>{{branch.branch_addr}}</p>
+                <p>{{item.tab}}</p>
               </dd>
             </dl>
           </a>

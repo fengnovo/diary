@@ -9,6 +9,10 @@
 	height: 40px;
 	line-height: 37px;
 	border-bottom: 1px solid #DDDDDD;
+	text-align: center;
+}
+.select-box-one {
+	background-color: #fff;
 }
 
 .search-box input{

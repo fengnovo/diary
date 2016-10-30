@@ -9,7 +9,7 @@ require.config({
       "fastclick" : "libs/fastclick",
       "blocksit" : "libs/blocksit",
       "idTabs" : "libs/idTabs",
-      "stickUp" : "libs/stickUp",
+     // "stickUp" : "libs/stickUp",
       "angular" : "libs/angular.min",
       "angular-route" : "libs/angular-route.min",
       "angular-sanitize" : "libs/angular-sanitize.min",
@@ -49,21 +49,22 @@ require.config({
        'idTabs': {
           deps: ['jquery'],
           exports: 'idTabs'
-       },
-       'stickUp': {
-          deps: ['jquery'],
-          exports: 'stickUp'
        }
+       // ,
+       // 'stickUp': {
+       //    deps: ['jquery'],
+       //    exports: 'stickUp'
+       // }
     }
 });
 
 
-require(['jquery','angular','angular-route','angular-sanitize','app','loadingInterceptor','route','telBox','fav','geo','geoFactory','contrl','blocksit','backButton','fliterBox','idTabs','jrTab','stickUp','fixBar'],function ($,angular){
-
+require(['jquery','angular','angular-route','angular-sanitize',
+  'app','loadingInterceptor','route','telBox','fav','geo',
+  'geoFactory','contrl','blocksit','backButton','fliterBox',
+  'idTabs','jrTab','fixBar'],function ($,angular){
+//'stickUp'
       $(function () {
-
             angular.bootstrap(document,["pinganApp"]);
-
-      })
-
+      });
 });
