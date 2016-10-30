@@ -22,13 +22,15 @@ require.config({
       "fliterBox" : "directives/fliterBox",
       "jrTab" : "directives/jrTab",
       "fixBar" : "directives/fixBar",
+      "insideHtml" : "directives/insideHtml",
       
       "geoFactory" : "services/geoFactory",
 
       "app" : "controllers/app",
       "loadingInterceptor" : "controllers/loadingInterceptor",
-      "contrl" : "controllers/contrl",
-      "route" : "routes/appRoute",
+      "listCtrl" : "controllers/listCtrl",
+      "detailCtrl": "controllers/detailCtrl",
+      "route" : "routes/appRoute"
     },
     shim: {
        'angular': {
@@ -61,8 +63,8 @@ require.config({
 
 require(['jquery','angular','angular-route','angular-sanitize',
   'app','loadingInterceptor','route','telBox','fav','geo',
-  'geoFactory','contrl','blocksit','backButton','fliterBox',
-  'idTabs','jrTab','fixBar'],function ($,angular){
+  'geoFactory','listCtrl','detailCtrl','blocksit','backButton','fliterBox',
+  'insideHtml','idTabs','jrTab','fixBar'],function ($,angular){
 //'stickUp'
       $(function () {
             angular.bootstrap(document,["pinganApp"]);

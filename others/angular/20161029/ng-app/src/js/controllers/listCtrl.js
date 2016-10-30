@@ -1,6 +1,6 @@
 define(['app','telBox'], function(app){
       
-    app.controller('contrl', ['$scope','$rootScope','$http','$sce', function ($scope,$rootScope,$http,$sce) {
+    app.controller('listCtrl', ['$scope','$rootScope','$http','$sce', function ($scope,$rootScope,$http,$sce) {
             
             $rootScope.headTitle = $rootScope.title = "cnode";
             $rootScope.favBol = false;
