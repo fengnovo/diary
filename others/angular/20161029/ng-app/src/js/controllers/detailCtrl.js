@@ -1,6 +1,7 @@
-define(['app','insideHtml'], function(app){
+define(['app'], function(app){
       
     app.controller('detailCtrl', ['$scope','$rootScope','$routeParams','$http','$sce', function ($scope,$rootScope,$routeParams,$http,$sce) {
+        $(window).unbind('scroll');
         $rootScope.headTitle = $rootScope.title = "详情";
         $rootScope.favBol = true;
         $rootScope.backBol = true;
@@ -12,8 +13,8 @@ define(['app','insideHtml'], function(app){
 
         $http.get('/api/v1/topic/'+$routeParams.id).success(function(data){
 			$scope.data = data.data;
-			// $scope.$on('insideHtml', data.data.content);
-			$('#content').html(data.data && data.data.content);
+			$scope.trustHtml = $sce.trustAsHtml(data.data && data.data.content);
+			//$('#content').html(data.data && data.data.content);
         });
 
 

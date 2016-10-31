@@ -2,5 +2,7 @@
 <div class="list-box">
 <div class="detail-title">{{data.title}}</div>
 <br/><br/>
-<p id="content"></p>
+<!-- <p id="content"></p> -->
+
+<div id="content" ng-bind-html="trustHtml"></div>
 </div>

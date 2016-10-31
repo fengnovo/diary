@@ -31,7 +31,19 @@
 }
 
 .search-box .btn{
-	width: 15%;
+	width: 17%;
+}
+
+.search-key-info{
+	font-size: .8rem;
+	padding-right: 1rem;
+}
+.search-key-info-tab{
+	float: right;
+}
+
+.search-key-info-time{
+
 }
 
 .foot-geo{
@@ -70,7 +82,7 @@
 
 .list-box{
 	margin-top: 85px;
-	margin-bottom: 36px;
+	/*margin-bottom: 36px;*/
 }
 
 .list-box li {
@@ -104,27 +116,31 @@ dt.search-key-img img {
 }
     /*标题*/
 dd.search-key-title {
-	width: auto;
-	height: 24px;
+	/*width: auto;
+	height: 3.6rem;
+	padding-right: .5rem;*/
 }
 
 dd > p {
 	font-size: 13px;
 	color: #aaa;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	-o-text-overflow: ellipsis;
+	/*white-space: nowrap;*/
+	/*text-overflow: ellipsis;*/
+	/*-o-text-overflow: ellipsis;*/
 	overflow: hidden;
 }
 
 dd.search-key-title>p {
-	font-size: 18px;
+	font-size: 1rem;
 	font-weight: bold;
 	color: #1F1F1F;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	-o-text-overflow: ellipsis;
+	/*white-space: nowrap;*/
+	/*text-overflow: ellipsis;*/
+	/*-o-text-overflow: ellipsis;*/
 	overflow: hidden;
+	width: auto;
+    height: 3.6rem;
+    padding-right: .5rem;
 }
         /*标题右边的标签*/
 div.search-key-title-tag {

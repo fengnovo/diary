@@ -13,6 +13,22 @@ define(['app'], function(app){
                 templateUrl: 'src/js/views/listCtrl.html',
                 controller: 'listCtrl'
               })
+              .when('/good', {
+                templateUrl: 'src/js/views/listCtrl.html',
+                controller: 'listCtrl'
+              })
+              .when('/share', {
+                templateUrl: 'src/js/views/listCtrl.html',
+                controller: 'listCtrl'
+              })
+              .when('/ask', {
+                templateUrl: 'src/js/views/listCtrl.html',
+                controller: 'listCtrl'
+              })
+              .when('/job', {
+                templateUrl: 'src/js/views/listCtrl.html',
+                controller: 'listCtrl'
+              })
               .when('/detailCtrl', {
                 templateUrl: 'src/js/views/detailCtrl.html',
                 controller: 'detailCtrl'
