@@ -1,0 +1,21 @@
+{
+  "name": "react-version",
+  "version": "1.0.0",
+  "description": "react news",
+  "main": "Swiper.js",
+  "scripts": {
+    "start": "webpack-dev-server --port 3000 --hot --host 0.0.0.0",
+    "build": "webpack"
+  },
+  "repository": {},
+  "keywords": [
+    "react",
+    "swiper"
+  ],
+  "author": "fengnovo",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "jquery": "^3.1.1"
+  }
+}

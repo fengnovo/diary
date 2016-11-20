@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html><head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>新闻列表</title>
+    <link rel="stylesheet" href="./src/scrollbar.css">
+    <link rel="stylesheet" href="./src/swiper.min.css">
+    <link rel="stylesheet" href="./src/reset.css">
+    <link rel="stylesheet" href="./src/ipad.css">
+    <link rel="stylesheet" href="./src/newsList.css">
+    <script type="text/javascript" src="./src/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="./src/underscore-min.js"></script>
+    <script type="text/javascript" src="./src/swiper.min.js"></script>
+    <script type="text/javascript" src="./src/iscroll.js"></script>
+    <style>
+    .swiper-slide {
+    	height: 60px;    
+    }
+    </style>
+</head>
+<body>
+    <div class="classification-box">
+        <div class="swiper-box flex">
+            <div class="swiper-container flex-1">
+                <div class="swiper-wrapper" id="swiper_w1">
+                </div>
+            </div>
+            <div class="swiper-nav-button"></div>
+        </div>
+        <div class="swiper-nav-box">
+            <ul id="swiper_w2">
+                <div class="swiper-page-button-up"></div>
+            </ul>
+        </div>
+    </div>
+    <div class="con-wrap" id="wrapper">
+        <section class="item-list">
+            <dl id="scroller">
+                <div id="pullDown">
+                    <span class="pullDownIcon"></span>
+                    <span class="pullDownLabel">下拉刷新...</span>
+                </div>
+                <ul id="item-list">
+                </ul>
+                <div id="pullUp" style="display:none;">
+                    <span class="pullUpIcon"></span>
+                    <span class="pullUpLabel">上拉加载更多...</span>
+                </div>
+            </dl>
+        </section>
+    </div>
+<script type="text/template" id="tpl">
+<%_.each(obj,function(value,index){
+	if(index<8){%>
+		<li class="bbs-list-li" id="<%=value.link%>">
+			<h1 class="flex"><p class="text-over" style="max-width: 100%;"><%=value.title%></p>
+			</h1>
+			<h3 class="f_c_999"><%=value.source%>&nbsp;&nbsp;<%=value.pubDate%></h3>
+			<div class="bbs-list-content"><%=value.desc%></div>
+		</li>
+	<%}
+});%>
+</script>
+
+
+    <script type="text/javascript" src="./src/iscrollInstance.js"></script>
+    <script type="text/javascript" src="./src/js/newsList.js"></script>
+</body></html>
