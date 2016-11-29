@@ -1,0 +1,140 @@
+.w18 {
+    font-size: 4rem;
+}
+body,div,ul,li,a,hr {
+  margin: 0;
+  padding: 0;
+}
+#app{
+  margin: 0;
+  padding: 0;
+}
+
+ul li {
+  list-style: none;
+  width: 100%;
+  height: 3rem;
+  font-size: 1.2rem;
+  line-height: 3rem;
+  
+}
+
+a {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  text-decoration: none;
+  color: #000;
+}
+
+.content {
+  position: absolute;
+  top: 3.2rem;
+  font-size: 1.2rem;
+  width: 100%;
+  word-break: break-all;
+}
+.content p{
+  text-indent: 2em;
+}
+
+.nav {
+  background-color: cornflowerblue; 
+  width: 100%;
+  height: 3.2rem;
+  position: fixed;
+  top: 0;
+  z-index: 2;
+}
+.nav-back {
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 3.2rem; 
+}
+
+/*.swap-enter {
+  opacity: 0.01;
+  transform: translateX(5em);
+  transition: all .5s ease-in;
+}
+
+.swap-enter.swap-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.swap-leave {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all .5s ease-in;
+}
+
+.swap-leave.swap-leave-active {
+  opacity: 0;
+  transform: translateX(-5em);
+}*/
+
+.swap-enter {
+  opacity: 0.01;
+  transform: translateX(5em);
+  transition: all .5s ease-in;
+}
+
+.swap-enter.swap-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.swap-leave {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all .5s ease-in-out;
+}
+
+.swap-leave.swap-leave-active {
+  opacity: 0;
+  transform: translateX(-5em);
+}
+
+
+/*.example-enter {
+  opacity: 0.01;
+  transition: opacity .5s ease-in;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+}
+
+.example-leave {
+  opacity: 1;
+  transition: opacity .5s ease-in;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0;
+}
+
+.transition-wrapper {
+  height: 100%;
+}*/
+
+
+
+/*
+.example-enter {
+  opacity: 0.01;
+  transition: opacity .5s ease-in;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+}
+
+.example-leave {
+  opacity: 1;
+  transition: opacity .5s ease-in;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0;
+}*/
