@@ -12,7 +12,7 @@ class App extends React.Component {
         //     transitionName = 'page-l2r';
         // }
         this.state={
-            transitionName: 'page-l2r'
+            transitionName: 'page'
         }
     }
 
@@ -26,7 +26,7 @@ class App extends React.Component {
             transitionName: 'page-r2l'
         });
     }
-
+    
   render() {
         
     return (
