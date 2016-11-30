@@ -1,7 +1,6 @@
 var webpack = require('webpack');
 var htmlWebpackPlugin = require('html-webpack-plugin');
 var autoprefixer = require('autoprefixer');
-
 module.exports = {
   devtool: 'eval-source-map',
 
@@ -29,10 +28,9 @@ module.exports = {
   //postcss:[autoprefixer({browsers:['last 2 versions']})],
   plugins: [
     new htmlWebpackPlugin({
-      template: __dirname + '/src/build-html/index.html',
+      template: __dirname + '/index.html',
       hash: true
-    }),
-    new webpack.BannerPlugin("Copyright fengnovo.")
+    })
   ],
   devServer: {
     contentBase: "./",

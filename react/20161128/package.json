@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --port=3002 --inline --host 0.0.0.0 --colors --hot",
-    "build": "webpack",
+    "build": "NODE_ENV=production webpack --config webpack.production.config.js --progress",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -23,6 +23,7 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "css-loader": "^0.26.0",
+    "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.24.1",
     "postcss-loader": "^1.1.1",
     "style-loader": "^0.13.1",

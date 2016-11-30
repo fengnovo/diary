@@ -5,6 +5,14 @@ class B extends React.Component {
         super(props)
         this.handleClickOne = this.handleClickOne.bind(this)
         this.handleClickFour = ::this.handleClickFour
+        function map(func) {
+            var mapped = new Array(this.length);
+            for(var i = 0; i < this.length; i++) {
+                mapped[i] = func(this[i], i);  
+            }
+            return mapped;
+        }
+        console.log([1, 2, 3]::map(x => x * 2))
     }
 
     handleBack () {
