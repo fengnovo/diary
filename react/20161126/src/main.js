@@ -6,7 +6,6 @@ import A from './js/A.js'
 import B from './js/B.js'
 import './css/main.css'
 
-
 ReactDOM.render(
     <Router history={hashHistory}>
         <Route path="/" component={App}>
