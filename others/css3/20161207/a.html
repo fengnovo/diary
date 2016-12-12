@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>html5下拉事件简单实例</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="apple-touch-fullscreen" content="YES" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="format-detection" content="telephone=no"/>
+    </head>
+    <body id="bodyid">
+        <h2>html5下拉事件简单实例</h2>
+        <br />
+        <div id="version" style="border:2px solid black;background-color:yellow"></div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <div id="result" style="border:2px solid red; color:red;">未触发事件！</div>
+        <script type="text/javascript">
+            //全局变量，触摸开始位置
+            var startX = 0, startY = 0;
+            
+            //touchstart事件
+            function touchSatrtFunc(evt) {
+                try
+                {
+                    evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
+
+                    var touch = evt.touches[0]; //获取第一个触点
+                    var x = touch.pageX; //页面触点X坐标
+                    var y = touch.pageY; //页面触点Y坐标
+                    //记录触点初始位置
+                    startX = x;
+                    startY = y;
+
+                    var text = 'TouchStart事件触发：（' + x + ', ' + y + '）';
+                    document.getElementById("result").innerHTML = text;
+                }
+                catch (e) {
+                    alert('touchSatrtFunc：' + e.message);
+                }
+            }
+
+            //touchmove事件，这个事件无法获取坐标
+            function touchMoveFunc(evt) {
+                try
+                {
+                    evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
+                    var touch = evt.touches[0]; //获取第一个触点
+                    var x = touch.pageX; //页面触点X坐标
+                    var y = touch.pageY; //页面触点Y坐标
+                    
+                    var text = 'TouchMove事件触发：（' + x + ', ' + y + '）';
+
+                    if (y - startY < 100) {
+                        text += '<br/>下拉事件触发';
+                        bindEvent(1);
+                    }
+                    
+                    //document.getElementById("ggimgid").style["webkitTransform"] = 'translate(0px,' + (y - startY) + 'px) scale(1) translateZ(0px)';
+                    
+                    
+                    document.getElementById("result").innerHTML = text;
+                }
+                catch (e) {
+                    alert('touchMoveFunc：' + e.message);
+                }
+            }
+
+            //touchend事件
+            function touchEndFunc(evt) {
+                try {
+                    evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
+
+                    var text = 'TouchEnd事件触发';
+                    document.getElementById("result").innerHTML = text;
+                }
+                catch (e) {
+                    alert('touchEndFunc：' + e.message);
+                }
+            }
+            //绑定事件
+            function bindEvent(f) {
+                if(f==1){
+                    document.removeEventListener('touchstart', touchSatrtFunc, false);
+                    document.removeEventListener('touchmove', touchMoveFunc, false);
+                    document.removeEventListener('touchend', touchEndFunc, false);
+                }else{
+                    document.addEventListener('touchstart', touchSatrtFunc, false);
+                    document.addEventListener('touchmove', touchMoveFunc, false);
+                    document.addEventListener('touchend', touchEndFunc, false);
+                }
+            }
+            //判断是否支持触摸事件
+            function isTouchDevice() {
+                document.getElementById("version").innerHTML = navigator.appVersion;
+                try {
+                    document.createEvent("TouchEvent");
+                    //alert("支持TouchEvent事件！");
+                    bindEvent(); //绑定事件
+                }
+                catch (e) {
+                    //alert("不支持TouchEvent事件！" + e.message);
+                }
+            }
+            window.onload = isTouchDevice;
+    </script>
+    </body>
+</html>
