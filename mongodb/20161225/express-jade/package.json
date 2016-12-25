@@ -11,5 +11,8 @@
     "jade"
   ],
   "author": "fengnovo",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "connect": "^3.5.0"
+  }
 }
