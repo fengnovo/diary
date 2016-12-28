@@ -1,5 +1,5 @@
 //http://web.juhe.cn:8080/finance/exchange/rmbquot
 
-$.get('/finance/exchange/rmbquot',function(data){
+$.get('http://localhost:8000/api',function(data){
 	$('#app').html(data);
 })
