@@ -1,0 +1,19 @@
+{
+  "name": "https-proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "https-proxy"
+  ],
+  "author": "fengnovo",
+  "license": "ISC",
+  "dependencies": {
+    "connect": "^3.5.0",
+    "proxy-middleware": "^0.15.0",
+    "url": "^0.11.0"
+  }
+}
