@@ -1,0 +1,29 @@
+.ads-detail-body {
+	// width: 800px;
+	.form-group {
+	    margin-right: 0;
+	    margin-left: 0; 
+	}
+	/*服务icon:80*80*/
+	.ad-page-icon {
+		width: 80px;
+		height: 80px;
+	}
+	/*banner:750*260*/
+	.ad-page-banner-img {
+		width: 500px;
+		height: 140px;
+	}
+	/*四方格广告icon：144*84*/
+	.ad-page-img {
+		width: 144px;
+		height: 84px;
+	}
+	.text-line{
+		width: 600px;
+		margin-bottom: 10px;
+	}
+	.prompt {
+		color: red;
+	}
+}

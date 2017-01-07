@@ -1,0 +1,22 @@
+.navigate {
+    border-bottom: solid 1px #fff;
+    li {
+        font-size: 14px; border-bottom: solid 1px #dbdbdb;
+        a {border-radius: 0;}
+    }
+
+    & > li + li {margin: 0; border-top: solid 1px #fff;} 
+
+
+    .fz {
+    	font-size: 0.8rem;
+    }
+}
+
+.mobile {
+	height: 3rem;
+	text-align: center;
+	font-size: 1rem;
+	line-height: 3rem;
+	margin-top: 1rem;
+}

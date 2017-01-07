@@ -1,0 +1,121 @@
+.mask-modal {
+    .modal-dialog {
+        .modal-content {height: 100%; .modal-title {text-align: center;}} 
+        .modal-footer {
+            button {min-width: 88px;}
+        }
+    }
+}
+
+.mask-modal.oa-login-modal {
+    .modal-dialog {
+        position: absolute; width: 460px; height: 280px; top: 50%; left: 50%; margin-top: -140px; margin-left: -230px;
+        .modal-body {height: calc(100% - 56px - 65px); overflow-y: auto;}
+        .err-msg, strong {line-height: 24px; color: red; height: 24px; text-align: center;}
+    }
+}
+
+.mask-modal.info-search-modal {
+    .modal-dialog {
+        width: 1104px; height: calc(100% - 80px); margin: 40px auto;
+        .modal-body {height: calc(100% - 56px);}
+        .info-search-body { height: 100%;
+            .info-list {height: calc(100% - 49px); overflow: auto; border: solid 1px #ddd; border-radius: 4px;}
+            li {
+                padding-left: 20px;
+                &:nth-child(odd) {background: #f9f9f9};
+                &:hover {background: #f5f5f5;}
+                .title {padding: 10px 0 5px;}
+                .info-meta {padding: 5px 0 10px 0;}
+            }
+            .filter-hint {color: #bbb; font-size: 28px; text-align: center; margin-top: 25%;} 
+        }
+    }
+}
+
+.mask-modal.info-detail-modal {
+    .modal-dialog {
+        width: 1104px; height: calc(100% - 80px); margin: 40px auto;
+        .modal-body {height: calc(100% - 65px);}
+        .info-detail {
+            height: 100%; overflow: auto;
+            h3 {font-size: 20px; line-height: 34px; color: #333; margin-bottom: 15px;}
+            .info-meta {margin: 15px 0;}
+            article {margin: 15px 0; padding: 10px; line-height: 26px; text-align: justify; border: solid 1px #ddd; border-radius: 5px; background: oldlace;}
+            // article {margin: 15px 0; line-height: 24px; text-indent: 2em; text-align: justify;}
+        }
+    }
+}
+
+.mask-modal.grant-new-modal, .mask-modal.black-list-modal {
+    .modal-dialog {
+        position: absolute; width: 560px; height: 280px; top: 50%; left: 50%; margin-top: -140px; margin-left: -280px;
+        .modal-body {height: calc(100% - 56px - 65px); overflow-y: auto;}
+        .err-msg {height: 32px; line-height: 32px; text-align: center; color: red;}
+        .checkbox-inline {margin-left: 18px;}
+        textarea {width: 100%; height: 95%; border: solid 1px #ddd; padding: 5px; line-height: 20px; border-radius: 3px;}
+        .line {line-height: 24px;}
+    }
+}
+
+.mask-modal.info-delete-modal, .mask-modal.grant-delete-modal {
+    .modal-dialog {
+        position: absolute; width: 380px; height: 123px; top: 50%; left: 50%; margin-top: -62px; margin-left: -190px;
+    }
+}
+
+.mask-modal.report-item-modal {
+    .modal-dialog {
+        position: absolute; width: 600px; height: 400px; top: 50%; left: 50%; margin-top: -300px; margin-left: -200px;
+        .modal-body {height: calc(100% - 65px);}
+        .report-detail-body {
+            height: 100%; overflow: auto;
+            .info-title {line-height: 30px; color: #333;}
+            .info-meta {line-height: 30px;}
+            .report-cont {line-height: 30px; color: #555;}
+            #repOpsDropdown {width: 108px;}
+        }
+    }
+}
+
+.mask-modal.ads-item-modal {
+    .modal-dialog {
+        position: absolute; width: 1000px; height: 700px; top: 50%; left: 50%; margin-top: -300px; margin-left: -500px;
+        .modal-body {height: calc(100% - 65px);}
+        .ads-detail-body {
+            height: 100%; overflow: auto;
+            .info-title {line-height: 30px; color: #333;}
+            .info-meta {line-height: 30px;}
+            .report-cont {line-height: 30px; color: #555;}
+            #repOpsDropdown {width: 108px;}
+        }
+    }
+}
+
+.mask-modal.hot-item-modal {
+    .modal-dialog {
+        position: absolute; width: 1000px; height: 300px; top: 50%; left: 50%; margin-top: -300px; margin-left: -500px;
+        .modal-body {height: calc(100% - 65px);}
+        .ads-detail-body {
+            height: 100%; overflow: auto;
+            .info-title {line-height: 30px; color: #333;}
+            .info-meta {line-height: 30px;}
+            .report-cont {line-height: 30px; color: #555;}
+            #repOpsDropdown {width: 108px;}
+        }
+    }
+}
+
+.mask-modal.navs-item-modal {
+    .modal-dialog {
+        position: absolute; width: 1000px; height: 500px; top: 50%; left: 50%; margin-top: -300px; margin-left: -500px;
+        .modal-body {height: calc(100% - 65px);}
+        .ads-detail-body {
+            height: 100%; overflow: auto;
+            .info-title {line-height: 30px; color: #333;}
+            .info-meta {line-height: 30px;}
+            .report-cont {line-height: 30px; color: #555;}
+            #repOpsDropdown {width: 108px;}
+        }
+    }
+}

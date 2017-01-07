@@ -1,0 +1,152 @@
+{
+    "baseUrl": "",
+    "serverUrl": "http://mds.gf.com.cn/geninfo/v1.0/",
+    "pageSize": 20,
+
+    "tableConfig": {
+        "infoTable": {
+            "column": [
+                {"field": "id", "isKey": true, "name": "资讯ID"},
+                {"field": "title", "isKey": false, "name": "资讯标题"},
+                {"field": "statusName", "isKey": false, "name": "状态"},
+                {"field": "readCnt", "isKey": false, "name": "阅读量"},
+                {"field": "utime", "isKey": false, "name": "状态更新时间"},
+                {"field": "columnName", "isKey": false, "name": "所属栏目"},
+                {"field": "ctime", "isKey": false, "name": "创建时间"},
+                {"field": "oaname", "isKey": false, "name": "历史处理人"}
+            ],
+            "checkboxMode": true
+        },
+        "draftTable": {
+            "column": [
+                {"field": "id", "isKey": true, "name": "资讯ID"},
+                {"field": "title", "isKey": false, "name": "资讯标题"},
+                {"field": "statusName", "isKey": false, "name": "状态"},
+                {"field": "columnName", "isKey": false, "name": "所属栏目"},
+                {"field": "ctime", "isKey": false, "name": "创建时间"},
+                {"field": "oaname", "isKey": false, "name": "创建人"}
+            ],
+            "checkboxMode": true
+        },
+        "colsTable": {
+            "column": [
+                {"field": "id", "isKey": true, "name": "栏目ID"},
+                {"field": "title", "isKey": false, "name": "栏目标题"},
+                {"field": "typeName", "isKey": false, "name": "类别"},
+                {"field": "statusName", "isKey": false, "name": "状态"},
+                {"field": "order", "isKey": false, "name": "排序"},
+                {"field": "op", "isKey": false, "name": "操作"}
+            ],
+            "checkboxMode": false
+        },
+        "checkTable": {
+            "column": [
+                {"field": "ctime", "isKey": true, "name": "时间"},
+                {"field": "oaname", "isKey": false, "name": "操作人ID"},
+                {"field": "oaname", "isKey": false, "name": "操作人姓名"},
+                {"field": "content", "isKey": false, "name": "操作内容"},
+                {"field": "remark", "isKey": false, "name": "备注"}
+            ],
+            "height": "100%",
+            "checkboxMode": false
+        },
+        "reportTable": {
+            "column": [
+                {"field": "id", "isKey": true, "name": "举报ID"},
+                {"field": "content", "isKey": false, "name": "举报原因"},
+                {"field": "statusName", "isKey": false, "name": "状态"},
+                {"field": "title", "isKey": false, "name": "被举报内容"},
+                {"field": "ctime", "isKey": false, "name": "举报时间"},
+                {"field": "accountName", "isKey": false, "name": "用户"}
+            ],
+            "checkboxMode": true
+        },
+        "authTable": {
+            "column": [
+                {"field": "oaname", "isKey": true, "name": "账号"},
+                {"field": "rights", "isKey": false, "name": "权限名称"},
+                {"field": "edit", "isKey": false, "name": "操作"}
+            ],
+            "checkboxMode": false,
+            "height": "100%"
+        },
+        "adminTable": {
+            "column": [
+                {"field": "oaname", "isKey": true, "name": "管理员账号"},
+                {"field": "add", "isKey": false, "name": "操作"}
+            ],
+            "checkboxMode": false,
+            "height": "100%"
+        },
+        "adsTable": {
+            "column": [
+            ],
+            "checkboxMode": true
+        },
+        "homeNavTable": {
+            "column": [
+            ],
+            "checkboxMode": true
+        },
+        "hotQuesTable": {
+            "column": [
+            ],
+            "checkboxMode": true
+        }
+    },
+
+    "dropdown": {
+        "column": [
+            {"key": "57e4e49af5a4652492d58f27", "name": "要闻"}, 
+            {"key": "57e4e49af5a4652492d58f28", "name": "我的关注"}, 
+            {"key": "57e4e49af5a4652492d58f29", "name": "直播"}, 
+            {"key": "57e4e49af5a4652492d58f2a", "name": "专栏"}, 
+            {"key": "57e4e49af5a4652492d58f2b", "name": "交易提示"}, 
+            {"key": "57e4e49af5a4652492d58f2c", "name": "新股提示"}, 
+            {"key": "57e4e49af5a4652492d58f2d", "name": "国内财经"}, 
+            {"key": "57e4e49af5a4652492d58f2e", "name": "国际财经"}, 
+            {"key": "57e4e49af5a4652492d58f2f", "name": "A股"}, 
+            {"key": "57e4e49af5a4652492d58f30", "name": "B股"}, 
+            {"key": "57e4e49af5a4652492d58f31", "name": "基金"}, 
+            {"key": "57e4e49af5a4652492d58f32", "name": "债券"}, 
+            {"key": "57e4e49af5a4652492d58f33", "name": "期货"}, 
+            {"key": "57e4e49af5a4652492d58f34", "name": "港股"},
+            {"key": "57e4e49af5a4652492d58f35", "name": "理财"},
+            {"key": "57e4e49af5a4652492d58f36", "name": "新兴产业"}, 
+            {"key": "57e4e49af5a4652492d58f37", "name": "IPO动态"}, 
+            {"key": "57e4e49af5a4652492d58f38", "name": "并购重组"}, 
+            {"key": "57e4e49af5a4652492d58f39", "name": "研报大全"}, 
+            {"key": "57e4e49af5a4652492d58f3a", "name": "投资技巧"}, 
+            {"key": "57e4e49af5a4652492d58f3b", "name": "广发投教"}, 
+            {"key": "57e4e49af5a4652492d58f3c", "name": "个股速递"}, 
+            {"key": "57e4e49af5a4652492d58f3d", "name": "市场策略"}, 
+            {"key": "57e4e49af5a4652492d58f3e", "name": "行业专题"}, 
+            {"key": "57e4e49af5a4652492d58f3f", "name": "有声开讲"}, 
+            {"key": "57e4e49af5a4652492d58f40", "name": "资讯产品"}
+        ],
+        "searchSource": [
+            {"key": "null", "name": "全部"},
+            {"key": "0", "name": "精选资讯"},
+            {"key": "1", "name": "资讯平台"}, 
+            {"key": "2", "name": "贝格"}, 
+            {"key": "3", "name": "新浪"}, 
+            {"key": "4", "name": "投顾"} 
+        ],
+        "infoStatus": [
+            {"key": "-1", "name": "全部"},
+            {"key": "10", "name": "待初审"}, 
+            {"key": "11", "name": "待复审"}, 
+            {"key": "19", "name": "被驳回"}, 
+            {"key": "30", "name": "待上线"}, 
+            {"key": "40", "name": "已上线"}, 
+            {"key": "80", "name": "已下线"}
+        ],
+        "reportStatus": [
+            {"key": "-1", "name": "全部"},
+            {"key": "1", "name": "捏造事实、传播政治性等谣言；②恶意营销；③涉及色情、恐怖、暴力等内容；③版权类侵权（媒体不当引用、抄袭等）④恶意诽谤、贬损他人⑤其他意见和建议"}
+        ]
+    },
+
+    "tableTestData": [
+    ]
+}

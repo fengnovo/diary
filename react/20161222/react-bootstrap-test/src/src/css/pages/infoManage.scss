@@ -1,0 +1,15 @@
+.info-manage-page, .draft-manage-page, .cols-manage-page, .report-manage-page {
+    .page-body {
+        .react-bs-table-container {flex:1; overflow: auto;}
+        .react-bs-table {background: white; margin: 0}
+        .react-bs-table-pagination {margin: 10px 0;}
+    };    
+}
+
+/* .draft-manage-page {
+    .draft-manage-body {
+        .react-bs-table-container {position: absolute; top: 64px; bottom: 36px; right: 15px; left: 15px;flex:1; }
+        .react-bs-table {background: white; margin: 0}
+        .react-bs-table-pagination {margin: 10px 0;}
+    };    
+} */

@@ -1,0 +1,26 @@
+.edit-banner-page {
+    .body-right {
+        .items-wrap {flex: 1; overflow: auto;}
+
+        .column-title {font-size: 20px; line-height: 34px; color: #333; margin-bottom: 15px; }
+        
+        .banner-item {
+            position: relative;
+            .banner-deler { position: absolute; z-index: 10; top: 0; right: 0; width: 36px; height: 36px; outline: none;
+                            background: url('../img/close.png') no-repeat; background-size: cover; opacity: 0; transition: all 1s;}
+            &:hover .banner-deler {opacity: 1;}
+        }
+        .banner-form {
+            margin-bottom: 25px; padding-bottom: 10px; border-bottom: 1px dotted #bbb;
+            .img-hint {line-height: 34px;}
+            .img-rounded {width: 375px;}
+            button {width: 100%;}
+            strong {color: red;}
+        }
+
+        .edit-ops {
+            text-align: right;
+            button {min-width: 88px; margin-left: 15px;}
+        }
+    }
+}
