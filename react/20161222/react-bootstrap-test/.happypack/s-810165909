@@ -1,0 +1,322 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _maskModal = require('../components/maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Header = function (_React$Component) {
+    _inherits(Header, _React$Component);
+
+    function Header(props) {
+        _classCallCheck(this, Header);
+
+        var _this2 = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props));
+
+        _this2.state = {};
+
+        _this2._bind.apply(_this2, ['login', 'logout', 'preLogout', 'newInfo', 'href', 'showModal', 'closeModal', 'renderModal']);
+        return _this2;
+    }
+
+    _createClass(Header, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var oaUser = _util2.default.getOaUser();
+
+            oaUser ? this.setState({ oaUser: oaUser }) : this.showModal('login');
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'showModal',
+        value: function showModal(modalName, clickFun) {
+            var _this4 = this;
+
+            this.setState({ showModal: true, modalName: modalName, clickFun: clickFun }, function () {
+                _this4.refs.MaskModal && _this4.refs.MaskModal.open();
+            });
+
+            var _this = this;
+            if (modalName == 'login') {
+                // $("#oaname").focus();
+                document.onkeydown = function keydown(e) {
+                    var e = e || event;
+                    var currKey = e.keyCode || e.which || e.charCode;
+                    if (currKey == 13) {
+                        console.log('触发了回车键');
+                        _this.login();
+                    }
+                };
+            }
+        }
+    }, {
+        key: 'newInfo',
+        value: function newInfo() {
+            // if ($("#certiCode").length) { // 判断当前是否是在编辑状态，
+            if (document.forms.newInfoForm) {
+                this.showModal('cancel', this.href);
+            } else {
+                this.href();
+            }
+        }
+    }, {
+        key: 'href',
+        value: function href() {
+            this.closeModal();
+            window.location.href = '#/newInfo';
+        }
+    }, {
+        key: 'login',
+        value: function login() {
+            var _this5 = this;
+
+            var $loginForm = (0, _jquery2.default)(this.refs.loginForm),
+                oaname = $loginForm.find('#oaname').val(),
+                password = $loginForm.find('#password').val();
+
+            if (!oaname) {
+                this.setState({ errMsg: '请输入用户名' });
+                return;
+            }
+            if (!password) {
+                this.setState({ errMsg: '请输入密码' });
+                return;
+            }
+
+            _jquery2.default.ajax({
+                url: _globalConfig2.default.baseUrl + '/api/login',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({ oaname: oaname, password: password })
+            }).done(function (json) {
+                if (0 != json.errCode) {
+                    _this5.setState({ errMsg: json.errMsg });
+                } else {
+                    // this.setState({oaUser: json.data});
+                    // this.closeModal();
+
+                    window.location.reload();
+                }
+            }).fail(function () {
+                _this5.setState({ errMsg: '未知错误，请联系维护人员' });
+            });
+        }
+    }, {
+        key: 'preLogout',
+        value: function preLogout() {
+            if (document.forms.newInfoForm) {
+                this.showModal('cancel', this.logout);
+            } else {
+                this.closeModal();
+                this.logout();
+            }
+        }
+    }, {
+        key: 'logout',
+        value: function logout() {
+            _jquery2.default.ajax({
+                url: _globalConfig2.default.baseUrl + '/api/login',
+                type: 'put',
+                dataType: 'json',
+                contentType: 'application/json'
+            })
+            /*.done((data) => {
+                if (0 != data.errCode) {
+                    this.setState({errMsg: data.errMsg});
+                }
+                else {
+                    this.setState({oaUser: util.getOaUser()});
+                    this.closeModal();
+                }
+            })
+            .fail(() => {
+                this.setState({errMsg: '未知错误，请联系维护人员'});
+            })*/
+            .always(function () {
+                window.location.href = '/';
+                // this.setState({oaUser: undefined});
+            });
+        }
+    }, {
+        key: 'closeModal',
+        value: function closeModal() {
+            this.setState({ errMsg: undefined });
+            this.refs.MaskModal && this.refs.MaskModal.close();
+        }
+    }, {
+        key: 'renderModal',
+        value: function renderModal(modalName) {
+            if (!this.state.showModal || !modalName) {
+                return null;
+            }
+
+            var modalInfo = void 0,
+                modalBody = void 0;
+
+            if ('login' == modalName) {
+                modalInfo = {
+                    className: 'oa-login-modal',
+                    title: '登录',
+                    btns: [{ name: '取消', click: this.closeModal }, { name: '登录', bsStyle: 'primary', click: this.login }]
+                };
+
+                modalBody = _react2.default.createElement(
+                    'div',
+                    { ref: 'loginForm', className: 'login-body' },
+                    _react2.default.createElement(
+                        'p',
+                        { className: 'err-msg' },
+                        this.state.errMsg
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Form,
+                        { horizontal: true, className: 'login-form' },
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'oaname' },
+                            _react2.default.createElement(
+                                _reactBootstrap.Col,
+                                { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                                '用户名',
+                                _react2.default.createElement(
+                                    'strong',
+                                    null,
+                                    '*'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.Col,
+                                { sm: 10 },
+                                _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: '请输入用户名' })
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'password' },
+                            _react2.default.createElement(
+                                _reactBootstrap.Col,
+                                { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                                '密码',
+                                _react2.default.createElement(
+                                    'strong',
+                                    null,
+                                    '*'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.Col,
+                                { sm: 10 },
+                                _react2.default.createElement(_reactBootstrap.FormControl, { type: 'password', placeholder: '请输入密码' })
+                            )
+                        )
+                    )
+                );
+            } else {
+                modalInfo = {
+                    className: 'info-delete-modal',
+                    title: '确定不保存并退出当前编辑吗？',
+                    btns: [{ name: '取消', click: this.closeModal }, { name: '确定', bsStyle: 'primary', click: this.state.clickFun || this.closeModal }]
+                };
+            }
+
+            return _react2.default.createElement(
+                _maskModal2.default,
+                { ref: 'MaskModal', showModal: true, modalInfo: modalInfo },
+                modalBody
+            );
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _state = this.state;
+            var oaUser = _state.oaUser;
+            var modalName = _state.modalName;
+
+            var colName = this.props.colName,
+                newBtn = void 0,
+                rights = oaUser ? oaUser.operations.split('+') : []; //1查看2编辑3初审4复审5上线
+
+            if (oaUser && ('infoManage' == colName || 'draftManage' == colName) && rights.indexOf('2') >= 0) {
+                newBtn = _react2.default.createElement(
+                    'a',
+                    { className: 'new', onClick: this.newInfo, href: 'javascript:;' },
+                    '新建'
+                );
+            }
+
+            return _react2.default.createElement(
+                'header',
+                { className: 'header' },
+                _react2.default.createElement('div', { className: 'logo' }),
+                oaUser ? _react2.default.createElement(
+                    'a',
+                    { className: 'login', href: 'javascript:;', onClick: this.preLogout },
+                    oaUser.oaname + ' | 退出'
+                ) : _react2.default.createElement(
+                    'a',
+                    { className: 'login', href: 'javascript:;', onClick: this.showModal.bind(this, 'login') },
+                    '登陆'
+                ),
+                newBtn,
+                this.renderModal(modalName)
+            );
+        }
+    }]);
+
+    return Header;
+}(_react2.default.Component);
+
+;
+
+exports.default = Header;

@@ -1,0 +1,345 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _header = require('../components/header');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _navigate = require('../components/navigate');
+
+var _navigate2 = _interopRequireDefault(_navigate);
+
+var _listFilter = require('../components/listFilter');
+
+var _listFilter2 = _interopRequireDefault(_listFilter);
+
+var _listOps = require('../components/listOps');
+
+var _listOps2 = _interopRequireDefault(_listOps);
+
+var _table = require('../components/table');
+
+var _table2 = _interopRequireDefault(_table);
+
+var _footer = require('../components/footer');
+
+var _footer2 = _interopRequireDefault(_footer);
+
+var _maskModal = require('../components/maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+var _notLogin = require('../components/notLogin');
+
+var _notLogin2 = _interopRequireDefault(_notLogin);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var InfoManage = function (_React$Component) {
+    _inherits(InfoManage, _React$Component);
+
+    function InfoManage(props) {
+        _classCallCheck(this, InfoManage);
+
+        var _this2 = _possibleConstructorReturn(this, (InfoManage.__proto__ || Object.getPrototypeOf(InfoManage)).call(this, props));
+
+        _this2.state = {};
+        _this2.option = {
+            page: 1
+        };
+        _this2.dataToOp = {};
+        _this2._bind.apply(_this2, ['onRowClick', 'onRowSelect', 'onSelectAll', 'getTableData', 'onPageChange', 'doDelete', 'doCheck', 'closeModal', 'ensureDelete', 'renderModal']);
+        return _this2;
+    }
+
+    _createClass(InfoManage, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'onRowClick',
+        value: function onRowClick(row) {
+            window.open('#/infoDetail/' + row.id);
+        }
+    }, {
+        key: 'onRowSelect',
+        value: function onRowSelect(row, isSelected) {
+            if (isSelected) {
+                this.dataToOp[row.id] = row;
+            } else {
+                delete this.dataToOp[row.id];
+            }
+        }
+    }, {
+        key: 'onSelectAll',
+        value: function onSelectAll(isSelected) {
+            if (isSelected) {
+                var i = 0,
+                    list = this.state.list,
+                    len = list.length,
+                    row = void 0;
+                for (; i < len; i++) {
+                    row = list[i];
+                    this.dataToOp[row.id] = row;
+                }
+            } else {
+                this.dataToOp = {};
+            }
+        }
+    }, {
+        key: 'getTableData',
+        value: function getTableData(option) {
+            var _this = this;
+            var url = _globalConfig2.default.baseUrl + '/api/articles';
+            // var url = (option.page == 1 ? '/test/testData.json' : '/test/testData2.json');
+
+            this.option = option; // listFilter 查询时，缓存查询条件，翻页时用
+
+            _jquery2.default.getJSON(url, option, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+
+                var infoStatus = _globalConfig2.default.dropdown.infoStatus;
+
+                var list = json.data.map(function (item, i) {
+                    item.statusName = _util2.default.keyToName(infoStatus, item.status);
+                    item.columnName = item.columnsInfo[0].title;
+                    item.ctime = _util2.default.dateStrFromUnix(item.createTime);
+                    item.utime = _util2.default.dateStrFromUnix(item.updateTime);
+
+                    return item;
+                });
+
+                _this.setState({
+                    list: list,
+                    total: json.total
+                });
+            });
+        }
+    }, {
+        key: 'onPageChange',
+        value: function onPageChange(page, sizePerPage) {
+            this.option.page = page;
+            this.getTableData(this.option);
+        }
+    }, {
+        key: 'ensureDelete',
+        value: function ensureDelete() {
+            this.doCheck(100);
+            this.closeModal();
+        }
+    }, {
+        key: 'closeModal',
+        value: function closeModal() {
+            this.refs.MaskModal && this.refs.MaskModal.close();
+        }
+    }, {
+        key: 'doDelete',
+        value: function doDelete() {
+            if (this.dataToOp && _jquery2.default.isEmptyObject(this.dataToOp)) {
+                this.refs.listOps.showToast();
+                return;
+            }
+
+            this.refs.MaskModal && this.refs.MaskModal.open();
+        }
+    }, {
+        key: 'doCheck',
+        value: function doCheck() {
+            var _this4 = this;
+
+            var nextStatus = arguments.length <= 0 || arguments[0] === undefined ? 11 : arguments[0];
+
+            var listOps = this.refs.listOps,
+                dataToOp = this.dataToOp;
+            var opName = { '11': '通过初审', '30': '通过复审', '100': '删除条目' }[nextStatus];
+
+            if (listOps.state.showToast) {
+                return; // 避免重复操作
+            }
+
+            if (dataToOp && _jquery2.default.isEmptyObject(dataToOp)) {
+                listOps.showToast();
+                return;
+            } else {
+                listOps.showToast('正在' + opName + '，请稍候...', true);
+            }
+
+            var key = void 0,
+                row = void 0,
+                size = 0,
+                statusToOp = { '11': 10, '30': 11, '100': 100 };
+
+            for (key in dataToOp) {
+                row = dataToOp[key];
+                if (100 != nextStatus && row.status != statusToOp[nextStatus] || 100 == nextStatus && row.status == 100) {
+                    // 删除条目时，不用判断状态(已经是删除状态的除外)
+                    continue;
+                }
+
+                size++;
+
+                _jquery2.default.ajax({
+                    url: _globalConfig2.default.baseUrl + '/api/article/' + row.id,
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ status: nextStatus })
+                }).always(function () {
+                    size--;
+                    if (0 == size) {
+                        listOps.showToast(opName + '操作完成');
+                        setTimeout(function () {
+                            _this4.onPageChange(1); // 全部返回后，刷新列表
+                        }, 2000);
+                    }
+                });
+            };
+
+            if (0 == size) {
+                listOps.showToast(opName + '操作完成');
+                setTimeout(function () {
+                    _this4.onPageChange(1); // 取消选中态
+                }, 2000);
+            }
+
+            this.dataToOp = {};
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            /*var _this = this;
+            var url = `${globalConfig.baseUrl}/api/columns`;
+             $.getJSON(url, {page: 1, pageSize: 100}, function(json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+                 let data = json.data, len = data.length, i = 0, column = [], item;
+                 for (; i < len; i++) {
+                    item = data[i];
+                    column.push({key: item.id, name: item.title});
+                }
+                globalConfig.dropdown.column = column;
+            });*/
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'renderModal',
+        value: function renderModal() {
+            var modalInfo = {
+                className: 'info-delete-modal',
+                title: '确定删除所选的内容吗？',
+                btns: [{ name: '确定', bsStyle: 'primary', click: this.ensureDelete }, { name: '取消', click: this.closeModal }]
+            };
+
+            return _react2.default.createElement(_maskModal2.default, { ref: 'MaskModal', showModal: false, modalInfo: modalInfo });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var opFun = {
+                doDelete: this.doDelete,
+                doCheck: this.doCheck
+            };
+            var tableConfig = _globalConfig2.default.tableConfig.infoTable;
+            var tableFun = {
+                onRowClick: this.onRowClick,
+                onRowSelect: this.onRowSelect,
+                onSelectAll: this.onSelectAll,
+                onPageChange: this.onPageChange
+            };
+            var tableData = {
+                list: this.state.list,
+                page: this.option.page || 1,
+                total: this.state.total
+            };
+
+            var bodyRight,
+                oaUser = _util2.default.getOaUser();
+
+            if (oaUser) {
+                bodyRight = _react2.default.createElement(
+                    'div',
+                    { className: 'body-right' },
+                    _react2.default.createElement(_listFilter2.default, { colName: 'infoManage', getTableData: this.getTableData }),
+                    _react2.default.createElement(_listOps2.default, { colName: 'infoManage', opFun: opFun, ref: 'listOps' }),
+                    _react2.default.createElement(_table2.default, { tableConfig: tableConfig, tableFun: tableFun, tableData: tableData }),
+                    _react2.default.createElement(_footer2.default, null)
+                );
+            } else {
+                bodyRight = _react2.default.createElement(
+                    'div',
+                    { className: 'body-right' },
+                    _react2.default.createElement(_notLogin2.default, null),
+                    _react2.default.createElement(_footer2.default, null)
+                );
+            }
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'info-manage-page page-wrap', ref: 'infoManage' },
+                _react2.default.createElement(_header2.default, { colName: 'infoManage' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'info-manage-body page-body' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-left' },
+                        _react2.default.createElement(_navigate2.default, { colName: 'infoManage' })
+                    ),
+                    bodyRight
+                ),
+                this.renderModal()
+            );
+        }
+    }]);
+
+    return InfoManage;
+}(_react2.default.Component);
+
+;
+
+exports.default = InfoManage;

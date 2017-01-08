@@ -1,0 +1,84 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = require('react-router');
+
+var _app = require('./pages/app.jsx');
+
+var _app2 = _interopRequireDefault(_app);
+
+var _infoManage = require('./pages/infoManage.jsx');
+
+var _infoManage2 = _interopRequireDefault(_infoManage);
+
+var _draftManage = require('./pages/draftManage.jsx');
+
+var _draftManage2 = _interopRequireDefault(_draftManage);
+
+var _infoDetail = require('./pages/infoDetail.jsx');
+
+var _infoDetail2 = _interopRequireDefault(_infoDetail);
+
+var _colsManage = require('./pages/colsManage.jsx');
+
+var _colsManage2 = _interopRequireDefault(_colsManage);
+
+var _editColBanner = require('./pages/editColBanner.jsx');
+
+var _editColBanner2 = _interopRequireDefault(_editColBanner);
+
+var _reportManage = require('./pages/reportManage.jsx');
+
+var _reportManage2 = _interopRequireDefault(_reportManage);
+
+var _authManage = require('./pages/authManage.jsx');
+
+var _authManage2 = _interopRequireDefault(_authManage);
+
+var _adsManage = require('./pages/adsManage.jsx');
+
+var _adsManage2 = _interopRequireDefault(_adsManage);
+
+var _homeNavManage = require('./pages/homeNavManage.jsx');
+
+var _homeNavManage2 = _interopRequireDefault(_homeNavManage);
+
+var _hotQuesManage = require('./pages/hotQuesManage.jsx');
+
+var _hotQuesManage2 = _interopRequireDefault(_hotQuesManage);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var historyOptions = {
+    queryKey: false
+}; // hashHistory, browserHistory
+
+var routes = _react2.default.createElement(
+    _reactRouter.Router,
+    { history: _reactRouter.hashHistory },
+    _react2.default.createElement(
+        _reactRouter.Route,
+        { path: '/', component: _app2.default },
+        _react2.default.createElement(_reactRouter.IndexRoute, { component: _homeNavManage2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: 'infoManage', component: _infoManage2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: 'newInfo(/:infoId)', component: _infoDetail2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: 'infoDetail/:infoId', component: _infoDetail2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: 'draftManage', component: _draftManage2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: 'colsManage', component: _colsManage2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: 'editColBanner/:colId', component: _editColBanner2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: 'reportManage', component: _reportManage2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: 'authManage', component: _authManage2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: 'adsManage', component: _adsManage2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: 'homeNavManage', component: _homeNavManage2.default }),
+        _react2.default.createElement(_reactRouter.Route, { path: 'hotQuesManage', component: _hotQuesManage2.default })
+    )
+);
+
+exports.default = routes;

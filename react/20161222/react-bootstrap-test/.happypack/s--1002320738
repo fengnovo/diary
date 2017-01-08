@@ -1,0 +1,928 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _reactBootstrapDaterangepicker = require('react-bootstrap-daterangepicker');
+
+var _reactBootstrapDaterangepicker2 = _interopRequireDefault(_reactBootstrapDaterangepicker);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _header = require('../components/header');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _navigate = require('../components/navigate');
+
+var _navigate2 = _interopRequireDefault(_navigate);
+
+var _listFilter = require('../components/listFilter');
+
+var _listFilter2 = _interopRequireDefault(_listFilter);
+
+var _listOps = require('../components/listOps');
+
+var _listOps2 = _interopRequireDefault(_listOps);
+
+var _table = require('../components/table');
+
+var _table2 = _interopRequireDefault(_table);
+
+var _footer = require('../components/footer');
+
+var _footer2 = _interopRequireDefault(_footer);
+
+var _maskModal = require('../components/maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+var _Toast = require('../components/Toast');
+
+var _Toast2 = _interopRequireDefault(_Toast);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var chan = function chan(cg) {
+    if (cg == 1) {
+        return '轮播广告';
+    }
+    if (cg == 2) {
+        return '文字条广告';
+    }
+    if (cg == 3) {
+        return '四方块广告';
+    }
+};
+
+var selectCategory = void 0;
+
+var AdsItem = function (_React$Component) {
+    _inherits(AdsItem, _React$Component);
+
+    function AdsItem(props) {
+        _classCallCheck(this, AdsItem);
+
+        var _this2 = _possibleConstructorReturn(this, (AdsItem.__proto__ || Object.getPrototypeOf(AdsItem)).call(this, props));
+
+        console.log(chan(_this2.props.curCategory));
+        _this2.state = {
+            repOpsTitle1: chan(_this2.props.curCategory),
+            status1: _this2.props.curCategory,
+            repOpsTitle2: '3',
+            status2: 0,
+            repOpsTitle3: '当前页',
+            status3: 0,
+            repOpsTitle4: '请选择',
+            status4: true,
+            repOpsTitle5: '默认',
+            status5: 0,
+            beginTime: (0, _moment2.default)().subtract(29, 'days').startOf('day'), //moment(new Date()).format('YYYY-MM-DD'),
+            category: _this2.props.curCategory,
+            content: "",
+            endTime: (0, _moment2.default)().endOf('day'), //moment(new Date()).format('YYYY-MM-DD'),
+            linkUrl: "",
+            name: "",
+            order: 0, //顺序  越小越大
+            picUrl: "",
+            status: 0, //审核状态
+            target: 1, //显示方式
+            linkType: 0, //打开模式，0是默认从清单里面选择跳转链接，1是自定义跳转链接
+            repOpsTitle6: '指向h5页面',
+            status6: 1 //选择自定义里的h5页面1,native界面2,arms界面3
+        };
+
+        selectCategory = _this2.props.curCategory;
+        _this2._bind.apply(_this2, ['onRepOPsSelect1', 'onRepOPsSelect2', 'onRepOPsSelect3', 'onRepOPsSelect4', 'onRepOPsSelect5', 'onRepOPsSelect6', 'upfile', 'handleAdNameChange', 'handleAdOrderChange', 'handleContentChange', 'handleLinkUrlChange', 'openFile', 'handleEvent']);
+
+        return _this2;
+    }
+
+    _createClass(AdsItem, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this4 = this;
+
+            var _this = this;
+            if (this.props.type === 'edit') {
+                (function () {
+                    var id = _this4.props.editId;
+                    console.log(id);
+                    _jquery2.default.getJSON(_globalConfig2.default.baseUrl + '/api/ad/' + id, function (json, textStatus) {
+                        var beginTime = json.beginTime;
+                        var category = json.category;
+                        var content = json.content;
+                        var endTime = json.endTime;
+                        var linkUrl = json.linkUrl;
+                        var name = json.name;
+                        var order = json.order;
+                        var picUrl = json.picUrl;
+                        var status = json.status;
+                        var target = json.target;
+                        var linkType = json.linkType;
+
+                        var loadState = void 0;
+                        selectCategory = category;
+                        if (linkType === 1) {
+                            //自定义的
+                            loadState = {
+                                status4: false, //显示自定义，指向h5页面或是指向原生界面
+                                repOpsTitle5: '自定义',
+                                status5: 1,
+                                repOpsTitle6: _util2.default.changeStatusToShow(linkUrl).stName,
+                                status6: _util2.default.changeStatusToShow(linkUrl).st,
+                                id: id,
+                                beginTime: (0, _moment2.default)(new Date(beginTime * 1000)).endOf('day'), //,
+                                category: category,
+                                repOpsTitle1: chan(category),
+                                status1: category,
+                                content: content,
+                                endTime: (0, _moment2.default)(new Date(endTime * 1000)).endOf('day'), //,
+                                linkUrl: _util2.default.changeStatusToShow(linkUrl).showUrl,
+                                name: name,
+                                order: order,
+                                picUrl: picUrl,
+                                status: status,
+                                target: target,
+                                linkType: linkType
+                            };
+                        } else {
+                            loadState = {
+                                id: id,
+                                beginTime: (0, _moment2.default)(new Date(beginTime * 1000)).endOf('day'), //,
+                                category: category,
+                                repOpsTitle1: chan(category),
+                                status1: category,
+                                content: content,
+                                endTime: (0, _moment2.default)(new Date(endTime * 1000)).endOf('day'), //,
+                                linkUrl: linkUrl,
+                                name: name,
+                                order: order,
+                                picUrl: picUrl,
+                                status: status,
+                                target: target,
+                                repOpsTitle4: _util2.default.changeStatusToShow(linkUrl).showUrl,
+                                linkType: linkType
+                            };
+                        }
+                        _this4.setState(loadState);
+                        console.log({
+                            beginTime: (0, _moment2.default)(new Date(beginTime * 1000)).endOf('day'),
+                            category: category,
+                            content: content,
+                            endTime: (0, _moment2.default)(new Date(endTime * 1000)).endOf('day'),
+                            linkUrl: linkUrl,
+                            name: name,
+                            order: order,
+                            picUrl: picUrl,
+                            status: status,
+                            target: target,
+                            linkType: linkType
+                        });
+                    });
+                })();
+            }
+
+            this.upfile();
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'upfile',
+        value: function upfile() {
+            var _this = this;
+            (0, _jquery2.default)(this.refs.fileUpload).unbind().bind('change', function () {
+                var file = this.files[0];
+
+                if (!file || file.type.indexOf('image') < 0) {
+                    _this.refs.Toast.show('请选择图片格式的文件');
+                    return;
+                };
+
+                if (file.size > 1000000) {
+                    _this.refs.Toast.show('图片大小超过1M');
+                    return;
+                }
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = document.createElement('img');
+                    img.title = file.name;
+                    img.src = e.target.result;
+                    img.onload = function () {
+                        console.log('selectCategory==1-------' + (selectCategory == 1));
+                        var uploadImgFunc = function uploadImgFunc() {
+                            var formdata = new FormData();
+                            formdata.append("file", file);
+                            _jquery2.default.ajax({
+                                url: _globalConfig2.default.baseUrl + '/api/upload',
+                                type: 'post',
+                                data: formdata,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                dataType: "json",
+                                success: function success(json) {
+
+                                    if (json.errCode == '0') {
+                                        console.log(json.data.url);
+                                        console.log(json);
+                                        (0, _jquery2.default)(_this.refs.adImgInput).attr('src', json.data.url);
+                                        _this.setState({
+                                            picUrl: json.data.url
+                                        });
+                                    }
+                                }
+                            });
+                        };
+                        if (selectCategory == 1) {
+                            if (this.width != 750 || this.height != 260) {
+                                _this.refs.Toast.show('图片尺寸不符合750*260规格');
+                            } else {
+                                uploadImgFunc();
+                            }
+                        } else {
+                            if (this.width != 144 || this.height != 84) {
+                                _this.refs.Toast.show('图片尺寸不符合144*84规格');
+                            } else {
+                                uploadImgFunc();
+                            }
+                        }
+                    };
+                };
+                reader.readAsDataURL(file);
+
+                this.value = ''; // 清除本次选定的文件，否则下次选择同样文件时，不触发onchange事件
+
+                return false;
+            });
+        }
+    }, {
+        key: 'openFile',
+        value: function openFile() {
+            (0, _jquery2.default)(this.refs.fileUpload).trigger('click');
+        }
+    }, {
+        key: 'handleEvent',
+        value: function handleEvent(event, picker) {
+            this.setState({
+                beginTime: picker.startDate,
+                endTime: picker.endDate
+            });
+            console.log({
+                beginTime: picker.startDate,
+                endTime: picker.endDate
+            });
+        }
+    }, {
+        key: 'onRepOPsSelect1',
+        value: function onRepOPsSelect1(key, evt) {
+            var _this5 = this;
+
+            //三种广告方式切换
+            this.setState({
+                repOpsTitle1: chan(key),
+                status1: key,
+                category: parseInt(key),
+                picUrl: ""
+            });
+            selectCategory = parseInt(key);
+            setTimeout(function () {
+                _this5.upfile();
+            }, 100);
+        }
+    }, {
+        key: 'onRepOPsSelect2',
+        value: function onRepOPsSelect2(key, evt) {
+            var title = ['1', '2', '3'][key],
+                status2 = [0, 1, 2][key];
+
+            this.setState({ repOpsTitle2: title, status2: status2 });
+        }
+    }, {
+        key: 'onRepOPsSelect3',
+        value: function onRepOPsSelect3(key, evt) {
+            var title = ['当前页', 'xx页'][key],
+                status3 = [0, 1, 2][key];
+
+            this.setState({ repOpsTitle3: title, status3: status3 });
+        }
+    }, {
+        key: 'onRepOPsSelect4',
+        value: function onRepOPsSelect4(key, evt) {
+            //默认让用户从功能清单中选择
+            var text = void 0;
+            this.props.opList.map(function (i) {
+                if (i.id == key) {
+                    text = i.linkUrl;
+                }
+            });
+            if (text) {
+                this.setState({
+                    repOpsTitle4: _util2.default.changeStatusToShow(text).showUrl,
+                    linkUrl: text
+                });
+            }
+            console.log({
+                repOpsTitle4: _util2.default.changeStatusToShow(text).showUrl,
+                linkUrl: text
+            });
+        }
+    }, {
+        key: 'onRepOPsSelect5',
+        value: function onRepOPsSelect5(key, evt) {
+            //设置选择默认还是自定义linkType
+
+            var status4 = true,
+                linkType = 0;
+            console.log(key);
+            if (key == '2') {
+                status4 = false;
+                linkType = 1;
+                this.setState({
+                    linkUrl: '',
+                    repOpsTitle4: '请选择'
+                });
+            }
+            this.setState({
+                repOpsTitle5: status4 ? '默认' : '自定义',
+                linkType: linkType, status4: status4 });
+        }
+    }, {
+        key: 'onRepOPsSelect6',
+        value: function onRepOPsSelect6(key, evt) {
+            var title = ['指向h5页面', '指向原生界面', '指向arms界面'][key],
+                status6 = [1, 2, 3][key];
+            console.log(status6);
+            this.setState({ repOpsTitle6: title, status6: status6 });
+        }
+    }, {
+        key: 'handleAdNameChange',
+        value: function handleAdNameChange(event) {
+            this.setState({ name: event.target.value });
+        }
+    }, {
+        key: 'handleAdOrderChange',
+        value: function handleAdOrderChange(event) {
+            this.setState({ order: event.target.value });
+        }
+    }, {
+        key: 'handleContentChange',
+        value: function handleContentChange(event) {
+            this.setState({ content: event.target.value });
+        }
+    }, {
+        key: 'handleLinkUrlChange',
+        value: function handleLinkUrlChange(event) {
+            this.setState({ linkUrl: event.target.value });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this6 = this;
+
+            var state = this.state;
+
+            var beginDate = (0, _moment2.default)(state.beginTime).format('YYYY-MM-DD');
+            var endDate = (0, _moment2.default)(state.endTime).format('YYYY-MM-DD');
+            var dateRangeStr = beginDate + ' - ' + endDate;
+
+            var opListArr = [];
+            this.props.opList.map(function (i) {
+                opListArr.push(_react2.default.createElement(
+                    _reactBootstrap.MenuItem,
+                    { eventKey: i.id, key: i.id },
+                    i.name + ' ' + i.linkUrl
+                ));
+            });
+
+            var renderAdNav = function renderAdNav() {
+                console.log(_this6.state.status6);
+                var tmp = void 0;
+                if (_this6.state.status6 == 1) {
+                    tmp = _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        null,
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                            '指向h5页面',
+                            _react2.default.createElement(
+                                'strong',
+                                { className: 'prompt' },
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 10 },
+                            _react2.default.createElement(
+                                'div',
+                                null,
+                                _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text',
+                                    value: _this6.state.linkUrl,
+                                    placeholder: '输入h5页面地址，如有参数，以&隔开，例如xxx?x1=xx1&x2=xx2',
+                                    onChange: _this6.handleLinkUrlChange,
+                                    ref: 'urlInput' })
+                            )
+                        )
+                    );
+                } else if (_this6.state.status6 == 2) {
+                    tmp = _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        null,
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                            '指向原生界面',
+                            _react2.default.createElement(
+                                'strong',
+                                { className: 'prompt' },
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 10 },
+                            _react2.default.createElement(
+                                'div',
+                                null,
+                                _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text',
+                                    value: _this6.state.linkUrl,
+                                    placeholder: '输入原生界面地址，如有参数，以&隔开，例如xxx?x1=xx1&x2=xx2',
+                                    onChange: _this6.handleLinkUrlChange,
+                                    ref: 'urlInput' })
+                            )
+                        )
+                    );
+                } else if (_this6.state.status6 == 3) {
+                    tmp = _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        null,
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                            '指向arms界面',
+                            _react2.default.createElement(
+                                'strong',
+                                { className: 'prompt' },
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 10 },
+                            _react2.default.createElement(
+                                'div',
+                                null,
+                                _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text',
+                                    value: _this6.state.linkUrl,
+                                    placeholder: '输入arms界面地址，如有参数，以&隔开，例如xxx?x1=xx1&x2=xx2',
+                                    onChange: _this6.handleLinkUrlChange,
+                                    ref: 'urlInput' })
+                            )
+                        )
+                    );
+                }
+                return tmp;
+            };
+
+            var renderAdImgInput = function renderAdImgInput() {
+                var tmp = _this6.state.status1 == '0' || _this6.state.status1 == '1' ? _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '广告图片',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 7 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reactBootstrap.FormControl, {
+                                ref: 'adImgInput',
+                                readOnly: 'true',
+                                value: _this6.state.picUrl,
+                                type: 'text' })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 2 },
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'info', onClick: _this6.openFile },
+                            '上传图片'
+                        ),
+                        _react2.default.createElement('input', { type: 'file', id: 'fileUpload',
+                            ref: 'fileUpload', style: { "display": "none" } })
+                    )
+                ) : _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        'ICO图标',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 7 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reactBootstrap.FormControl, {
+                                ref: 'adImgInput',
+                                readOnly: 'true',
+                                value: _this6.state.picUrl,
+                                type: 'text' })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 2 },
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'info', onClick: _this6.openFile },
+                            '上传图片'
+                        ),
+                        _react2.default.createElement('input', { type: 'file', id: 'fileUpload',
+                            ref: 'fileUpload', style: { "display": "none" } })
+                    )
+                );
+                return tmp;
+            };
+
+            var renderAdImg = function renderAdImg() {
+                var tmp = _this6.state.status1 == '0' || _this6.state.status1 == '1' ? _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(_reactBootstrap.Col, { componentClass: _reactBootstrap.ControlLabel, sm: 2 }),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 3 },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'text-line' },
+                            '支持jpg/png格式，RGB模式，单张尺寸（750*260），大小不超过1M'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement('img', { ref: 'fileIcon', src: _this6.state.picUrl, className: 'ad-page-banner-img img-rounded' })
+                        )
+                    ),
+                    _react2.default.createElement(_reactBootstrap.Col, { sm: 2 })
+                ) : _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(_reactBootstrap.Col, { componentClass: _reactBootstrap.ControlLabel, sm: 2 }),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 3 },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'text-line' },
+                            '支持jpg/png格式，RGB模式，单张尺寸（144*84），大小不超过1M'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement('img', { ref: 'fileIcon', src: _this6.state.picUrl, className: 'ad-page-img img-rounded' })
+                        )
+                    ),
+                    _react2.default.createElement(_reactBootstrap.Col, { sm: 2 })
+                );
+                return tmp;
+            };
+            /*
+            1 //轮播图广告
+                AD_CATEGORY_TEXT      = 2 //文字条广告
+                AD_CATEGORY_FOURGRIDS = 3 //四方格广告
+                AD_CATEOGRY_PIC       = 4 //图片广告
+                */
+            return _react2.default.createElement(
+                _reactBootstrap.Form,
+                { componentClass: 'fieldset', className: 'ads-detail-body', horizontal: true },
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '所属栏目',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 10 },
+                        _react2.default.createElement(
+                            _reactBootstrap.DropdownButton,
+                            { bsStyle: 'default', style: { 'width': '142px' }, id: 'repOpsDropdown1', onSelect: this.onRepOPsSelect1, title: this.state.repOpsTitle1 || '轮播广告' },
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '1' },
+                                '轮播广告'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '2' },
+                                '文字条广告'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '3' },
+                                '四方块广告'
+                            )
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '广告名称',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 3 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reactBootstrap.FormControl, {
+                                ref: 'nameInput',
+                                value: this.state.name,
+                                onChange: this.handleAdNameChange,
+                                type: 'text' })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 1 },
+                        '顺序',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    this.props.type === 'edit' ? _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 2 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reactBootstrap.FormControl, {
+                                ref: 'orderInput',
+                                value: this.state.order,
+                                onChange: this.handleAdOrderChange,
+                                type: 'text' })
+                        )
+                    ) : _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 2 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reactBootstrap.FormControl, {
+                                ref: 'orderInput',
+                                value: this.state.order,
+                                disabled: 'true',
+                                type: 'text' })
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '开始日期和结束日期',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 10 },
+                        _react2.default.createElement(
+                            _reactBootstrapDaterangepicker2.default,
+                            { className: 'date-picker', startDate: state.beginTime, endDate: state.endTime, ranges: this.ranges, onEvent: this.handleEvent },
+                            _react2.default.createElement(
+                                _reactBootstrap.Button,
+                                { className: 'date-picker-btn' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'pull-left' },
+                                    _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'calendar' })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'pull-right' },
+                                    _react2.default.createElement(
+                                        'span',
+                                        null,
+                                        dateRangeStr
+                                    ),
+                                    _react2.default.createElement('span', { className: 'caret' })
+                                )
+                            )
+                        )
+                    )
+                ),
+                selectCategory == 2 ? null : renderAdImgInput(),
+                selectCategory == 2 ? null : renderAdImg(),
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '广告内容'
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 10 },
+                        _react2.default.createElement('textarea', {
+                            className: 'form-control',
+                            rows: '3',
+                            value: state.content,
+                            onChange: this.handleContentChange })
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '广告指向模式',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 3 },
+                        _react2.default.createElement(
+                            _reactBootstrap.DropdownButton,
+                            { bsStyle: 'default', id: 'repOpsDropdown5', onSelect: this.onRepOPsSelect5, title: this.state.repOpsTitle5 || '默认' },
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '1' },
+                                '默认'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '2' },
+                                '自定义'
+                            )
+                        )
+                    ),
+                    this.state.linkType == 0 ? null : _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                            '类型',
+                            _react2.default.createElement(
+                                'strong',
+                                { className: 'prompt' },
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 3 },
+                            _react2.default.createElement(
+                                _reactBootstrap.DropdownButton,
+                                { bsStyle: 'default', id: 'repOpsDropdown', onSelect: this.onRepOPsSelect6, title: this.state.repOpsTitle6 || '指向h5页面' },
+                                _react2.default.createElement(
+                                    _reactBootstrap.MenuItem,
+                                    { eventKey: '0' },
+                                    '指向h5页面'
+                                ),
+                                _react2.default.createElement(
+                                    _reactBootstrap.MenuItem,
+                                    { eventKey: '1' },
+                                    '指向原生界面'
+                                ),
+                                _react2.default.createElement(
+                                    _reactBootstrap.MenuItem,
+                                    { eventKey: '2' },
+                                    '指向arms界面'
+                                )
+                            )
+                        )
+                    )
+                ),
+                this.state.status4 ? _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '广告指向页面',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 10 },
+                        _react2.default.createElement(
+                            _reactBootstrap.DropdownButton,
+                            { bsStyle: 'default', id: 'repOpsDropdown4', onSelect: this.onRepOPsSelect4, title: this.state.repOpsTitle4 || '请选择' },
+                            opListArr
+                        )
+                    )
+                ) : renderAdNav(),
+                _react2.default.createElement(_Toast2.default, { ref: 'Toast' })
+            );
+        }
+    }]);
+
+    return AdsItem;
+}(_react2.default.Component);
+
+;
+
+exports.default = AdsItem;

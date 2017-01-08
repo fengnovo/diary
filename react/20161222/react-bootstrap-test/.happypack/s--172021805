@@ -1,0 +1,566 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _header = require('../components/header');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _navigate = require('../components/navigate');
+
+var _navigate2 = _interopRequireDefault(_navigate);
+
+var _listFilter = require('../components/listFilter');
+
+var _listFilter2 = _interopRequireDefault(_listFilter);
+
+var _listOps = require('../components/listOps');
+
+var _listOps2 = _interopRequireDefault(_listOps);
+
+var _table = require('../components/table');
+
+var _table2 = _interopRequireDefault(_table);
+
+var _footer = require('../components/footer');
+
+var _footer2 = _interopRequireDefault(_footer);
+
+var _maskModal = require('../components/maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ReportManage = function (_React$Component) {
+    _inherits(ReportManage, _React$Component);
+
+    function ReportManage(props) {
+        _classCallCheck(this, ReportManage);
+
+        var _this2 = _possibleConstructorReturn(this, (ReportManage.__proto__ || Object.getPrototypeOf(ReportManage)).call(this, props));
+
+        var oaUser = _util2.default.getOaUser();
+
+        if (!oaUser || oaUser.role != 100) {
+            window.location.href = '/';
+        }
+
+        _this2.state = {};
+        _this2.option = {};
+        _this2.dataToOp = {};
+
+        _this2._bind.apply(_this2, ['onRowClick', 'onRowSelect', 'onSelectAll', 'doDelete', 'doCheck', 'getTableData', 'onPageChange', 'renderDelModal', 'ensureDelete', 'closeDelModal', 'renderModal', 'save', 'closeModal']);
+        return _this2;
+    }
+
+    _createClass(ReportManage, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {}
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'onRowClick',
+        value: function onRowClick(row) {
+            var _this4 = this;
+
+            this.setState({ reportItemData: row }, function () {
+                _this4.refs.MaskModal && _this4.refs.MaskModal.open();
+            });
+        }
+    }, {
+        key: 'onRowSelect',
+        value: function onRowSelect(row, isSelected) {
+            if (isSelected) {
+                this.dataToOp[row.id] = row;
+            } else {
+                delete this.dataToOp[row.id];
+            }
+        }
+    }, {
+        key: 'onSelectAll',
+        value: function onSelectAll(isSelected) {
+            if (isSelected) {
+                var i = 0,
+                    list = this.state.list,
+                    len = list.length,
+                    row = void 0;
+                for (; i < len; i++) {
+                    row = list[i];
+                    this.dataToOp[row.id] = row;
+                }
+            } else {
+                this.dataToOp = {};
+            }
+        }
+    }, {
+        key: 'doDelete',
+        value: function doDelete() {
+            if (this.dataToOp && _jquery2.default.isEmptyObject(this.dataToOp)) {
+                this.refs.listOps.showToast();
+                return;
+            }
+
+            this.refs.delMaskModal && this.refs.delMaskModal.open();
+        }
+    }, {
+        key: 'doCheck',
+        value: function doCheck() {
+            var _this5 = this;
+
+            var nextStatus = arguments.length <= 0 || arguments[0] === undefined ? 40 : arguments[0];
+
+            var listOps = this.refs.listOps,
+                dataToOp = this.dataToOp;
+            var opName = { '40': '处理', '80': '处理', '100': '删除条目' }[nextStatus];
+
+            if (listOps.state.showToast) {
+                return; // 避免重复操作
+            }
+
+            if (dataToOp && _jquery2.default.isEmptyObject(dataToOp)) {
+                listOps.showToast();
+                return;
+            } else {
+                listOps.showToast('正在' + opName + '，请稍候...', true);
+            }
+
+            var _this = this,
+                key = void 0,
+                row = void 0,
+                size = 0;
+
+            for (key in dataToOp) {
+                row = dataToOp[key];
+                if (100 != nextStatus && 0 != row.status || 100 == nextStatus && row.status == 100) {
+                    // 删除条目时，不用判断状态(已经是删除状态的除外)
+                    continue;
+                }
+
+                size++;
+
+                _jquery2.default.ajax({
+                    url: _globalConfig2.default.baseUrl + '/api/report/' + row.id,
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ status: nextStatus })
+                }).always(function () {
+                    size--;
+
+                    if (0 == size) {
+                        listOps.showToast(opName + '操作完成');
+                        setTimeout(function () {
+                            _this5.onPageChange(1); // 全部返回后，刷新列表
+                        }, 2000);
+                    }
+                });
+            };
+
+            if (0 == size) {
+                listOps.showToast(opName + '操作完成');
+                setTimeout(function () {
+                    _this5.onPageChange(1); // 取消选中态
+                }, 2000);
+            }
+
+            this.dataToOp = {};
+        }
+    }, {
+        key: 'getTableData',
+        value: function getTableData(option) {
+            var _this = this;
+            var url = _globalConfig2.default.baseUrl + '/api/reports';
+
+            this.option = option; // listFilter 查询时，缓存查询条件，翻页时用
+
+            _jquery2.default.getJSON(url, option, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+
+                var reportStatus = { '0': '未审核', '40': '已核实', '80': '不实举报' };
+                var list = json.data;
+
+                list.map(function (item, i) {
+                    item.statusName = reportStatus[item.status];
+                    item.title = item.articleInfo && item.articleInfo.title;
+                    item.ctime = _util2.default.dateStrFromUnix(item.createTime);
+
+                    return item;
+                });
+
+                _this.setState({
+                    list: list,
+                    total: json.total
+                });
+            });
+        }
+    }, {
+        key: 'onPageChange',
+        value: function onPageChange(page, sizePerPage) {
+            this.option.page = page;
+            this.getTableData(this.option);
+        }
+    }, {
+        key: 'renderDelModal',
+        value: function renderDelModal() {
+            var btns = [{ name: '确定', bsStyle: 'primary', click: this.ensureDelete }, { name: '取消', click: this.closeDelModal }];
+            var modalInfo = {
+                className: 'info-delete-modal',
+                title: '确定删除所选的内容吗？',
+                btns: btns
+            };
+
+            return _react2.default.createElement(_maskModal2.default, { ref: 'delMaskModal', showModal: false, modalInfo: modalInfo });
+        }
+    }, {
+        key: 'ensureDelete',
+        value: function ensureDelete() {
+            this.doCheck(100);
+            this.closeDelModal();
+        }
+    }, {
+        key: 'closeDelModal',
+        value: function closeDelModal() {
+            this.refs.delMaskModal && this.refs.delMaskModal.close();
+        }
+    }, {
+        key: 'renderModal',
+        value: function renderModal(reportItemData) {
+            if (!reportItemData) {
+                return null;
+            }
+
+            var btns = [{ name: '取消', click: this.closeModal }];
+
+            if (0 == reportItemData.status) {
+                btns.unshift({ name: '保存并提交', bsStyle: 'primary', click: this.save });
+            }
+
+            var modalInfo = {
+                className: 'report-item-modal',
+                btns: btns
+            };
+
+            return _react2.default.createElement(
+                _maskModal2.default,
+                { ref: 'MaskModal', showModal: true, modalInfo: modalInfo },
+                _react2.default.createElement(ReportItem, { ref: 'reportItem', reportId: reportItemData.id })
+            );
+        }
+    }, {
+        key: 'save',
+        value: function save() {
+            var _this6 = this;
+
+            var status = this.refs.reportItem.state.status;
+            var id = this.state.reportItemData.id;
+
+            _jquery2.default.ajax({
+                url: _globalConfig2.default.baseUrl + '/api/report/' + id,
+                type: 'PUT',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({ status: status })
+            }).done(function (data) {
+                if (0 != data.errCode) {
+                    _this6.setState({ errMsg: data.errMsg });
+                } else {
+                    _this6.closeModal();
+                    _this6.onPageChange(1);
+                }
+            }).fail(function () {
+                _this6.closeModal();
+            });
+        }
+    }, {
+        key: 'closeModal',
+        value: function closeModal() {
+            this.refs.MaskModal && this.refs.MaskModal.close();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var tableConfig = _globalConfig2.default.tableConfig.reportTable;
+            var tableFun = {
+                onRowClick: this.onRowClick,
+                onRowSelect: this.onRowSelect,
+                onSelectAll: this.onSelectAll,
+                onPageChange: this.onPageChange
+            };
+            var tableData = {
+                list: this.state.list,
+                page: this.option.page || 1,
+                total: this.state.total
+            };
+            var opFun = {
+                doDelete: this.doDelete,
+                doCheck: this.doCheck
+            };
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'report-manage-page page-wrap', ref: 'reportManage' },
+                _react2.default.createElement(_header2.default, { colName: 'reportManage' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'report-manage-body page-body' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-left' },
+                        _react2.default.createElement(_navigate2.default, { colName: 'reportManage' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-right' },
+                        _react2.default.createElement(_listFilter2.default, { colName: 'reportManage', getTableData: this.getTableData }),
+                        _react2.default.createElement(_listOps2.default, { colName: 'reportManage', opFun: opFun, ref: 'listOps' }),
+                        _react2.default.createElement(_table2.default, { tableConfig: tableConfig, tableFun: tableFun, tableData: tableData }),
+                        _react2.default.createElement(_footer2.default, null)
+                    )
+                ),
+                this.renderModal(this.state.reportItemData),
+                this.renderDelModal()
+            );
+        }
+    }]);
+
+    return ReportManage;
+}(_react2.default.Component);
+
+;
+
+exports.default = ReportManage;
+
+var ReportItem = function (_React$Component2) {
+    _inherits(ReportItem, _React$Component2);
+
+    function ReportItem(props) {
+        _classCallCheck(this, ReportItem);
+
+        var _this7 = _possibleConstructorReturn(this, (ReportItem.__proto__ || Object.getPrototypeOf(ReportItem)).call(this, props));
+
+        _this7.state = {};
+
+        _this7._bind.apply(_this7, ['getInfoMeta', 'onRepOPsSelect']);
+        return _this7;
+    }
+
+    _createClass(ReportItem, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this8 = this;
+
+            for (var _len2 = arguments.length, methods = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                methods[_key2] = arguments[_key2];
+            }
+
+            methods.forEach(function (method) {
+                return _this8[method] = _this8[method].bind(_this8);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this9 = this;
+
+            var id = this.props.reportId;
+
+            _jquery2.default.getJSON(_globalConfig2.default.baseUrl + '/api/report/' + id, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+
+                var reportData = json.data,
+                    title = { '40': '已核实', '80': '不实举报' }[reportData.status] || '已核实';
+
+                _this9.setState({
+                    reportData: reportData,
+                    repOpsTitle: title,
+                    status: 40
+                });
+            });
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'getInfoMeta',
+        value: function getInfoMeta(infoData) {
+            if (_jquery2.default.isEmptyObject(infoData)) {
+                return '';
+            }
+
+            var author = infoData.authors && infoData.authors[0],
+                ctime = _util2.default.dateStrFromUnix(infoData.createTime || infoData.publishTime);
+
+            return '新闻来源：' + infoData.media + ' &nbsp;&nbsp; 作者：' + (author ? author.name : '匿名') + ' &nbsp;&nbsp; 创建时间：' + ctime;
+        }
+    }, {
+        key: 'onRepOPsSelect',
+        value: function onRepOPsSelect(key, evt) {
+            var title = ['已核实', '不实举报'][key],
+                status = [40, 80][key];
+
+            this.setState({ repOpsTitle: title, status: status });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var reportData = this.state.reportData || {},
+                info = reportData.articleInfo || {},
+                title = info.title,
+                meta = this.getInfoMeta(info);
+
+            return _react2.default.createElement(
+                _reactBootstrap.Form,
+                { componentClass: 'fieldset', className: 'report-detail-body', horizontal: true },
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '举报内容：'
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 10 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'h5',
+                                { className: 'info-title' },
+                                title
+                            ),
+                            _react2.default.createElement('p', { className: 'info-meta', dangerouslySetInnerHTML: { __html: meta } })
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '举报原因：'
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 10 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'p',
+                                { className: 'report-cont' },
+                                reportData.content
+                            )
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '联系方式：'
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 10 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(
+                                'p',
+                                { className: 'report-contact' },
+                                reportData.contact
+                            )
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '举报处理：'
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 3 },
+                        _react2.default.createElement(
+                            _reactBootstrap.DropdownButton,
+                            { bsStyle: 'default', id: 'repOpsDropdown', onSelect: this.onRepOPsSelect, title: this.state.repOpsTitle || '已核实' },
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '0' },
+                                '已核实'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '1' },
+                                '不实举报'
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return ReportItem;
+}(_react2.default.Component);
+
+;

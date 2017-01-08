@@ -1,0 +1,8 @@
+.auth-manage-page {
+    .auth-wrap {
+        flex: 1; overflow: auto;
+        .auth-hint {margin: 10px 0 15px; color: #999; text-indent: 28px;}
+        .react-bs-table {background: white; margin: 0}
+        .react-bs-table-pagination {margin: 10px 0;}
+    }    
+}

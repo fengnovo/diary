@@ -1,0 +1,51 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "title": "栏目1",
+            "type": "固定栏目",
+            "status": 160,
+            "sortNum": 1,
+            "op": "编辑banner"
+        },{
+            "id": 2,
+            "title": "栏目2",
+            "type": "固定栏目",
+            "status": 80,
+            "sortNum": 2,
+            "op": "编辑banner"
+        },{
+            "id": 3,
+            "title": "栏目3",
+            "type": "固定栏目",
+            "status": 207,
+            "sortNum": 3,
+            "op": "编辑banner"
+        },{
+            "id": 4,
+            "title": "栏目4",
+            "type": "固定栏目",
+            "status": 100,
+            "sortNum": 4,
+            "op": "编辑banner"
+        },{
+            "id": 5,
+            "title": "栏目5",
+            "type": "固定栏目",
+            "status": 150,
+            "sortNum": 5,
+            "op": "编辑banner"
+        },{
+            "id": 6,
+            "title": "栏目6",
+            "type": "非固定栏目",
+            "status": 160,
+            "sortNum": 6,
+            "op": "编辑banner"
+        }
+    ],
+    "errCode": 0,
+    "errMsg": null,
+    "total": 6,
+    "page": 1
+}

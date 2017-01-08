@@ -1,0 +1,247 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrapTable = require('react-bootstrap-table');
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Table = function (_React$Component) {
+    _inherits(Table, _React$Component);
+
+    function Table(props) {
+        _classCallCheck(this, Table);
+
+        var _this = _possibleConstructorReturn(this, (Table.__proto__ || Object.getPrototypeOf(Table)).call(this, props));
+
+        _this.state = {
+            // tableData: props.tableData
+        };
+        _this.selectRowProp = {
+            onSelect: props.tableFun.onRowSelect,
+            onSelectAll: props.tableFun.onSelectAll,
+            selected: []
+        };
+        _this.options = {
+            page: props.tableData.page || 1,
+            sizePerPage: _globalConfig2.default.pageSize || 20,
+            sizePerPageList: [],
+            onRowClick: props.tableFun.onRowClick,
+            onPageChange: props.tableFun.onPageChange
+        };
+
+        props.tableConfig.checkboxMode && (_this.selectRowProp.mode = 'checkbox');
+
+        // this._bind.apply(this, ['onPageChange']);
+        return _this;
+    }
+
+    _createClass(Table, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this2 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this2[method] = _this2[method].bind(_this2);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {}
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'render',
+        value: function render() {
+            var props = this.props;
+            var _props$tableData = props.tableData;
+            var _props$tableData$list = _props$tableData.list;
+            var list = _props$tableData$list === undefined ? [] : _props$tableData$list;
+            var _props$tableData$tota = _props$tableData.total;
+            var total = _props$tableData$tota === undefined ? 0 : _props$tableData$tota;var tableHeight = props.tableConfig.height;
+
+            if (!tableHeight) {
+                tableHeight = window.innerHeight - 40 - 113 - 36 - 75; // 40 header, 113 top, 36 bottom, 75 pagination
+                tableHeight = Math.min(612, tableHeight); // 612, 20条数据的高度。取二者较小值，用于滚动   
+            }
+
+            var columns = [];
+            var imgFormatter = function imgFormatter(cell, row) {
+                if (cell != '') {
+                    return '<img style="width: 80px;" src=' + cell + ' />';
+                } else {
+                    return '';
+                }
+            };
+
+            switch (this.props.colName) {
+                case 'adsManage':
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'dsn', key: 'id', dataField: 'id', isKey: true },
+                        'ID'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'w1', key: 'order', dataField: 'order', isKey: false },
+                        '顺序'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { key: 'categoryName', dataField: 'categoryName', isKey: false },
+                        '所属栏目'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'col', key: 'name', dataField: 'name', isKey: false },
+                        '名称'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'col', key: 'linkUrl', dataField: 'linkUrl', isKey: false },
+                        '链接'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { key: 'beginTime', dataField: 'beginTime', isKey: false },
+                        '开始日期'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { key: 'endTime', dataField: 'endTime', isKey: false },
+                        '结束日期'
+                    ));
+                    // columns.push(<TableHeaderColumn key="target" dataField="target" isKey={false}>显示方式</TableHeaderColumn>); 
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { key: 'picUrl', dataField: 'picUrl', dataFormat: imgFormatter, isKey: false },
+                        '图片'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'col', key: 'content', dataField: 'content', isKey: false },
+                        '内容'
+                    ));
+                    break;
+                case 'homeNavManage':
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'dsn', key: 'id', dataField: 'id', isKey: true },
+                        'ID'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'w1', key: 'order', dataField: 'order', isKey: false },
+                        '顺序'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'col', key: 'name', dataField: 'name', isKey: false },
+                        '名称'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'col', key: 'linkUrl', dataField: 'linkUrl', isKey: false },
+                        '链接'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { key: 'target', dataField: 'target', isKey: false },
+                        '显示方式'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { key: 'picUrl', dataField: 'picUrl', dataFormat: imgFormatter, isKey: false },
+                        '图标'
+                    ));
+                    break;
+
+                case 'hotQuesManage':
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'dsn', key: 'id', dataField: 'id', isKey: true },
+                        'ID'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'w1', key: 'order', dataField: 'order', isKey: false },
+                        '顺序'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'col', key: 'name', dataField: 'name', isKey: false },
+                        '名称'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { columnClassName: 'col', key: 'content', dataField: 'content', isKey: false },
+                        '内容'
+                    ));
+                    columns.push(_react2.default.createElement(
+                        _reactBootstrapTable.TableHeaderColumn,
+                        { key: 'createTime', dataField: 'createTime', isKey: false },
+                        '添加时间'
+                    ));
+                    break;
+
+                default:
+                    columns = props.tableConfig.column.map(function (item, i) {
+                        return _react2.default.createElement(
+                            _reactBootstrapTable.TableHeaderColumn,
+                            { key: item.field, dataField: item.field, isKey: item.isKey },
+                            item.name
+                        );
+                    });
+                    break;
+            }
+
+            return _react2.default.createElement(
+                _reactBootstrapTable.BootstrapTable,
+                { ref: 'tableContainer',
+                    data: list, height: tableHeight, remote: true, fetchInfo: { dataTotalSize: total },
+                    selectRow: this.selectRowProp, striped: true, hover: true, condensed: true,
+                    ignoreSinglePage: true, pagination: true, options: this.options },
+                columns
+            );
+        }
+    }]);
+
+    return Table;
+}(_react2.default.Component);
+
+;
+
+Table.defaultProps = {
+    tableConfig: {},
+    tableFun: {},
+    tableData: {}
+};
+
+exports.default = Table;

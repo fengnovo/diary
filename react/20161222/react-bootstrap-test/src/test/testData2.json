@@ -1,0 +1,63 @@
+{
+    "data": [
+        {
+            "id": 21,
+            "title": "Product1",
+            "status": 160,
+            "readNum": 1234,
+            "utime": "2016-08-23",
+            "column": "股市动态",
+            "ctime": "2016-08-20",
+            "handler": "匿名"
+        },{
+            "id": 22,
+            "title": "Product2",
+            "status": 80,
+            "readNum": 1234,
+            "utime": "2016-08-23",
+            "column": "股市动态",
+            "ctime": "2016-08-20",
+            "handler": "匿名"
+        },{
+            "id": 23,
+            "title": "Product3",
+            "status": 207,
+            "readNum": 1234,
+            "utime": "2016-08-23",
+            "column": "股市动态",
+            "ctime": "2016-08-20",
+            "handler": "匿名"
+        },{
+            "id": 24,
+            "title": "Product4",
+            "status": 100,
+            "readNum": 1234,
+            "utime": "2016-08-23",
+            "column": "股市动态",
+            "ctime": "2016-08-20",
+            "handler": "匿名"
+        },{
+            "id": 25,
+            "title": "Product5",
+            "status": 150,
+            "readNum": 1234,
+            "utime": "2016-08-23",
+            "column": "股市动态",
+            "ctime": "2016-08-20",
+            "handler": "匿名"
+        },{
+            "id": 26,
+            "title": "Product1",
+            "status": 160,
+            "readNum": 1234,
+            "utime": "2016-08-23",
+            "column": "股市动态",
+            "ctime": "2016-08-20",
+            "handler": "匿名"
+        }
+    ],
+    "errCode": 0,
+    "errMsg": null,
+    "total": 26,
+    "page": 2
+}

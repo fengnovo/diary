@@ -1,0 +1,26 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Footer = function Footer(props) {
+    return _react2.default.createElement(
+        "footer",
+        { className: "footer" },
+        _react2.default.createElement(
+            "p",
+            null,
+            "©广发证券股份有限公司版权所有1991-",
+            new Date().getFullYear()
+        )
+    );
+};
+
+exports.default = Footer;

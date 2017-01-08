@@ -1,0 +1,396 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _header = require('../components/header');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _navigate = require('../components/navigate');
+
+var _navigate2 = _interopRequireDefault(_navigate);
+
+var _newInfo = require('../components/newInfo');
+
+var _newInfo2 = _interopRequireDefault(_newInfo);
+
+var _detail = require('../components/detail');
+
+var _detail2 = _interopRequireDefault(_detail);
+
+var _table = require('../components/table');
+
+var _table2 = _interopRequireDefault(_table);
+
+var _footer = require('../components/footer');
+
+var _footer2 = _interopRequireDefault(_footer);
+
+var _maskModal = require('../components/maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+var _Toast = require('../components/Toast');
+
+var _Toast2 = _interopRequireDefault(_Toast);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var InfoDetail = function (_React$Component) {
+    _inherits(InfoDetail, _React$Component);
+
+    function InfoDetail(props) {
+        _classCallCheck(this, InfoDetail);
+
+        var _this = _possibleConstructorReturn(this, (InfoDetail.__proto__ || Object.getPrototypeOf(InfoDetail)).call(this, props));
+
+        var oaUser = _util2.default.getOaUser();
+
+        if (!oaUser) {
+            window.location.href = '/';
+        }
+
+        var path = props.route.path;
+
+        _this.state = {
+            oaUser: oaUser,
+            path: path,
+            infoId: props.routeParams.infoId,
+            previeMode: path.indexOf('infoDetail') >= 0 //查看详情时预览模式，新建或草稿时编辑模式
+        };
+
+        _this._bind.apply(_this, ['editInfo', 'getDetailData', 'back', 'save', 'cancel', 'showModal', 'closeModal', 'renderModal']);
+        return _this;
+    }
+
+    _createClass(InfoDetail, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this2 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this2[method] = _this2[method].bind(_this2);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var infoId = this.state.infoId;
+
+            infoId && this.getDetailData(infoId);
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            // 在编辑时又点了‘新建’，清空输入框，重置默认栏目
+            var infoId = nextProps.routeParams.infoId,
+                path = nextProps.route.path;
+
+            this.setState({
+                path: path,
+                infoId: infoId,
+                detail: undefined,
+                previeMode: path.indexOf('infoDetail') >= 0 //查看详情时预览模式，新建或草稿时编辑模式
+            });
+
+            infoId && this.getDetailData(infoId);
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'getDetailData',
+        value: function getDetailData(infoId) {
+            var _this3 = this;
+
+            var url = _globalConfig2.default.baseUrl + '/api/article/' + infoId;
+
+            _jquery2.default.getJSON(url, function (json, textStatus) {
+                json.adminlog.map(function (item, i) {
+                    item.ctime = _util2.default.timeStrFromUnix(item.createTime);
+                    return item;
+                });
+                _this3.setState({
+                    detail: json
+                });
+            });
+        }
+    }, {
+        key: 'editInfo',
+        value: function editInfo() {
+            this.setState({
+                previeMode: false
+            });
+        }
+    }, {
+        key: 'back',
+        value: function back() {
+            this.setState({
+                previeMode: true
+            });
+        }
+    }, {
+        key: 'save',
+        value: function save(nextStatus) {
+            var _this4 = this;
+
+            var data = { status: nextStatus };
+
+            if (19 == nextStatus) {
+                data.remark = this.refs.rejectReason.value;
+            }
+
+            _jquery2.default.ajax({
+                url: _globalConfig2.default.baseUrl + '/api/article/' + this.state.infoId,
+                type: 'PUT',
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify(data)
+            }).done(function (json) {
+                _this4.closeModal();
+                if (0 !== json.errCode) {
+                    _this4.refs.Toast.show('提交失败，错误信息：' + json.errMsg);
+                } else {
+                    _this4.refs.Toast.show('提交成功，页面将在2秒后自动关闭');
+                    setTimeout(function () {
+                        window.close();
+                        // window.location.href = '#/infoManage';
+                    }, 2000);
+                }
+            }).fail(function () {
+                _this4.closeModal();
+                _this4.showToast('提交失败，请重新提交');
+            });
+        }
+    }, {
+        key: 'cancel',
+        value: function cancel() {
+            window.close();
+            // window.location.href = '#/infoManage';
+        }
+    }, {
+        key: 'showModal',
+        value: function showModal(modalName) {
+            var _this5 = this;
+
+            this.setState({
+                showModal: true,
+                modalName: modalName
+            }, function () {
+                _this5.refs.MaskModal && _this5.refs.MaskModal.open();
+            });
+        }
+    }, {
+        key: 'closeModal',
+        value: function closeModal() {
+            this.refs.MaskModal && this.refs.MaskModal.close();
+        }
+    }, {
+        key: 'renderModal',
+        value: function renderModal(modalName) {
+            if (!this.state.showModal || !modalName) {
+                return null;
+            }
+
+            var modalInfo = void 0,
+                modalBody = void 0;
+
+            if ('reject' == modalName) {
+                modalInfo = {
+                    className: 'black-list-modal',
+                    title: '请填写驳回原因',
+                    btns: [{ name: '取消', click: this.closeModal }, { name: '提交', bsStyle: 'primary', click: this.save.bind(this, 19) }]
+                };
+
+                modalBody = _react2.default.createElement('textarea', { ref: 'rejectReason', placeholder: '请填写驳回原因' });
+            } else {
+                modalInfo = {
+                    className: 'info-delete-modal',
+                    title: '确定不保存并退出编辑吗？',
+                    btns: [{ name: '取消', click: this.closeModal }, { name: '确定', bsStyle: 'primary', click: this.closeModal }]
+                };
+            }
+
+            return _react2.default.createElement(
+                _maskModal2.default,
+                { ref: 'MaskModal', showModal: true, modalInfo: modalInfo },
+                modalBody
+            );
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _state = this.state;
+            var oaUser = _state.oaUser;
+            var path = _state.path;
+            var infoId = _state.infoId;
+            var previeMode = _state.previeMode;
+            var _state$detail = _state.detail;
+            var detail = _state$detail === undefined ? {} : _state$detail;var bodyRight = void 0;
+            var rights = oaUser.operations.split('+'); //1查看2编辑3初审4复审5上线
+
+            if (infoId && previeMode) {
+                // 从咨询管理列表进来
+                var loglist = detail.adminlog || [],
+                    tableConfig = _globalConfig2.default.tableConfig.checkTable,
+                    tableFun = {},
+                    tableData = {
+                    list: loglist,
+                    total: loglist.length
+                };
+                var status = void 0,
+                    editBtn = void 0,
+                    opBtns = void 0;
+
+                if (detail.data) {
+                    status = detail.data.status;
+                    if ((1 == status || 19 == status) && rights.indexOf('2') >= 0) {
+                        // 草稿中和被驳回，才可以编辑
+                        editBtn = _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'success', className: 'edit-btn', onClick: this.editInfo },
+                            '编辑'
+                        );
+                    }
+
+                    opBtns = [_react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'success', key: 'cancel', onClick: this.cancel },
+                        '取消'
+                    )];
+                    if (10 == status && (rights.indexOf('3') >= 0 || rights.indexOf('4') >= 0 || rights.indexOf('5') >= 0) || 11 == status && (rights.indexOf('4') >= 0 || rights.indexOf('5') >= 0) || 30 == status && rights.indexOf('5')) {
+                        //待初审，待复审，待上线，可以驳回操作
+                        opBtns.unshift(_react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'success', key: 'reject', onClick: this.showModal.bind(this, 'reject') },
+                            '驳回'
+                        ));
+                    }
+                    if (10 == status && rights.indexOf('3') >= 0) {
+                        opBtns.unshift(_react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'success', key: 'firstcheck', onClick: this.save.bind(this, 11) },
+                            '通过初审'
+                        ));
+                        rights.indexOf('4') >= 0 && opBtns.unshift(_react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'success', key: 'recheck', onClick: this.save.bind(this, 30) },
+                            '通过初审、复审'
+                        ));
+                    } else if (11 == status && rights.indexOf('4') >= 0) {
+                        opBtns.unshift(_react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'success', key: 'recheck', onClick: this.save.bind(this, 30) },
+                            '通过复审'
+                        ));
+                    } else if (30 == status && rights.indexOf('5') >= 0) {
+                        opBtns.unshift(_react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'success', key: 'public', onClick: this.save.bind(this, 40) },
+                            '发布'
+                        ));
+                    } else if (40 == status && rights.indexOf('5') >= 0) {
+                        opBtns.unshift(_react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'success', key: 'offline', onClick: this.save.bind(this, 80) },
+                            '下线'
+                        ));
+                    }
+                }
+
+                bodyRight = _react2.default.createElement(
+                    'div',
+                    { className: 'body-right detail-body-right' },
+                    _react2.default.createElement(
+                        'section',
+                        { className: 'detail-wrap' },
+                        editBtn,
+                        _react2.default.createElement(_detail2.default, { infoId: infoId, detailData: detail.data, passive: true }),
+                        _react2.default.createElement(
+                            'h6',
+                            null,
+                            '操作流程：'
+                        ),
+                        _react2.default.createElement(_table2.default, { tableConfig: tableConfig, tableFun: tableFun, tableData: tableData }),
+                        _react2.default.createElement(
+                            _reactBootstrap.Form,
+                            { componentClass: 'fieldset', inline: true, className: 'detail-ops' },
+                            opBtns
+                        )
+                    ),
+                    _react2.default.createElement(_footer2.default, null)
+                );
+            } else {
+                // 点"新建"或"编辑"按钮进来
+                bodyRight = _react2.default.createElement(
+                    'div',
+                    { className: 'body-right new-body-right' },
+                    _react2.default.createElement(_newInfo2.default, { infoId: infoId, detailData: detail.data, path: path, back: this.back }),
+                    _react2.default.createElement(_footer2.default, null)
+                );
+            }
+
+            var colName = path.indexOf('infoDetail') >= 0 ? 'infoManage' : 'draftManage';
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'detail-new-page page-wrap', ref: 'infoDetail' },
+                _react2.default.createElement(_header2.default, { colName: colName }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'detail-new-body page-body' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-left' },
+                        _react2.default.createElement(_navigate2.default, { colName: colName })
+                    ),
+                    bodyRight
+                ),
+                this.renderModal(this.state.modalName),
+                _react2.default.createElement(_Toast2.default, { ref: 'Toast', showToast: false })
+            );
+        }
+    }]);
+
+    return InfoDetail;
+}(_react2.default.Component);
+
+;
+
+exports.default = InfoDetail;

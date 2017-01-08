@@ -1,0 +1,131 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MaskModal = function (_React$Component) {
+    _inherits(MaskModal, _React$Component);
+
+    function MaskModal(props) {
+        _classCallCheck(this, MaskModal);
+
+        var _this2 = _possibleConstructorReturn(this, (MaskModal.__proto__ || Object.getPrototypeOf(MaskModal)).call(this, props));
+
+        _this2.state = {
+            showModal: props.showModal || false
+        };
+
+        _this2._bind.apply(_this2, ['close', 'open', 'enter']);
+        return _this2;
+    }
+
+    _createClass(MaskModal, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {}
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'close',
+        value: function close() {
+            this.setState({ showModal: false });
+        }
+    }, {
+        key: 'open',
+        value: function open() {
+            this.setState({ showModal: true });
+        }
+    }, {
+        key: 'enter',
+        value: function enter() {
+            this.setState({ showModal: false });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this = this;
+            var modalInfo = this.props.modalInfo;
+            var header = !modalInfo.title ? null : _react2.default.createElement(
+                _reactBootstrap.Modal.Header,
+                { closeButton: true, onHide: this.close },
+                _react2.default.createElement(
+                    _reactBootstrap.Modal.Title,
+                    { className: 'modal-title' },
+                    modalInfo.title
+                )
+            ),
+                body = !this.props.children ? null : _react2.default.createElement(
+                _reactBootstrap.Modal.Body,
+                null,
+                this.props.children
+            ),
+                footer = !(modalInfo.btns && modalInfo.btns.length) ? null : _react2.default.createElement(
+                _reactBootstrap.Modal.Footer,
+                null,
+                modalInfo.btns.map(function (item, i) {
+                    return _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { key: i, bsStyle: item.bsStyle, onClick: item.click },
+                        item.name
+                    );
+                })
+            );
+
+            return _react2.default.createElement(
+                _reactBootstrap.Modal,
+                { className: 'mask-modal ' + modalInfo.className, show: this.state.showModal },
+                header,
+                body,
+                footer
+            );
+        }
+    }]);
+
+    return MaskModal;
+}(_react2.default.Component);
+
+;
+
+MaskModal.defaultProps = {
+    modalInfo: {}
+};
+
+exports.default = MaskModal;

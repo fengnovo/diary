@@ -1,0 +1,544 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _header = require('../components/header');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _navigate = require('../components/navigate');
+
+var _navigate2 = _interopRequireDefault(_navigate);
+
+var _footer = require('../components/footer');
+
+var _footer2 = _interopRequireDefault(_footer);
+
+var _infoSearch = require('../components/infoSearch');
+
+var _infoSearch2 = _interopRequireDefault(_infoSearch);
+
+var _maskModal = require('../components/maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+var _Toast = require('../components/Toast');
+
+var _Toast2 = _interopRequireDefault(_Toast);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EditColBanner = function (_React$Component) {
+    _inherits(EditColBanner, _React$Component);
+
+    function EditColBanner(props) {
+        _classCallCheck(this, EditColBanner);
+
+        var _this2 = _possibleConstructorReturn(this, (EditColBanner.__proto__ || Object.getPrototypeOf(EditColBanner)).call(this, props));
+
+        var oaUser = _util2.default.getOaUser();
+
+        if (!oaUser || oaUser.role != 100) {
+            window.location.href = '/';
+        }
+
+        _this2.state = {};
+
+        _this2._bind.apply(_this2, ['addBanner', 'delBanner', 'save', 'cancel']);
+        return _this2;
+    }
+
+    _createClass(EditColBanner, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this = this,
+                url = _globalConfig2.default.baseUrl + '/api/column/' + this.props.routeParams.colId;
+
+            _jquery2.default.getJSON(url, function (json, textStatus) {
+                _this.banners = json.data && json.data.banners;
+                _this.setState({ detail: json.data });
+            });
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'addBanner',
+        value: function addBanner(banner, idx) {
+            var len = this.banners.length;
+
+            banner.type = 0;
+            // idx = Math.min(idx, this.bannners.length);
+            this.banners[idx] = banner;
+
+            if (len != this.banners.length) {
+                // 只有新建完成刷新，修改的不刷新
+                this.forceUpdate();
+            }
+        }
+    }, {
+        key: 'delBanner',
+        value: function delBanner(idx) {
+            this.banners.splice(idx, 1);
+            this.forceUpdate();
+        }
+    }, {
+        key: 'save',
+        value: function save() {
+            var _this = this,
+                url = _globalConfig2.default.baseUrl + '/api/column/' + this.props.routeParams.colId,
+                ajaxData = { banners: this.banners };
+            var ajaxParam = { url: url, type: 'PUT', dataType: 'json', contentType: 'application/json', data: JSON.stringify(ajaxData) };
+
+            _jquery2.default.ajax(ajaxParam).done(function (data) {
+                alert('保存成功，请按确定关闭本页面');
+                window.close();
+            }).fail(function () {
+                console.log("error");
+            });
+        }
+    }, {
+        key: 'cancel',
+        value: function cancel() {
+            window.close();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var colDetail = this.state.detail,
+                bannerItems = [],
+                i = 0,
+                len = 0,
+                opBtns = [];
+
+            if (!colDetail) {
+                colDetail = {};
+            } else {
+                for (i = 0, len = this.banners.length; i < len; i++) {
+                    bannerItems.push(_react2.default.createElement(BannerItem, { key: i, banner: this.banners[i], idx: i, addBanner: this.addBanner, delBanner: this.delBanner }));
+                }
+            }
+            len < 3 && bannerItems.push(_react2.default.createElement(BannerItem, { key: 'add', idx: len, banner: null, addBanner: this.addBanner, delBanner: this.delBanner })); // 小于三个时，多出一个编辑的空项目
+
+            if (0 == len) {
+                opBtns = [_react2.default.createElement(
+                    _reactBootstrap.Button,
+                    { bsStyle: 'success', key: 'save', disabled: true },
+                    '保存'
+                ), _react2.default.createElement(
+                    _reactBootstrap.Button,
+                    { bsStyle: 'success', key: 'cancel', onClick: this.cancel },
+                    '取消'
+                )];
+            } else {
+                opBtns = [_react2.default.createElement(
+                    _reactBootstrap.Button,
+                    { bsStyle: 'success', key: 'save', onClick: this.save },
+                    '保存'
+                ), _react2.default.createElement(
+                    _reactBootstrap.Button,
+                    { bsStyle: 'success', key: 'cancel', onClick: this.cancel },
+                    '取消'
+                )];
+            }
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'edit-banner-page page-wrap', ref: 'editBanner' },
+                _react2.default.createElement(_header2.default, { colName: 'colsManage' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'edit-banner-body page-body' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-left' },
+                        _react2.default.createElement(_navigate2.default, { colName: 'colsManage' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-right' },
+                        _react2.default.createElement(
+                            'section',
+                            { className: 'items-wrap' },
+                            _react2.default.createElement(
+                                'h3',
+                                { className: 'column-title' },
+                                colDetail.title
+                            ),
+                            bannerItems,
+                            _react2.default.createElement(
+                                _reactBootstrap.Form,
+                                { componentClass: 'fieldset', inline: true, className: 'edit-ops' },
+                                opBtns
+                            )
+                        ),
+                        _react2.default.createElement(_footer2.default, null)
+                    )
+                )
+            );
+        }
+    }]);
+
+    return EditColBanner;
+}(_react2.default.Component);
+
+;
+
+exports.default = EditColBanner;
+
+var BannerItem = function (_React$Component2) {
+    _inherits(BannerItem, _React$Component2);
+
+    function BannerItem(props) {
+        _classCallCheck(this, BannerItem);
+
+        var _this4 = _possibleConstructorReturn(this, (BannerItem.__proto__ || Object.getPrototypeOf(BannerItem)).call(this, props));
+
+        _this4.state = {};
+
+        _this4.banner = props.banner ? {
+            picUrl: props.banner.picUrl,
+            title: props.banner.title,
+            articleId: props.banner.articleId,
+            linkUrl: props.banner.linkUrl
+        } : {};
+
+        _this4._bind.apply(_this4, ['fieldEditDone', 'openFile', 'openSearchModal', 'closeSearchModal', 'onInfoSelectDone']);
+        return _this4;
+    }
+
+    _createClass(BannerItem, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this5 = this;
+
+            for (var _len2 = arguments.length, methods = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                methods[_key2] = arguments[_key2];
+            }
+
+            methods.forEach(function (method) {
+                return _this5[method] = _this5[method].bind(_this5);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this = this;
+
+            (0, _jquery2.default)(this.refs.fileUpload).change(function () {
+                var file = this.files[0];
+
+                if (!file || file.type.indexOf('image') < 0) {
+                    _this.refs.Toast.show('请选择图片格式的文件');
+                    return;
+                };
+
+                if (file.size > 1000000) {
+                    _this.refs.Toast.show('图片大小超过1M');
+                    return;
+                }
+
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var img = document.createElement('img');
+
+                    img.title = file.name;
+                    img.src = e.target.result;
+                    // document.body.appendChild(img); //这里你想插哪插哪
+                    img.onload = function () {
+                        if (this.width != 750 || this.height != 320) {
+                            _this.refs.Toast.show('图片尺寸不符合750*320规格');
+                        } else {
+                            var formdata = new FormData();
+
+                            formdata.append("file", file);
+                            _jquery2.default.ajax({
+                                url: _globalConfig2.default.baseUrl + '/api/upload',
+                                type: 'post',
+                                data: formdata,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                dataType: "json",
+                                success: function success(json) {
+                                    // console.log(json);
+                                    var picUrl = json.data.url;
+
+                                    _this.fieldEditDone({ picUrl: picUrl });
+                                }
+                            });
+                        }
+                    };
+                };
+                reader.readAsDataURL(file);
+
+                this.value = ''; // 清除本次选定的文件，否则下次选择同样文件时，不触发onchange事件
+
+                return false;
+            });
+
+            (0, _jquery2.default)(this.refs.bannerItem).find('#title').blur(function () {
+                var title = this.value.trim();
+
+                _this.fieldEditDone({ title: title });
+            });
+
+            (0, _jquery2.default)(this.refs.bannerItem).find('#link').blur(function () {
+                var linkUrl = this.value.trim();
+
+                _this.fieldEditDone({ linkUrl: linkUrl });
+            });
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate(nextProps, nextState) {
+            if (!nextProps.banner || !this.props.banner) {
+                return true;
+            }
+
+            var _nextProps$banner = nextProps.banner;
+            var picUrl = _nextProps$banner.picUrl;
+            var title = _nextProps$banner.title;
+            var articleId = _nextProps$banner.articleId;var banner = this.props.banner;
+
+
+            if (picUrl != banner.picUrl || title != banner.title || articleId != banner.articleId) {
+                this.banner = nextProps.banner;
+                (0, _jquery2.default)(this.refs.bannerItem).find('#title').val(this.banner.title);
+                return true;
+            }
+
+            return false;
+        }
+    }, {
+        key: 'fieldEditDone',
+        value: function fieldEditDone(state) {
+            var obj = Object.assign(this.banner, state); // assign，会改变第一个参数，即this.banner === obj
+            var picUrl = obj.picUrl;
+            var title = obj.title;
+            var articleId = obj.articleId;
+            var linkUrl = obj.linkUrl;
+
+
+            if (picUrl && title && (articleId || linkUrl)) {
+                // 三项都有值
+                var _props = this.props;
+                var idx = _props.idx;
+                var banner = _props.banner;
+                var addBanner = _props.addBanner;
+
+
+                addBanner(obj, idx);
+                // 新建的banner，因为可能还有新建，要清空展示的数据。已有的banner，只要更改显示就行, forceUpdate。
+                if (!banner && idx < 2) {
+                    this.banner = {};
+                    this.forceUpdate();
+                    (0, _jquery2.default)(this.refs.bannerItem).find('#title,#link').val('');
+                }
+            } else {
+                state.picUrl && this.forceUpdate(); // 若本次是编辑标题，可以不刷新，因为标题是输入框
+            }
+        }
+    }, {
+        key: 'openFile',
+        value: function openFile() {
+            (0, _jquery2.default)(this.refs.fileUpload).trigger('click');
+        }
+    }, {
+        key: 'openSearchModal',
+        value: function openSearchModal() {
+            this.refs.MaskModal.open();
+        }
+    }, {
+        key: 'closeSearchModal',
+        value: function closeSearchModal() {
+            this.refs.MaskModal.close();
+        }
+    }, {
+        key: 'onInfoSelectDone',
+        value: function onInfoSelectDone(articleId, article) {
+            var linkUrl = 'http://10.2.122.58/test/' + articleId;
+            var title = article.title;
+
+            article.bigPicUrl && (this.banner.picUrl = article.bigPicUrl);
+            title && (this.banner.title = title);
+            (0, _jquery2.default)(this.refs.bannerItem).find('#title').val(title);
+
+            this.fieldEditDone({ articleId: articleId, linkUrl: linkUrl });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _banner = this.banner;
+            var picUrl = _banner.picUrl;
+            var title = _banner.title;
+            var articleId = _banner.articleId;
+            var linkUrl = _banner.linkUrl;
+            var _props2 = this.props;
+            var delBanner = _props2.delBanner;
+            var idx = _props2.idx;
+
+            var modalInfo = {
+                className: 'info-search-modal',
+                title: '搜索资讯'
+            };
+            return _react2.default.createElement(
+                'section',
+                { className: 'banner-item', ref: 'bannerItem' },
+                picUrl && (articleId || linkUrl) && title ? _react2.default.createElement(_reactBootstrap.Button, { className: 'banner-deler', bsStyle: 'link', onClick: delBanner.bind(this, idx) }) : null,
+                _react2.default.createElement(
+                    _reactBootstrap.Form,
+                    { horizontal: true, className: 'banner-form' },
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        null,
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 1 },
+                            '图片',
+                            _react2.default.createElement(
+                                'strong',
+                                null,
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 2 },
+                            _react2.default.createElement(
+                                _reactBootstrap.Button,
+                                { bsStyle: 'info', onClick: this.openFile },
+                                '选择图片'
+                            ),
+                            _react2.default.createElement('input', { type: 'file', id: 'fileUpload', ref: 'fileUpload', style: { "display": "none" } })
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 9 },
+                            _react2.default.createElement(
+                                'p',
+                                { className: 'img-hint' },
+                                '支持jpg/png格式，RGB模式，单张尺寸（750*320），最多上传3张，大小不超过1M'
+                            )
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        null,
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { smOffset: 1, sm: 11 },
+                            picUrl && _react2.default.createElement(_reactBootstrap.Image, { src: picUrl, rounded: true })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        { controlId: 'title' },
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 1 },
+                            '标题',
+                            _react2.default.createElement(
+                                'strong',
+                                null,
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 11 },
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: '请输入标题', defaultValue: title })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        { controlId: 'link' },
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 1 },
+                            '链接',
+                            _react2.default.createElement(
+                                'strong',
+                                null,
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 9 },
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: '如选择搜索资讯，链接将自动生成；如需配置外链，请直接输入', defaultValue: linkUrl })
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 2 },
+                            _react2.default.createElement(
+                                _reactBootstrap.Button,
+                                { bsStyle: 'info', onClick: this.openSearchModal },
+                                '搜索相关资讯'
+                            )
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _maskModal2.default,
+                        { ref: 'MaskModal', modalInfo: modalInfo },
+                        _react2.default.createElement(_infoSearch2.default, { closeSearchModal: this.closeSearchModal, onInfoSelectDone: this.onInfoSelectDone })
+                    )
+                ),
+                _react2.default.createElement(_Toast2.default, { ref: 'Toast' })
+            );
+        }
+    }]);
+
+    return BannerItem;
+}(_react2.default.Component);
+
+;

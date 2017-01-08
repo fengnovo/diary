@@ -1,0 +1,485 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _header = require('../components/header');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _navigate = require('../components/navigate');
+
+var _navigate2 = _interopRequireDefault(_navigate);
+
+var _listOps = require('../components/listOps');
+
+var _listOps2 = _interopRequireDefault(_listOps);
+
+var _table = require('../components/table');
+
+var _table2 = _interopRequireDefault(_table);
+
+var _footer = require('../components/footer');
+
+var _footer2 = _interopRequireDefault(_footer);
+
+var _maskModal = require('../components/maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AuthManage = function (_React$Component) {
+    _inherits(AuthManage, _React$Component);
+
+    function AuthManage(props) {
+        _classCallCheck(this, AuthManage);
+
+        var _this2 = _possibleConstructorReturn(this, (AuthManage.__proto__ || Object.getPrototypeOf(AuthManage)).call(this, props));
+
+        var oaUser = _util2.default.getOaUser();
+
+        if (!oaUser || oaUser.role != 100) {
+            window.location.href = '/';
+        }
+
+        _this2.state = {
+            row: {}
+        };
+        _this2.option = {};
+
+        _this2._bind.apply(_this2, ['onRowClick', 'getAllOps', 'getAdminList', 'getUserList', 'onPageChange', 'save', 'closeModal', 'adminBoxChange', 'showUnbind', 'closeUnbind', 'unbind', 'renderUnbindModal']);
+        return _this2;
+    }
+
+    _createClass(AuthManage, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.getAllOps();
+            this.getAdminList(); // 管理员列表
+            this.getUserList({ page: 1, pageSize: _globalConfig2.default.pageSize, role: 0 }); // 用户列表
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'onRowClick',
+        value: function onRowClick(row) {
+            var _this4 = this;
+
+            var state = row.add ? { modalName: 'new' } : { modalName: 'edit', row: row };
+
+            this.setState(state, function () {
+                _this4.refs.MaskModal && _this4.refs.MaskModal.open();
+            });
+        }
+    }, {
+        key: 'getAllOps',
+        value: function getAllOps() {
+            var _this = this,
+                url = _globalConfig2.default.baseUrl + '/api/operations';
+
+            _jquery2.default.getJSON(url, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+
+                _this.opList = json.data;
+            });
+        }
+    }, {
+        key: 'getAdminList',
+        value: function getAdminList() {
+            var option = { page: 1, pageSize: _globalConfig2.default.pageSize, role: 100 };
+            var _this = this,
+                url = _globalConfig2.default.baseUrl + '/api/privileges';
+
+            return _jquery2.default.getJSON(url, option, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+
+                json.data.map(function (item, i) {
+                    item.add = '添加账号';
+                    return item;
+                });
+
+                _this.setState({
+                    adminList: json.data
+                });
+            });
+        }
+    }, {
+        key: 'getUserList',
+        value: function getUserList(option) {
+            var _this = this,
+                url = _globalConfig2.default.baseUrl + '/api/privileges';
+
+            this.option = option; // listFilter 查询时，缓存查询条件，翻页时用
+
+            return _jquery2.default.getJSON(url, option, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+
+                json.data.map(function (item, i) {
+                    var rights = [];
+
+                    item.operationsInfo.forEach(function (it) {
+                        rights.push(it.name);
+                    });
+                    item.rights = rights.join('、');
+                    item.edit = '编辑';
+
+                    return item;
+                });
+
+                _this.setState({
+                    userList: json.data,
+                    total: json.total
+                });
+            });
+        }
+    }, {
+        key: 'onPageChange',
+        value: function onPageChange(page, sizePerPage) {
+            this.option.page = page;
+            this.getUserList(this.option);
+        }
+    }, {
+        key: 'showUnbind',
+        value: function showUnbind() {
+            // this.setState({showUnbindModal: true}, () => {
+            this.refs.unbindMaskModal && this.refs.unbindMaskModal.open();
+            // });
+        }
+    }, {
+        key: 'closeUnbind',
+        value: function closeUnbind() {
+            this.refs.unbindMaskModal && this.refs.unbindMaskModal.close();
+        }
+    }, {
+        key: 'unbind',
+        value: function unbind() {
+            var _this5 = this;
+
+            _jquery2.default.ajax({
+                url: _globalConfig2.default.baseUrl + '/api/privilege/' + this.state.row.oaname,
+                type: 'DELETE',
+                dataType: 'json',
+                contentType: 'application/json'
+            }).done(function (data) {
+                if (0 != data.errCode) {
+                    _this5.setState({ errMsg: data.errMsg });
+                } else {
+                    _this5.closeModal();
+                    _this5.onPageChange(1);
+                }
+            }).fail(function () {
+                _this5.setState({ errMsg: '未知错误，请联系维护人员' });
+            }).always(function () {
+                _this5.closeUnbind();
+            });
+        }
+    }, {
+        key: 'save',
+        value: function save() {
+            var _this6 = this;
+
+            var modalName = this.state.modalName,
+                $modalForm = (0, _jquery2.default)(this.refs.modalForm),
+                oaname = $modalForm.find('#oaname').val();
+
+            if (!oaname) {
+                this.setState({ errMsg: '请输入oa账号' });
+                return;
+            }
+
+            var role = 0,
+                operations = [];
+            var $input = $modalForm.find('input[type="checkbox"]');
+
+            Array.prototype.forEach.call($input, function (item) {
+                var rightid = item.dataset.rightid;
+                if (100 == rightid) {
+                    item.checked && (role = 100);
+                } else {
+                    item.checked && operations.push(rightid);
+                }
+            });
+
+            var formdata = { role: role, operations: operations },
+                ajaxParam = { dataType: 'json', contentType: 'application/json' };
+
+            if ('new' == modalName) {
+                // 新建接口
+                formdata.oaname = oaname;
+                Object.assign(ajaxParam, { url: _globalConfig2.default.baseUrl + '/api/privilege', type: 'POST', data: JSON.stringify(formdata) });
+            } else {
+                // 编辑接口
+                Object.assign(ajaxParam, { url: _globalConfig2.default.baseUrl + '/api/privilege/' + this.state.row.oaname, type: 'PUT', data: JSON.stringify(formdata) });
+            }
+
+            _jquery2.default.ajax(ajaxParam).done(function (data) {
+                if (0 != data.errCode) {
+                    _this6.setState({ errMsg: data.errMsg });
+                } else {
+                    _this6.closeModal();
+                    role ? _this6.getAdminList() : _this6.onPageChange(1);
+                }
+            }).fail(function () {
+                _this6.setState({ errMsg: '未知错误，请联系维护人员' });
+            });
+        }
+    }, {
+        key: 'closeModal',
+        value: function closeModal() {
+            this.setState({ errMsg: undefined, row: {} });
+            this.refs.MaskModal && this.refs.MaskModal.close();
+        }
+    }, {
+        key: 'adminBoxChange',
+        value: function adminBoxChange(event) {
+            var checked = event.target.checked;
+            var $input = (0, _jquery2.default)(this.refs.modalForm).find('input[type="checkbox"]');
+
+            Array.prototype.forEach.call($input, function (item) {
+                if (1 != item.dataset.rightid) {
+                    item.checked = checked;
+                }
+            });
+        }
+    }, {
+        key: 'renderUnbindModal',
+        value: function renderUnbindModal() {
+            var modalInfo = {
+                className: 'grant-delete-modal',
+                title: '确定解除此账号的绑定？',
+                btns: [{ name: '确定', bsStyle: 'primary', click: this.unbind }, { name: '取消', click: this.closeUnbind }]
+            };
+
+            return _react2.default.createElement(_maskModal2.default, { ref: 'unbindMaskModal', showModal: false, modalInfo: modalInfo });
+        }
+    }, {
+        key: 'renderModal',
+        value: function renderModal(name) {
+            var _this7 = this;
+
+            if ('new' != name && 'edit' != name) {
+                return null;
+            }
+
+            var modalForm = function modalForm() {
+                var _state$row = _this7.state.row;
+                var oaname = _state$row.oaname;
+                var role = _state$row.role;
+                var operations = _state$row.operations;
+
+                var check = void 0,
+                    allBox = [];
+
+                _this7.opList.forEach(function (item, i) {
+                    if (100 == role) {
+                        check = true;
+                    } else if (!operations) {
+                        check = false;
+                    } else if (operations.indexOf(item.id) < 0) {
+                        check = false;
+                    } else {
+                        check = true;
+                    }
+
+                    if (1 == item.id) {
+                        allBox.push(_react2.default.createElement(
+                            _reactBootstrap.Checkbox,
+                            { inline: true, key: i, 'data-rightid': item.id, checked: true, readOnly: true },
+                            item.name + '权限'
+                        ));
+                    } else {
+                        allBox.push(_react2.default.createElement(
+                            _reactBootstrap.Checkbox,
+                            { inline: true, key: i, 'data-rightid': item.id, defaultChecked: check },
+                            item.name + '权限'
+                        ));
+                    }
+                });
+                allBox.push(_react2.default.createElement(
+                    _reactBootstrap.Checkbox,
+                    { inline: true, key: 'admin', 'data-rightid': 100, defaultChecked: 100 == role, onChange: _this7.adminBoxChange },
+                    '管理员权限'
+                ));
+
+                return _react2.default.createElement(
+                    'div',
+                    { ref: 'modalForm' },
+                    _react2.default.createElement(
+                        'p',
+                        { className: 'err-msg' },
+                        _this7.state.errMsg
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Form,
+                        { componentClass: 'fieldset', className: 'grant-new-body', horizontal: true },
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'oaname' },
+                            _react2.default.createElement(
+                                _reactBootstrap.Col,
+                                { componentClass: _reactBootstrap.ControlLabel, sm: 3 },
+                                '请输入绑定的账号：'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.Col,
+                                { sm: 9 },
+                                'new' == name ? _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: '账号' }) : _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: '账号', value: oaname, readOnly: true })
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            null,
+                            allBox
+                        )
+                    ),
+                    _this7.renderUnbindModal()
+                );
+            };
+            var modalInfo = void 0;
+
+            if ('new' == name) {
+                modalInfo = {
+                    className: 'grant-new-modal',
+                    title: '添加账号',
+                    btns: [{ name: '确定', bsStyle: 'primary', click: this.save }, { name: '取消', click: this.closeModal }]
+                };
+            } else {
+                modalInfo = {
+                    className: 'grant-new-modal',
+                    title: '编辑权限',
+                    btns: [{ name: '解除绑定', bsStyle: 'primary', click: this.showUnbind }, { name: '确定', bsStyle: 'primary', click: this.save }, { name: '取消', click: this.closeModal }]
+                };
+            }
+
+            return _react2.default.createElement(
+                _maskModal2.default,
+                { ref: 'MaskModal', showModal: true, modalInfo: modalInfo },
+                modalForm()
+            );
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var tableConfig = _globalConfig2.default.tableConfig.authTable;
+            var tableFun = {
+                onRowClick: this.onRowClick,
+                onPageChange: this.onPageChange
+            };
+            var tableData = {
+                list: this.state.userList,
+                page: this.option.page || 1,
+                total: this.state.total
+            };
+
+            var adminTableConfig = _globalConfig2.default.tableConfig.adminTable;
+            var adminTableFun = {
+                onRowClick: this.onRowClick
+            };
+            var adminTableData = {
+                list: this.state.adminList,
+                page: 1,
+                total: 1
+            };
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'auth-manage-page page-wrap', ref: 'authManage' },
+                _react2.default.createElement(_header2.default, { colName: 'authManage' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'auth-manage-body page-body' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-left' },
+                        _react2.default.createElement(_navigate2.default, { colName: 'authManage' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-right' },
+                        _react2.default.createElement(
+                            'section',
+                            { className: 'auth-wrap' },
+                            _react2.default.createElement(
+                                'h5',
+                                null,
+                                '管理员权限'
+                            ),
+                            _react2.default.createElement(
+                                'p',
+                                { className: 'auth-hint' },
+                                '管理员可以分配任务给不同功能点的人员进行工作。'
+                            ),
+                            _react2.default.createElement(_table2.default, { tableConfig: adminTableConfig, tableFun: adminTableFun, tableData: adminTableData }),
+                            _react2.default.createElement(
+                                'p',
+                                { className: 'auth-hint' },
+                                '根据管理员分配的任务权限，对应不同的权限操作。'
+                            ),
+                            _react2.default.createElement(_table2.default, { tableConfig: tableConfig, tableFun: tableFun, tableData: tableData })
+                        ),
+                        _react2.default.createElement(_footer2.default, null)
+                    )
+                ),
+                this.renderModal(this.state.modalName)
+            );
+        }
+    }]);
+
+    return AuthManage;
+}(_react2.default.Component);
+
+;
+
+exports.default = AuthManage;

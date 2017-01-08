@@ -1,0 +1,614 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _reactBootstrapDaterangepicker = require('react-bootstrap-daterangepicker');
+
+var _reactBootstrapDaterangepicker2 = _interopRequireDefault(_reactBootstrapDaterangepicker);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _header = require('../components/header');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _navigate = require('../components/navigate');
+
+var _navigate2 = _interopRequireDefault(_navigate);
+
+var _listFilter = require('../components/listFilter');
+
+var _listFilter2 = _interopRequireDefault(_listFilter);
+
+var _listOps = require('../components/listOps');
+
+var _listOps2 = _interopRequireDefault(_listOps);
+
+var _table = require('../components/table');
+
+var _table2 = _interopRequireDefault(_table);
+
+var _footer = require('../components/footer');
+
+var _footer2 = _interopRequireDefault(_footer);
+
+var _maskModal = require('../components/maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+var _Toast = require('../components/Toast');
+
+var _Toast2 = _interopRequireDefault(_Toast);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var oaname = void 0,
+    oaUser = _util2.default.getOaUser();
+
+var HotQuesManage = function (_React$Component) {
+    _inherits(HotQuesManage, _React$Component);
+
+    function HotQuesManage(props) {
+        _classCallCheck(this, HotQuesManage);
+
+        var _this2 = _possibleConstructorReturn(this, (HotQuesManage.__proto__ || Object.getPrototypeOf(HotQuesManage)).call(this, props));
+
+        if (!oaUser || oaUser.role != 100) {
+            window.location.href = '/';
+        } else {
+            oaname = oaUser.oaname;
+        }
+
+        _this2.state = {
+            showAddAdModal: false,
+            showAddBtn: false
+        };
+        _this2.option = {};
+        _this2.dataToOp = {};
+
+        _this2._bind.apply(_this2, ['onRowClick', 'getTableData', 'onPageChange', 'closeQuesModal', 'renderQuesModal', 'showQuesModal', 'showToast', 'save', 'onRowSelect', 'onSelectAll', 'doDelete', 'renderDelModal', 'ensureDelete', 'closeDelModal', 'doCheck']);
+        return _this2;
+    }
+
+    _createClass(HotQuesManage, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            if (oaUser) {
+                this.getTableData(this.option);
+            }
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'onRowClick',
+        value: function onRowClick(row) {
+            if (row.id) {
+                this.setState({
+                    showQuesModal: true,
+                    type: 'edit',
+                    editId: row.id
+                });
+            }
+        }
+    }, {
+        key: 'onRowSelect',
+        value: function onRowSelect(row, isSelected) {
+            if (isSelected) {
+                this.dataToOp[row.id] = row;
+            } else {
+                delete this.dataToOp[row.id];
+            }
+        }
+    }, {
+        key: 'onSelectAll',
+        value: function onSelectAll(isSelected) {
+            if (isSelected) {
+                var i = 0,
+                    list = this.state.list,
+                    len = list.length,
+                    row = void 0;
+                for (; i < len; i++) {
+                    row = list[i];
+                    this.dataToOp[row.id] = row;
+                }
+            } else {
+                this.dataToOp = {};
+            }
+        }
+    }, {
+        key: 'doDelete',
+        value: function doDelete() {
+            console.log(this.dataToOp);
+
+            if (this.dataToOp && _jquery2.default.isEmptyObject(this.dataToOp)) {
+                this.refs.listOps.showToast();
+                return;
+            }
+
+            this.refs.renderDelModal && this.refs.renderDelModal.open();
+        }
+    }, {
+        key: 'getTableData',
+        value: function getTableData(option) {
+            var _this = this;
+            var url = _globalConfig2.default.baseUrl + '/api/asks'; //'./test/hotQuesTestData.json';
+
+            _jquery2.default.getJSON(url, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+                var list = json.data;
+
+                list.map(function (item, i) {
+                    item.createTime = _util2.default.dateStrFromUnix(item.createTime);
+                    return item;
+                });
+
+                if (list.length > 0) {
+                    _this.setState({
+                        showAddBtn: false, //如果有一条数据就不能再有新增按钮让新增
+                        list: list,
+                        total: json.total
+                    });
+                } else {
+                    _this.setState({
+                        showAddBtn: true,
+                        list: list,
+                        total: json.total
+                    });
+                }
+            });
+        }
+    }, {
+        key: 'onPageChange',
+        value: function onPageChange(page, sizePerPage) {
+            this.option.page = page;
+            this.getTableData(this.option);
+        }
+    }, {
+        key: 'closeQuesModal',
+        value: function closeQuesModal() {
+            this.setState({
+                showQuesModal: false
+            });
+        }
+    }, {
+        key: 'showQuesModal',
+        value: function showQuesModal() {
+            this.setState({
+                showQuesModal: true,
+                type: 'add'
+            });
+        }
+    }, {
+        key: 'closeDelModal',
+        value: function closeDelModal() {
+            this.refs.renderDelModal && this.refs.renderDelModal.close();
+        }
+    }, {
+        key: 'showToast',
+        value: function showToast(msg) {
+            this.refs.Toast.show(msg);
+        }
+    }, {
+        key: 'save',
+        value: function save() {
+            var _this4 = this;
+
+            var _refs$quesItem$state = this.refs.quesItem.state;
+            var id = _refs$quesItem$state.id;
+            var name = _refs$quesItem$state.name;
+            var content = _refs$quesItem$state.content;
+
+            if (_jquery2.default.trim(name) == '') {
+                this.showToast('名称不能为空！');
+                return;
+            }
+            if (_jquery2.default.trim(content) == '') {
+                this.showToast('内容不能为空！');
+                return;
+            }
+            if (this.state.type === 'add') {
+                console.log('新增');
+                console.log({
+                    content: content,
+                    name: name,
+                    oaname: oaname
+                });
+                _jquery2.default.ajax({
+                    url: _globalConfig2.default.baseUrl + '/api/ask',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        content: content,
+                        name: name,
+                        oaname: oaname,
+                        order: 1,
+                        status: 0
+                    })
+                }).done(function (data) {
+                    console.log('新增成功');
+                    if (0 == data.errCode) {
+                        _this4.closeQuesModal();
+                        _this4.onPageChange(1);
+                    } else {
+                        _this4.showToast('新增失败，原因：' + data.errMsg);
+                    }
+                }).fail(function () {
+                    console.log('新增失败');
+                    _this4.showToast('新增失败');
+                    _this4.closeQuesModal();
+                });
+            } else {
+                console.log('修改');
+                console.log({
+                    content: content,
+                    name: name,
+                    oaname: oaname,
+                    order: 1,
+                    status: 0
+                });
+                _jquery2.default.ajax({
+                    url: _globalConfig2.default.baseUrl + '/api/ask/' + id,
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        content: content,
+                        name: name,
+                        oaname: oaname
+                    })
+                }).done(function (data) {
+                    console.log('修改成功');
+                    if (0 == data.errCode) {
+                        _this4.closeQuesModal();
+                        _this4.onPageChange(1);
+                    } else {
+                        _this4.showToast('修改失败，原因：' + data.errMsg);
+                    }
+                }).fail(function () {
+                    console.log('修改失败');
+                    _this4.showToast('修改失败');
+                    _this4.closeQuesModal();
+                });
+            }
+        }
+    }, {
+        key: 'ensureDelete',
+        value: function ensureDelete() {
+            this.doCheck(100);
+            this.closeDelModal();
+        }
+    }, {
+        key: 'doCheck',
+        value: function doCheck() {
+            var _this5 = this;
+
+            var nextStatus = arguments.length <= 0 || arguments[0] === undefined ? 40 : arguments[0];
+
+            var listOps = this.refs.listOps,
+                dataToOp = this.dataToOp;
+            var opName = { '40': '处理', '80': '处理', '100': '删除条目' }[nextStatus];
+
+            if (listOps.state.showToast) {
+                return; // 避免重复操作
+            }
+
+            if (dataToOp && _jquery2.default.isEmptyObject(dataToOp)) {
+                listOps.showToast();
+                return;
+            } else {
+                listOps.showToast('正在' + opName + '，请稍候...', true);
+            }
+
+            var _this = this,
+                key = void 0,
+                row = void 0,
+                size = 0;
+
+            for (key in dataToOp) {
+                row = dataToOp[key];
+                if (100 != nextStatus && 0 != row.status || 100 == nextStatus && row.status == 100) {
+                    // 删除条目时，不用判断状态(已经是删除状态的除外)
+                    continue;
+                }
+
+                size++;
+
+                _jquery2.default.ajax({
+                    url: _globalConfig2.default.baseUrl + '/api/ask/' + row.id,
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ status: nextStatus })
+                }).always(function () {
+                    size--;
+
+                    if (0 == size) {
+                        listOps.showToast(opName + '操作完成');
+                        setTimeout(function () {
+                            _this5.onPageChange(1); // 全部返回后，刷新列表
+                        }, 2000);
+                    }
+                });
+            };
+
+            if (0 == size) {
+                listOps.showToast(opName + '操作完成');
+                setTimeout(function () {
+                    _this5.onPageChange(1); // 取消选中态
+                }, 2000);
+            }
+
+            this.dataToOp = {};
+        }
+    }, {
+        key: 'renderQuesModal',
+        value: function renderQuesModal() {
+
+            var btns = [{ name: '取消', click: this.closeQuesModal }, { name: '保存并提交', bsStyle: 'primary', click: this.save }];
+
+            var modalInfo = {
+                className: 'hot-item-modal',
+                btns: btns
+            };
+            return _react2.default.createElement(
+                _maskModal2.default,
+                { ref: 'MaskModal', showModal: true, modalInfo: modalInfo },
+                _react2.default.createElement(QuesItem, _extends({ ref: 'quesItem', showToast: this.showToast }, this.state)),
+                _react2.default.createElement(_Toast2.default, { ref: 'Toast' })
+            );
+        }
+    }, {
+        key: 'renderDelModal',
+        value: function renderDelModal() {
+            var modalInfo = {
+                className: 'info-delete-modal',
+                title: '确定删除所选的内容吗？',
+                btns: [{ name: '确定', bsStyle: 'primary', click: this.ensureDelete }, { name: '取消', click: this.closeDelModal }]
+            };
+
+            return _react2.default.createElement(_maskModal2.default, { ref: 'renderDelModal', showModal: false, modalInfo: modalInfo });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var tableConfig = _globalConfig2.default.tableConfig.hotQuesTable;
+            var tableFun = {
+                onRowClick: this.onRowClick,
+                onRowSelect: this.onRowSelect,
+                onSelectAll: this.onSelectAll,
+                onPageChange: this.onPageChange
+            };
+            var tableData = {
+                list: this.state.list,
+                page: this.option.page || 1,
+                total: this.state.total
+            };
+            var opFun = {
+                showAddAdModal: this.showQuesModal,
+                doDelete: this.doDelete
+            };
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'report-manage-page page-wrap', ref: 'hotQuesManage' },
+                _react2.default.createElement(_header2.default, { colName: 'hotQuesManage' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'report-manage-body page-body' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-left' },
+                        _react2.default.createElement(_navigate2.default, { colName: 'hotQuesManage' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-right' },
+                        _react2.default.createElement(_listOps2.default, { colName: 'hotQuesManage', opFun: opFun, ref: 'listOps', showAddBtn: this.state.showAddBtn }),
+                        _react2.default.createElement(_table2.default, { colName: 'hotQuesManage', tableConfig: tableConfig, tableFun: tableFun, tableData: tableData }),
+                        _react2.default.createElement(_footer2.default, null)
+                    )
+                ),
+                this.state.showQuesModal ? this.renderQuesModal() : null,
+                this.renderDelModal()
+            );
+        }
+    }]);
+
+    return HotQuesManage;
+}(_react2.default.Component);
+
+;
+
+exports.default = HotQuesManage;
+
+var QuesItem = function (_React$Component2) {
+    _inherits(QuesItem, _React$Component2);
+
+    function QuesItem(props) {
+        _classCallCheck(this, QuesItem);
+
+        var _this6 = _possibleConstructorReturn(this, (QuesItem.__proto__ || Object.getPrototypeOf(QuesItem)).call(this, props));
+
+        _this6.state = {
+            name: '',
+            content: ''
+        };
+
+        _this6._bind.apply(_this6, ['handleNameChange', 'handleContentChange']);
+        return _this6;
+    }
+
+    _createClass(QuesItem, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this7 = this;
+
+            for (var _len2 = arguments.length, methods = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                methods[_key2] = arguments[_key2];
+            }
+
+            methods.forEach(function (method) {
+                return _this7[method] = _this7[method].bind(_this7);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this8 = this;
+
+            var _this = this;
+            var id = this.props.editId;
+            if (this.props.type === 'edit') {
+                _jquery2.default.getJSON(_globalConfig2.default.baseUrl + '/api/ask/' + id, function (json, textStatus) {
+                    // console.log(json);
+                    // if (0 != json.errCode) {
+                    //     return;
+                    // }
+                    var content = json.content;
+                    var name = json.name;
+
+                    _this8.setState({
+                        id: id,
+                        content: content,
+                        name: name
+                    });
+                });
+            }
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'handleNameChange',
+        value: function handleNameChange(event) {
+            this.setState({ name: event.target.value });
+        }
+    }, {
+        key: 'handleContentChange',
+        value: function handleContentChange(event) {
+            this.setState({ content: event.target.value });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var btns = [{ name: '取消', click: this.closeAddAdModal }, { name: '保存并提交', bsStyle: 'primary', click: this.save }];
+
+            var modalInfo = {
+                className: 'hot-item-modal',
+                btns: btns
+            };
+            var state = this.state;
+
+            return _react2.default.createElement(
+                _reactBootstrap.Form,
+                { componentClass: 'fieldset', className: 'ads-detail-body', horizontal: true },
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '名称',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 10 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reactBootstrap.FormControl, {
+                                type: 'text',
+                                value: state.name,
+                                onChange: this.handleNameChange })
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '内容',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 10 },
+                        _react2.default.createElement('textarea', {
+                            className: 'form-control',
+                            rows: '3',
+                            value: state.content,
+                            onChange: this.handleContentChange })
+                    )
+                )
+            );
+        }
+    }]);
+
+    return QuesItem;
+}(_react2.default.Component);
+
+;

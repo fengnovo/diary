@@ -1,0 +1,974 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _reactBootstrapDaterangepicker = require('react-bootstrap-daterangepicker');
+
+var _reactBootstrapDaterangepicker2 = _interopRequireDefault(_reactBootstrapDaterangepicker);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _header = require('../components/header');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _navigate = require('../components/navigate');
+
+var _navigate2 = _interopRequireDefault(_navigate);
+
+var _listFilter = require('../components/listFilter');
+
+var _listFilter2 = _interopRequireDefault(_listFilter);
+
+var _listOps = require('../components/listOps');
+
+var _listOps2 = _interopRequireDefault(_listOps);
+
+var _table = require('../components/table');
+
+var _table2 = _interopRequireDefault(_table);
+
+var _footer = require('../components/footer');
+
+var _footer2 = _interopRequireDefault(_footer);
+
+var _maskModal = require('../components/maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+var _Toast = require('../components/Toast');
+
+var _Toast2 = _interopRequireDefault(_Toast);
+
+var _notLogin = require('../components/notLogin');
+
+var _notLogin2 = _interopRequireDefault(_notLogin);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var oaname = void 0,
+    oaUser = _util2.default.getOaUser();
+
+var HomeNavManage = function (_React$Component) {
+    _inherits(HomeNavManage, _React$Component);
+
+    function HomeNavManage(props) {
+        _classCallCheck(this, HomeNavManage);
+
+        // let oaUser = util.getOaUser();
+        // if (!oaUser || oaUser.role != 100) {
+        //     window.location.href = '/';
+        // }else{
+        //     oaname = oaUser.oaname;
+        // }
+
+        var _this2 = _possibleConstructorReturn(this, (HomeNavManage.__proto__ || Object.getPrototypeOf(HomeNavManage)).call(this, props));
+
+        _this2.state = {
+            showAdModal: false,
+            showTipModal: false,
+            type: 'add',
+            editId: null
+        };
+        _this2.option = {};
+        _this2.dataToOp = {};
+
+        _this2._bind.apply(_this2, ['onRowClick', 'getTableData', 'onPageChange', 'onRowSelect', 'onSelectAll', 'save', 'doDelete', 'doCheck', 'renderDelModal', 'closeDelModal', 'ensureDelete', 'closeAdModal', 'renderAdModal', 'showAdModal', 'showToast']);
+        return _this2;
+    }
+
+    _createClass(HomeNavManage, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            if (oaUser) {
+                this.getTableData(this.option);
+            }
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'onRowClick',
+        value: function onRowClick(row) {
+            // console.log(row);
+            if (row.id) {
+                this.setState({
+                    showAdModal: true,
+                    type: 'edit',
+                    editId: row.id
+                });
+            }
+        }
+    }, {
+        key: 'onRowSelect',
+        value: function onRowSelect(row, isSelected) {
+            console.log(row);
+            if (isSelected) {
+                this.dataToOp[row.id] = row;
+            } else {
+                delete this.dataToOp[row.id];
+            }
+        }
+    }, {
+        key: 'onSelectAll',
+        value: function onSelectAll(isSelected) {
+            console.log(this.state.list);
+            if (isSelected) {
+                var i = 0,
+                    list = this.state.list,
+                    len = list.length,
+                    row = void 0;
+                for (; i < len; i++) {
+                    row = list[i];
+                    this.dataToOp[row.id] = row;
+                }
+            } else {
+                this.dataToOp = {};
+            }
+        }
+    }, {
+        key: 'doDelete',
+        value: function doDelete() {
+            if (this.dataToOp && _jquery2.default.isEmptyObject(this.dataToOp)) {
+                this.refs.listOps.showToast();
+                return;
+            }
+
+            this.refs.renderDelModal && this.refs.renderDelModal.open();
+        }
+    }, {
+        key: 'getTableData',
+        value: function getTableData(option) {
+            var _this = this;
+            // var url = `${globalConfig.baseUrl}/api/reports`;
+            var url = _globalConfig2.default.baseUrl + '/api/navs?page=1&pageSize=50'; //'./test/homeNavTestData.json';
+
+            this.option = option; // listFilter 查询时，缓存查询条件，翻页时用
+
+            _jquery2.default.getJSON(url, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+
+                var list = json.data;
+                list.map(function (item, i) {
+                    item.startTime = _util2.default.dateStrFromUnix(item.startTime);
+                    item.finishTime = _util2.default.dateStrFromUnix(item.finishTime);
+                    item.target = item.target == 1 ? '首页' : '第二页';
+                    return item;
+                });
+
+                _this.setState({
+                    list: list,
+                    total: json.total
+                });
+            });
+        }
+    }, {
+        key: 'onPageChange',
+        value: function onPageChange(page, sizePerPage) {
+            console.log('------------');
+            this.option.page = page;
+            if (oaUser) {
+                this.getTableData(this.option);
+            }
+        }
+    }, {
+        key: 'closeAdModal',
+        value: function closeAdModal() {
+            this.setState({
+                showAdModal: false
+            });
+        }
+    }, {
+        key: 'showAdModal',
+        value: function showAdModal() {
+            this.setState({
+                showAdModal: true,
+                type: 'add'
+            });
+        }
+    }, {
+        key: 'showToast',
+        value: function showToast(msg) {
+            this.refs.Toast.show(msg);
+        }
+    }, {
+        key: 'closeDelModal',
+        value: function closeDelModal() {
+            this.refs.renderDelModal && this.refs.renderDelModal.close();
+        }
+    }, {
+        key: 'ensureDelete',
+        value: function ensureDelete() {
+            this.doCheck(100);
+            this.closeDelModal();
+        }
+    }, {
+        key: 'save',
+        value: function save() {
+            var _this4 = this;
+
+            var _refs$navsItem$state = this.refs.navsItem.state;
+            var id = _refs$navsItem$state.id;
+            var linkUrl = _refs$navsItem$state.linkUrl;
+            var navName = _refs$navsItem$state.navName;
+            var navOrder = _refs$navsItem$state.navOrder;
+            var navStatus = _refs$navsItem$state.navStatus;
+            var navTarget = _refs$navsItem$state.navTarget;
+            var picUrl = _refs$navsItem$state.picUrl;
+            var repOpsTitle1 = _refs$navsItem$state.repOpsTitle1;
+            var repOpsTitle2 = _refs$navsItem$state.repOpsTitle2;
+            var status1 = _refs$navsItem$state.status1;
+            var status2 = _refs$navsItem$state.status2;
+
+            console.log(this.refs.navsItem.state);
+            if (_jquery2.default.trim(navName) == '') {
+                this.showToast('名称不能为空！');
+                return;
+            }
+            if (_jquery2.default.trim(navOrder) == '') {
+                this.showToast('顺序不能为空！');
+                return;
+            }
+            if (_jquery2.default.trim(picUrl) == '') {
+                this.showToast('icon图标不能为空！');
+                return;
+            }
+            if (_jquery2.default.trim(linkUrl) == '') {
+                this.showToast('指向链接不能为空！');
+                return;
+            }
+            if (this.state.type === 'add') {
+                console.log('新增');
+                _jquery2.default.ajax({
+                    url: _globalConfig2.default.baseUrl + '/api/nav',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        linkUrl: _util2.default.changeStatusToAction(status1, linkUrl).actionLinkUrl,
+                        name: navName,
+                        oaname: oaname,
+                        order: 0,
+                        picUrl: picUrl,
+                        status: 0,
+                        target: status2 //显示：1是首页，2是第二页
+                    })
+                }).done(function (data) {
+                    console.log('新增成功');
+                    if (0 == data.errCode) {
+                        _this4.closeAdModal();
+                        _this4.onPageChange(1);
+                    } else {
+                        _this4.showToast('新增失败，原因：' + data.errMsg);
+                    }
+                }).fail(function () {
+                    console.log('新增失败');
+                    _this4.showToast('新增失败');
+                    _this4.closeAdModal();
+                });
+            } else {
+                console.log('修改');
+                _jquery2.default.ajax({
+                    url: _globalConfig2.default.baseUrl + '/api/nav/' + id,
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        linkUrl: _util2.default.changeStatusToAction(status1, linkUrl).actionLinkUrl,
+                        name: navName,
+                        oaname: oaname,
+                        order: parseInt(navOrder),
+                        picUrl: picUrl,
+                        status: 0,
+                        target: status2 //显示：1是首页，2是第二页
+                    })
+                }).done(function (data) {
+                    console.log('修改成功');
+                    if (0 == data.errCode) {
+                        _this4.closeAdModal();
+                        _this4.onPageChange(1);
+                    } else {
+                        _this4.showToast('修改失败，原因：' + data.errMsg);
+                    }
+                }).fail(function () {
+                    console.log('修改失败');
+                    _this4.showToast('修改失败');
+                    _this4.closeAdModal();
+                });
+            }
+        }
+    }, {
+        key: 'doCheck',
+        value: function doCheck() {
+            var _this5 = this;
+
+            var nextStatus = arguments.length <= 0 || arguments[0] === undefined ? 40 : arguments[0];
+
+            var listOps = this.refs.listOps,
+                dataToOp = this.dataToOp;
+            var opName = { '40': '处理', '80': '处理', '100': '删除条目' }[nextStatus];
+
+            if (listOps.state.showToast) {
+                return; // 避免重复操作
+            }
+
+            if (dataToOp && _jquery2.default.isEmptyObject(dataToOp)) {
+                listOps.showToast();
+                return;
+            } else {
+                listOps.showToast('正在' + opName + '，请稍候...', true);
+            }
+
+            var _this = this,
+                key = void 0,
+                row = void 0,
+                size = 0;
+
+            for (key in dataToOp) {
+                row = dataToOp[key];
+                if (100 != nextStatus && 0 != row.status || 100 == nextStatus && row.status == 100) {
+                    // 删除条目时，不用判断状态(已经是删除状态的除外)
+                    continue;
+                }
+
+                size++;
+
+                _jquery2.default.ajax({
+                    url: _globalConfig2.default.baseUrl + '/api/nav/' + row.id,
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ status: nextStatus })
+                }).always(function () {
+                    size--;
+
+                    if (0 == size) {
+                        listOps.showToast(opName + '操作完成');
+                        setTimeout(function () {
+                            _this5.onPageChange(1); // 全部返回后，刷新列表
+                        }, 2000);
+                    }
+                });
+            };
+
+            if (0 == size) {
+                listOps.showToast(opName + '操作完成');
+                setTimeout(function () {
+                    _this5.onPageChange(1); // 取消选中态
+                }, 2000);
+            }
+
+            this.dataToOp = {};
+        }
+    }, {
+        key: 'renderAdModal',
+        value: function renderAdModal() {
+
+            var btns = [{ name: '取消', click: this.closeAdModal }, { name: '保存并提交', bsStyle: 'primary', click: this.save }];
+
+            var modalInfo = {
+                className: 'navs-item-modal',
+                btns: btns
+            };
+            return _react2.default.createElement(
+                _maskModal2.default,
+                { ref: 'MaskModal', showModal: true, modalInfo: modalInfo },
+                _react2.default.createElement(NavsItem, _extends({ ref: 'navsItem', showToast: this.showToast }, this.state)),
+                _react2.default.createElement(_Toast2.default, { ref: 'Toast' })
+            );
+        }
+    }, {
+        key: 'renderDelModal',
+        value: function renderDelModal() {
+            var modalInfo = {
+                className: 'info-delete-modal',
+                title: '确定删除所选的内容吗？',
+                btns: [{ name: '确定', bsStyle: 'primary', click: this.ensureDelete }, { name: '取消', click: this.closeDelModal }]
+            };
+
+            return _react2.default.createElement(_maskModal2.default, { ref: 'renderDelModal', showModal: false, modalInfo: modalInfo });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var tableConfig = _globalConfig2.default.tableConfig.homeNavTable;
+            var tableFun = {
+                onRowClick: this.onRowClick,
+                onRowSelect: this.onRowSelect,
+                onSelectAll: this.onSelectAll,
+                onPageChange: this.onPageChange
+            };
+            var tableData = {
+                list: this.state.list,
+                page: this.option.page || 1,
+                total: this.state.total
+            };
+            var opFun = {
+                showAddAdModal: this.showAdModal,
+                doDelete: this.doDelete
+            };
+
+            var bodyRight;
+            if (oaUser) {
+                oaname = oaUser.oaname;
+                bodyRight = _react2.default.createElement(
+                    'div',
+                    { className: 'body-right' },
+                    _react2.default.createElement(_listOps2.default, { colName: 'homeNavManage', opFun: opFun, ref: 'listOps' }),
+                    _react2.default.createElement(_table2.default, { colName: 'homeNavManage', tableConfig: tableConfig, tableFun: tableFun, tableData: tableData }),
+                    _react2.default.createElement(_footer2.default, null)
+                );
+            } else {
+                bodyRight = _react2.default.createElement(
+                    'div',
+                    { className: 'body-right' },
+                    _react2.default.createElement(_notLogin2.default, null),
+                    _react2.default.createElement(_footer2.default, null)
+                );
+            }
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'info-manage-page page-wrap', ref: 'homeNavManage' },
+                _react2.default.createElement(_header2.default, { colName: 'homeNavManage' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'info-manage-body page-body' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-left' },
+                        _react2.default.createElement(_navigate2.default, { colName: 'homeNavManage' })
+                    ),
+                    bodyRight
+                ),
+                this.state.showAdModal ? this.renderAdModal() : null,
+                this.renderDelModal()
+            );
+        }
+    }]);
+
+    return HomeNavManage;
+}(_react2.default.Component);
+
+;
+
+exports.default = HomeNavManage;
+
+var NavsItem = function (_React$Component2) {
+    _inherits(NavsItem, _React$Component2);
+
+    function NavsItem(props) {
+        _classCallCheck(this, NavsItem);
+
+        var _this6 = _possibleConstructorReturn(this, (NavsItem.__proto__ || Object.getPrototypeOf(NavsItem)).call(this, props));
+
+        _this6.state = {
+            id: _this6.props.editId,
+            repOpsTitle1: '指向h5页面',
+            status1: 1,
+            repOpsTitle2: '首页',
+            status2: 1,
+            navName: '', //导航按钮的名称
+            linkUrl: '', //导航的链接
+            picUrl: '', //导航图标的链接
+            navOrder: 0, //导航的顺序序号
+            navStatus: 0, //导航的审核状态
+            navTarget: 1 //导航的显示方式，首页1还是第二页2
+        };
+        _this6._bind.apply(_this6, ['onRepOPsSelect1', 'onRepOPsSelect2', 'handleNavOrderChange', 'handleNavNameChange', 'handleLinkUrlChange', 'openFile']);
+        return _this6;
+    }
+
+    _createClass(NavsItem, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this7 = this;
+
+            for (var _len2 = arguments.length, methods = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                methods[_key2] = arguments[_key2];
+            }
+
+            methods.forEach(function (method) {
+                return _this7[method] = _this7[method].bind(_this7);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this8 = this;
+
+            var _this = this;
+
+            if (this.props.type === 'edit') {
+                var id = this.props.editId;
+
+                _jquery2.default.getJSON(_globalConfig2.default.baseUrl + '/api/nav/' + id, function (json, textStatus) {
+                    // console.log(json);
+                    // if (0 != json.errCode) {
+                    //     return;
+                    // }
+                    var createTime = json.createTime;
+                    var id = json.id;
+                    var linkUrl = json.linkUrl;
+                    var name = json.name;
+                    var oaname = json.oaname;
+                    var order = json.order;
+                    var picUrl = json.picUrl;
+                    var status = json.status;
+                    var target = json.target;
+                    var updateTime = json.updateTime;
+
+                    _this8.setState({
+                        repOpsTitle1: _util2.default.changeStatusToShow(linkUrl).stName,
+                        status1: _util2.default.changeStatusToShow(linkUrl).st,
+                        repOpsTitle2: target == 1 ? '首页' : '第二页',
+                        status2: target,
+                        navName: name, //导航按钮的名称
+                        linkUrl: _util2.default.changeStatusToShow(linkUrl).showUrl, //导航的链接
+                        picUrl: picUrl, //导航图标的链接
+                        navOrder: order, //导航的顺序序号
+                        navStatus: status, //导航的审核状态
+                        navTarget: target //导航的显示方式，首页还是第二页
+                    });
+                });
+            }
+
+            (0, _jquery2.default)(this.refs.fileUpload).change(function () {
+                var file = this.files[0];
+
+                if (!file || file.type.indexOf('image') < 0) {
+                    _this.refs.Toast.show('请选择图片格式的文件');
+                    return;
+                };
+
+                if (file.size > 1000000) {
+                    _this.refs.Toast.show('图片大小超过1M');
+                    return;
+                }
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = document.createElement('img');
+                    img.title = file.name;
+                    img.src = e.target.result;
+                    img.onload = function () {
+                        if (this.width != 80 || this.height != 80) {
+                            _this.refs.Toast.show('图片尺寸不符合80*80规格');
+                        } else {
+                            var formdata = new FormData();
+                            formdata.append("file", file);
+                            _jquery2.default.ajax({
+                                url: _globalConfig2.default.baseUrl + '/api/upload',
+                                type: 'post',
+                                data: formdata,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                dataType: "json",
+                                success: function success(json) {
+                                    console.log(json.errCode);
+                                    if (json.errCode == '0') {
+                                        (0, _jquery2.default)(_this.refs.fileIcon).attr('src', json.data.url);
+                                        _this.setState({
+                                            picUrl: json.data.url
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    };
+                };
+                reader.readAsDataURL(file);
+
+                this.value = ''; // 清除本次选定的文件，否则下次选择同样文件时，不触发onchange事件
+
+                return false;
+            });
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'openFile',
+        value: function openFile() {
+            (0, _jquery2.default)(this.refs.fileUpload).trigger('click');
+        }
+    }, {
+        key: 'onRepOPsSelect1',
+        value: function onRepOPsSelect1(key, evt) {
+            var title = ['指向h5页面', '指向原生界面', '指向arms界面'][key],
+                status1 = [1, 2, 3][key];
+            console.log(status1);
+            this.setState({ repOpsTitle1: title, status1: status1 });
+        }
+    }, {
+        key: 'onRepOPsSelect2',
+        value: function onRepOPsSelect2(key, evt) {
+            var title = ['', '首页', '第二页'][key],
+                status2 = [0, 1, 2][key];
+            this.setState({ repOpsTitle2: title, status2: status2, navTarget: status2 });
+        }
+    }, {
+        key: 'handleNavOrderChange',
+        value: function handleNavOrderChange(event) {
+            this.setState({ navOrder: event.target.value });
+        }
+    }, {
+        key: 'handleNavNameChange',
+        value: function handleNavNameChange(event) {
+            this.setState({ navName: event.target.value });
+        }
+    }, {
+        key: 'handleLinkUrlChange',
+        value: function handleLinkUrlChange(event) {
+            this.setState({ linkUrl: event.target.value });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this9 = this;
+
+            var renderUrlInput = function renderUrlInput() {
+                var status1 = _this9.state.status1,
+                    _vdom = void 0;
+                if (status1 === 1) {
+                    _vdom = _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        null,
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                            '指向h5页面',
+                            _react2.default.createElement(
+                                'strong',
+                                { className: 'prompt' },
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 10 },
+                            _react2.default.createElement(
+                                'div',
+                                null,
+                                _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text',
+                                    value: _this9.state.linkUrl,
+                                    placeholder: '输入h5页面地址，如有参数，以&隔开，例如xxx?x1=xx1&x2=xx2',
+                                    onChange: _this9.handleLinkUrlChange,
+                                    ref: 'urlInput' })
+                            )
+                        )
+                    );
+                } else if (status1 === 2) {
+                    _vdom = _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        null,
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                            '指向原生界面',
+                            _react2.default.createElement(
+                                'strong',
+                                { className: 'prompt' },
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 10 },
+                            _react2.default.createElement(
+                                'div',
+                                null,
+                                _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text',
+                                    value: _this9.state.linkUrl,
+                                    placeholder: '输入原生界面地址，如有参数，以&隔开，例如xxx?x1=xx1&x2=xx2',
+                                    onChange: _this9.handleLinkUrlChange,
+                                    ref: 'urlInput' })
+                            )
+                        )
+                    );
+                } else if (status1 === 3) {
+                    _vdom = _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        null,
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                            '指向arms界面',
+                            _react2.default.createElement(
+                                'strong',
+                                { className: 'prompt' },
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 10 },
+                            _react2.default.createElement(
+                                'div',
+                                null,
+                                _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text',
+                                    value: _this9.state.linkUrl,
+                                    placeholder: '输入arms界面地址，如有参数，以&隔开，例如xxx?x1=xx1&x2=xx2',
+                                    onChange: _this9.handleLinkUrlChange,
+                                    ref: 'urlInput' })
+                            )
+                        )
+                    );
+                }
+                return _vdom;
+            };
+
+            return _react2.default.createElement(
+                _reactBootstrap.Form,
+                { componentClass: 'fieldset', className: 'ads-detail-body', horizontal: true },
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '名称',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 10 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reactBootstrap.FormControl, {
+                                ref: 'nameInput',
+                                value: this.state.navName,
+                                onChange: this.handleNavNameChange,
+                                type: 'text' })
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '顺序',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    this.props.type === 'edit' ? _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 2 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reactBootstrap.FormControl, {
+                                ref: 'orderInput',
+                                value: this.state.navOrder,
+                                onChange: this.handleNavOrderChange,
+                                type: 'text' })
+                        )
+                    ) : _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 2 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reactBootstrap.FormControl, {
+                                ref: 'orderInput',
+                                value: this.state.navOrder,
+                                disabled: 'true',
+                                type: 'text' })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '显示方式',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 2 },
+                        _react2.default.createElement(
+                            _reactBootstrap.DropdownButton,
+                            { bsStyle: 'default', id: 'repOpsDropdown', onSelect: this.onRepOPsSelect2, title: this.state.repOpsTitle2 || '首页' },
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '1' },
+                                '首页'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '2' },
+                                '第二页'
+                            )
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        'ICO图标',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 7 },
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_reactBootstrap.FormControl, {
+                                ref: 'iconInput',
+                                type: 'text',
+                                value: this.state.picUrl,
+                                readOnly: 'true' })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 2 },
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'info', onClick: this.openFile },
+                            '上传图片'
+                        ),
+                        _react2.default.createElement('input', { type: 'file', id: 'fileUpload',
+                            ref: 'fileUpload', style: { "display": "none" } })
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(_reactBootstrap.Col, { componentClass: _reactBootstrap.ControlLabel, sm: 2 }),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 3 },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'text-line' },
+                            '支持jpg/png格式，RGB模式，单张尺寸（80*80），大小不超过1M'
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement('img', { ref: 'fileIcon', src: this.state.picUrl, className: 'home-nav-icon img-rounded' })
+                        )
+                    ),
+                    _react2.default.createElement(_reactBootstrap.Col, { sm: 2 })
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.FormGroup,
+                    null,
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+                        '类型',
+                        _react2.default.createElement(
+                            'strong',
+                            { className: 'prompt' },
+                            '*'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.Col,
+                        { sm: 3 },
+                        _react2.default.createElement(
+                            _reactBootstrap.DropdownButton,
+                            { bsStyle: 'default', id: 'repOpsDropdown', onSelect: this.onRepOPsSelect1, title: this.state.repOpsTitle1 || '指向h5页面' },
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '0' },
+                                '指向h5页面'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '1' },
+                                '指向原生界面'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '2' },
+                                '指向arms界面'
+                            )
+                        )
+                    )
+                ),
+                renderUrlInput(),
+                _react2.default.createElement(_Toast2.default, { ref: 'Toast' })
+            );
+        }
+    }]);
+
+    return NavsItem;
+}(_react2.default.Component);
+
+;

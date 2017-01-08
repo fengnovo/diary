@@ -1,0 +1,14 @@
+.list-filter {
+    margin-bottom: 15px; 
+    & > div, & > button {margin-right: 10px;}
+    #statusDropdown {width: 88px; text-align: right;}
+    .date-picker {
+        display: inline-block;
+        .date-picker-btn {width: 218px;}
+    }
+    .form-control {width: 128px;}
+    button {width: 88px;}
+    .btn-w3 {
+    	width: 120px;
+    }
+}

@@ -1,0 +1,178 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _header = require('../components/header');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _navigate = require('../components/navigate');
+
+var _navigate2 = _interopRequireDefault(_navigate);
+
+var _listFilter = require('../components/listFilter');
+
+var _listFilter2 = _interopRequireDefault(_listFilter);
+
+var _table = require('../components/table');
+
+var _table2 = _interopRequireDefault(_table);
+
+var _footer = require('../components/footer');
+
+var _footer2 = _interopRequireDefault(_footer);
+
+var _maskModal = require('../components/maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var colsManage = function (_React$Component) {
+    _inherits(colsManage, _React$Component);
+
+    function colsManage(props) {
+        _classCallCheck(this, colsManage);
+
+        var _this2 = _possibleConstructorReturn(this, (colsManage.__proto__ || Object.getPrototypeOf(colsManage)).call(this, props));
+
+        var oaUser = _util2.default.getOaUser();
+
+        if (!oaUser || oaUser.role != 100) {
+            window.location.href = '/';
+        }
+
+        _this2.state = {};
+        _this2.option = {
+            // page: 1
+        };
+        _this2._bind.apply(_this2, ['onRowClick', 'getTableData', 'onPageChange']);
+        return _this2;
+    }
+
+    _createClass(colsManage, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {}
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'onRowClick',
+        value: function onRowClick(row) {
+            row.op && window.open('#/editColBanner/' + row.id);
+            // window.location.href = `#/infoDetail/${row.id}`;
+        }
+    }, {
+        key: 'getTableData',
+        value: function getTableData(option) {
+            var _this = this;
+            var url = _globalConfig2.default.baseUrl + '/api/columns';
+
+            this.option = option; // listFilter 查询时，缓存查询条件，翻页时用
+
+            _jquery2.default.getJSON(url, option, function (json, textStatus) {
+                var list = json.data.map(function (item, i) {
+                    item.typeName = item.fixed ? '固定栏目' : '非定栏目';
+                    item.statusName = '已上线';
+                    item.title == '要闻' && (item.op = '编辑banner'); // 产品说目前这里只可配置要闻的banner
+                    return item;
+                });
+                _this.setState({
+                    list: list,
+                    total: json.total
+                });
+            });
+        }
+    }, {
+        key: 'onPageChange',
+        value: function onPageChange(page, sizePerPage) {
+            var opt = Object.assign(this.option, { page: page });
+            this.getTableData(opt);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var tableConfig = _globalConfig2.default.tableConfig.colsTable;
+            var tableFun = {
+                onRowClick: this.onRowClick,
+                onPageChange: this.onPageChange
+            };
+            var tableData = {
+                list: this.state.list,
+                page: this.option.page || 1,
+                total: this.state.total
+            };
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'cols-manage-page page-wrap', ref: 'colsManage' },
+                _react2.default.createElement(_header2.default, { colName: 'colsManage' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'cols-manage-body page-body' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-left' },
+                        _react2.default.createElement(_navigate2.default, { colName: 'colsManage' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-right' },
+                        _react2.default.createElement(_listFilter2.default, { colName: 'colsManage', getTableData: this.getTableData }),
+                        _react2.default.createElement(_table2.default, { tableConfig: tableConfig, tableFun: tableFun, tableData: tableData }),
+                        _react2.default.createElement(_footer2.default, null)
+                    )
+                )
+            );
+        }
+    }]);
+
+    return colsManage;
+}(_react2.default.Component);
+
+;
+
+exports.default = colsManage;

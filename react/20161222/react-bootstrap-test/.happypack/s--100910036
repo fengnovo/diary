@@ -1,0 +1,565 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _reactBootstrapDaterangepicker = require('react-bootstrap-daterangepicker');
+
+var _reactBootstrapDaterangepicker2 = _interopRequireDefault(_reactBootstrapDaterangepicker);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _header = require('../components/header');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _navigate = require('../components/navigate');
+
+var _navigate2 = _interopRequireDefault(_navigate);
+
+var _listFilter = require('../components/listFilter');
+
+var _listFilter2 = _interopRequireDefault(_listFilter);
+
+var _listOps = require('../components/listOps');
+
+var _listOps2 = _interopRequireDefault(_listOps);
+
+var _table = require('../components/table');
+
+var _table2 = _interopRequireDefault(_table);
+
+var _footer = require('../components/footer');
+
+var _footer2 = _interopRequireDefault(_footer);
+
+var _maskModal = require('../components/maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+var _Toast = require('../components/Toast');
+
+var _Toast2 = _interopRequireDefault(_Toast);
+
+var _adsManageAddEdit = require('./adsManageAddEdit');
+
+var _adsManageAddEdit2 = _interopRequireDefault(_adsManageAddEdit);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var oaname = void 0,
+    oaUser = _util2.default.getOaUser(),
+    category = void 0; //新增或修改时的Category
+
+var AdsManage = function (_React$Component) {
+    _inherits(AdsManage, _React$Component);
+
+    function AdsManage(props) {
+        _classCallCheck(this, AdsManage);
+
+        var _this2 = _possibleConstructorReturn(this, (AdsManage.__proto__ || Object.getPrototypeOf(AdsManage)).call(this, props));
+
+        if (!oaUser || oaUser.role != 100) {
+            window.location.href = '/';
+        } else {
+            oaname = oaUser.oaname;
+        }
+
+        _this2.state = {
+            type: 'add',
+            showAdModal: false,
+            editId: null,
+            opList: [],
+            oaname: oaname,
+            curCategory: '0', //当前浏览Category
+            category: category
+        };
+        _this2.option = {};
+        _this2.dataToOp = {};
+
+        _this2._bind.apply(_this2, ['getOptionData', 'getTableData', 'onPageChange', 'closeAdModal', 'renderAdModal', 'showAdModal', 'showToast', 'save', 'doDelete', 'renderDelModal', 'onRowClick', 'onRowSelect', 'onSelectAll', 'ensureDelete', 'closeDelModal', 'doCheck']);
+        return _this2;
+    }
+
+    _createClass(AdsManage, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            if (oaUser) {
+                this.getTableData(this.option);
+                this.getOptionData();
+            }
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'onRowClick',
+        value: function onRowClick(row) {
+            if (row.id) {
+                this.setState({
+                    showAdModal: true,
+                    type: 'edit',
+                    editId: row.id
+                });
+            }
+        }
+    }, {
+        key: 'onRowSelect',
+        value: function onRowSelect(row, isSelected) {
+            console.log(row);
+            if (isSelected) {
+                this.dataToOp[row.id] = row;
+            } else {
+                delete this.dataToOp[row.id];
+            }
+        }
+    }, {
+        key: 'onSelectAll',
+        value: function onSelectAll(isSelected) {
+            console.log(this.state.list);
+            if (isSelected) {
+                var i = 0,
+                    list = this.state.list,
+                    len = list.length,
+                    row = void 0;
+                for (; i < len; i++) {
+                    row = list[i];
+                    this.dataToOp[row.id] = row;
+                }
+            } else {
+                this.dataToOp = {};
+            }
+        }
+    }, {
+        key: 'getOptionData',
+        value: function getOptionData() {
+            var _this = this;
+            var url = _globalConfig2.default.baseUrl + '/api/navs?page=1&pageSize=20';
+            _jquery2.default.getJSON(url, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+                var list = json.data;
+                _this.setState({
+                    opList: list
+                });
+            });
+        }
+    }, {
+        key: 'getTableData',
+        value: function getTableData(option) {
+            var _this = this;
+            var url = _globalConfig2.default.baseUrl + '/api/ads'; //'./test/adsTestData.json';
+            this.option = option; // listFilter 查询时，缓存查询条件，翻页时用
+            console.log('--------------' + option.category);
+            this.setState({ curCategory: option.category || '0' });
+            _jquery2.default.getJSON(url, option, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+
+                var list = json.data;
+                list.map(function (item, i) {
+                    item.categoryName = _util2.default.changeToCategoryName(item.category);
+                    item.beginTime = _util2.default.dateStrFromUnix(item.beginTime);
+                    item.endTime = _util2.default.dateStrFromUnix(item.endTime);
+                    return item;
+                });
+
+                _this.setState({
+                    list: list,
+                    total: json.total
+                });
+            });
+        }
+    }, {
+        key: 'onPageChange',
+        value: function onPageChange(page, sizePerPage) {
+            this.option.page = page;
+            this.getTableData(this.option);
+        }
+    }, {
+        key: 'closeAdModal',
+        value: function closeAdModal() {
+            console.log('closeAdModal');
+            this.setState({
+                showAdModal: false
+            });
+        }
+    }, {
+        key: 'showAdModal',
+        value: function showAdModal() {
+            this.setState({
+                showAdModal: true,
+                type: 'add'
+            });
+        }
+    }, {
+        key: 'doDelete',
+        value: function doDelete() {
+            console.log(this.dataToOp);
+
+            if (this.dataToOp && _jquery2.default.isEmptyObject(this.dataToOp)) {
+                this.refs.listOps.showToast();
+                return;
+            }
+
+            this.refs.renderDelModal && this.refs.renderDelModal.open();
+        }
+    }, {
+        key: 'showToast',
+        value: function showToast(msg) {
+            this.refs.Toast.show(msg);
+        }
+    }, {
+        key: 'closeDelModal',
+        value: function closeDelModal() {
+            this.refs.renderDelModal && this.refs.renderDelModal.close();
+        }
+    }, {
+        key: 'ensureDelete',
+        value: function ensureDelete() {
+            this.doCheck(100);
+            this.closeDelModal();
+        }
+    }, {
+        key: 'save',
+        value: function save() {
+            var _this4 = this;
+
+            var _refs$adsItem$state = this.refs.adsItem.state;
+            var id = _refs$adsItem$state.id;
+            var beginTime = _refs$adsItem$state.beginTime;
+            var category = _refs$adsItem$state.category;
+            var content = _refs$adsItem$state.content;
+            var endTime = _refs$adsItem$state.endTime;
+            var linkUrl = _refs$adsItem$state.linkUrl;
+            var name = _refs$adsItem$state.name;
+            var order = _refs$adsItem$state.order;
+            var picUrl = _refs$adsItem$state.picUrl;
+            var status = _refs$adsItem$state.status;
+            var target = _refs$adsItem$state.target;
+            var linkType = _refs$adsItem$state.linkType;
+            var status6 = _refs$adsItem$state.status6;
+
+            if (_jquery2.default.trim(name) == '') {
+                this.showToast('名称不能为空！');
+                return;
+            }
+            if (_jquery2.default.trim(order) == '') {
+                this.showToast('顺序不能为空！');
+                return;
+            }
+            if (endTime && parseInt(endTime.format('X')) * 1000 < new Date()) {
+                this.showToast('不能发布今天之前的广告！');
+                return;
+            }
+            console.log(category);
+            if (category != 2 && _jquery2.default.trim(picUrl) == '') {
+                //非2 轮播广告、四方格广告必须输入图片url
+                this.showToast('icon图标不能为空！');
+                return;
+            }
+
+            if (_jquery2.default.trim(linkUrl) == '') {
+                this.showToast('指向链接不能为空！');
+                return;
+            }
+            if (linkType === 1) {
+                //自定义的
+                // linkUrl = status6==0 ? 'web:'+linkUrl : 'native:'+linkUrl;
+                linkUrl = _util2.default.changeStatusToAction(status6, linkUrl).actionLinkUrl;
+            }
+            if (this.state.type === 'add') {
+                console.log('新增');
+                console.log({
+                    beginTime: parseInt(beginTime.format('X')), //1481558400*1000,
+                    category: typeof category === 'string' ? parseInt(category) : category,
+                    content: content,
+                    endTime: parseInt(endTime.format('X')),
+                    linkUrl: linkUrl,
+                    name: name,
+                    oaname: oaname,
+                    order: 1,
+                    picUrl: picUrl,
+                    status: 0,
+                    target: 1
+                });
+
+                _jquery2.default.ajax({
+                    url: _globalConfig2.default.baseUrl + '/api/ad',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        beginTime: parseInt(beginTime.format('X')), //1481558400*1000,
+                        category: typeof category === 'string' ? parseInt(category) : category,
+                        content: content,
+                        endTime: parseInt(endTime.format('X')),
+                        linkUrl: linkUrl,
+                        name: name,
+                        oaname: oaname,
+                        order: 1,
+                        picUrl: picUrl,
+                        status: 0,
+                        linkType: linkType,
+                        target: 1
+                    })
+                }).done(function (data) {
+                    console.log('新增成功');
+                    if (0 == data.errCode) {
+                        _this4.closeAdModal();
+                        _this4.onPageChange(1);
+                        console.log(_this4.state.curCategory);
+                        _this4.getTableData({ category: _this4.state.curCategory });
+                    } else {
+                        _this4.showToast('新增失败，原因：' + data.errMsg);
+                    }
+                }).fail(function () {
+                    console.log('新增失败');
+                    _this4.showToast('新增失败');
+                    _this4.closeAdModal();
+                });
+            } else {
+                console.log('修改');
+                console.log({
+                    beginTime: parseInt(beginTime.format('X')), //1479115229,//1481558400*1000,
+                    category: typeof category === 'string' ? parseInt(category) : category,
+                    content: content,
+                    endTime: parseInt(endTime.format('X')), //1481558400,
+                    linkUrl: linkUrl,
+                    name: name,
+                    oaname: oaname,
+                    order: typeof order === 'string' ? parseInt(order) : order,
+                    picUrl: picUrl,
+                    status: 0,
+                    target: typeof target === 'string' ? parseInt(target) : target
+                });
+                _jquery2.default.ajax({
+                    url: _globalConfig2.default.baseUrl + '/api/ad/' + id,
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        beginTime: parseInt(beginTime.format('X')), //1479115229,//1481558400*1000,
+                        category: typeof category === 'string' ? parseInt(category) : category,
+                        content: content,
+                        endTime: parseInt(endTime.format('X')), //1481558400,
+                        linkUrl: linkUrl,
+                        name: name,
+                        oaname: oaname,
+                        order: typeof order === 'string' ? parseInt(order) : order,
+                        picUrl: picUrl,
+                        status: 0,
+                        linkType: linkType,
+                        target: typeof target === 'string' ? parseInt(target) : target
+                    })
+                }).done(function (data) {
+                    console.log('修改成功');
+                    if (0 == data.errCode) {
+                        _this4.closeAdModal();
+                        _this4.onPageChange(1);
+                        console.log(_this4.state.curCategory);
+                        _this4.getTableData({ category: _this4.state.curCategory });
+                    } else {
+                        _this4.showToast('修改失败，原因：' + data.errMsg);
+                    }
+                }).fail(function () {
+                    console.log('修改失败');
+                    _this4.showToast('修改失败');
+                    _this4.closeAdModal();
+                });
+            }
+        }
+    }, {
+        key: 'doCheck',
+        value: function doCheck() {
+            var _this5 = this;
+
+            var nextStatus = arguments.length <= 0 || arguments[0] === undefined ? 40 : arguments[0];
+
+            var listOps = this.refs.listOps,
+                dataToOp = this.dataToOp;
+            var opName = { '40': '处理', '80': '处理', '100': '删除条目' }[nextStatus];
+
+            if (listOps.state.showToast) {
+                return; // 避免重复操作
+            }
+
+            if (dataToOp && _jquery2.default.isEmptyObject(dataToOp)) {
+                listOps.showToast();
+                return;
+            } else {
+                listOps.showToast('正在' + opName + '，请稍候...', true);
+            }
+
+            var _this = this,
+                key = void 0,
+                row = void 0,
+                size = 0;
+
+            for (key in dataToOp) {
+                row = dataToOp[key];
+                if (100 != nextStatus && 0 != row.status || 100 == nextStatus && row.status == 100) {
+                    // 删除条目时，不用判断状态(已经是删除状态的除外)
+                    continue;
+                }
+
+                size++;
+
+                _jquery2.default.ajax({
+                    url: _globalConfig2.default.baseUrl + '/api/ad/' + row.id,
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ status: nextStatus })
+                }).always(function () {
+                    size--;
+
+                    if (0 == size) {
+                        listOps.showToast(opName + '操作完成');
+                        setTimeout(function () {
+                            _this5.onPageChange(1); // 全部返回后，刷新列表
+                        }, 2000);
+                    }
+                });
+            };
+
+            if (0 == size) {
+                listOps.showToast(opName + '操作完成');
+                setTimeout(function () {
+                    _this5.onPageChange(1); // 取消选中态
+                }, 2000);
+            }
+
+            this.dataToOp = {};
+        }
+    }, {
+        key: 'renderAdModal',
+        value: function renderAdModal() {
+
+            var btns = [{ name: '取消', click: this.closeAdModal }, { name: '保存并提交', bsStyle: 'primary', click: this.save }];
+
+            var modalInfo = {
+                className: 'ads-item-modal',
+                btns: btns
+            };
+            return _react2.default.createElement(
+                _maskModal2.default,
+                { ref: 'MaskModal', showModal: true, modalInfo: modalInfo },
+                _react2.default.createElement(_adsManageAddEdit2.default, _extends({ ref: 'adsItem', showToast: this.showToast }, this.state)),
+                _react2.default.createElement(_Toast2.default, { ref: 'Toast' })
+            );
+        }
+    }, {
+        key: 'renderDelModal',
+        value: function renderDelModal() {
+            var modalInfo = {
+                className: 'info-delete-modal',
+                title: '确定删除所选的内容吗？',
+                btns: [{ name: '确定', bsStyle: 'primary', click: this.ensureDelete }, { name: '取消', click: this.closeDelModal }]
+            };
+
+            return _react2.default.createElement(_maskModal2.default, { ref: 'renderDelModal', showModal: false, modalInfo: modalInfo });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var tableConfig = _globalConfig2.default.tableConfig.adsTable;
+            var tableFun = {
+                onRowClick: this.onRowClick,
+                onRowSelect: this.onRowSelect,
+                onSelectAll: this.onSelectAll,
+                onPageChange: this.onPageChange
+            };
+            var tableData = {
+                list: this.state.list,
+                page: this.option.page || 1,
+                total: this.state.total
+            };
+            var opFun = {
+                showAddAdModal: this.showAdModal,
+                doDelete: this.doDelete
+            };
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'report-manage-page page-wrap', ref: 'adsManage' },
+                _react2.default.createElement(_header2.default, { colName: 'adsManage' }),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'report-manage-body page-body' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-left' },
+                        _react2.default.createElement(_navigate2.default, { colName: 'adsManage' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'body-right' },
+                        _react2.default.createElement(_listFilter2.default, { colName: 'adsManage', getTableData: this.getTableData, ref: 'listFilter' }),
+                        _react2.default.createElement(_listOps2.default, { colName: 'adsManage', opFun: opFun, ref: 'listOps' }),
+                        _react2.default.createElement(_table2.default, { colName: 'adsManage', tableConfig: tableConfig, tableFun: tableFun, tableData: tableData }),
+                        _react2.default.createElement(_footer2.default, null)
+                    )
+                ),
+                this.state.showAdModal ? this.renderAdModal() : null,
+                this.renderDelModal()
+            );
+        }
+    }]);
+
+    return AdsManage;
+}(_react2.default.Component);
+
+;
+
+exports.default = AdsManage;

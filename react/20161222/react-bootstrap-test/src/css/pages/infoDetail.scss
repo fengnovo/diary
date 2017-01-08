@@ -1,0 +1,45 @@
+.detail-new-page {
+    .detail-body-right {
+        .detail-wrap {
+            flex: 1; overflow: auto;
+            .edit-btn {width: 88px; float: right;}
+
+            .info-detail {
+                h3 {font-size: 20px; line-height: 34px; color: #333; margin-bottom: 15px;}
+                .info-meta {margin: 15px 0;}
+                article {margin: 15px 0; padding: 10px; line-height: 26px; text-align: justify; border: solid 1px #ddd; border-radius: 5px; background: oldlace;}
+            }
+
+            .react-bs-table {background: white; margin: 0}
+            .react-bs-table-pagination {margin: 10px 0;}
+
+            .detail-ops {
+                text-align: right; margin: 15px 0;
+                button {min-width: 88px; margin-left: 15px;}
+            }
+        }   
+    }
+
+    .new-body-right {
+        .new-info {
+            flex: 1; overflow: auto;
+            .title-hint {
+                margin-bottom: 15px;
+                strong {color: red;} 
+            }
+            #dropdown {width: 108px;}
+            .form {
+                strong {color: red;}
+            }
+            .form-ops {
+                text-align: right;
+                button {min-width: 88px; margin-left: 15px;}
+            }
+            .simditor-body {overflow: auto; height: 300px;}
+            .toast-like {
+                position: absolute; top: 37%; left: 50%; transform: translate(-50%, -50%);
+                button {height: 58px; background: rgba(255, 0, 0, 0.4); box-shadow:0 5px 10px rgba(255, 0, 0, 0.2); border: none; color: #333;}
+            }
+        }
+    }
+}

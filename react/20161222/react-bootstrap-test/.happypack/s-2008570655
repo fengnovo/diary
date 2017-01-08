@@ -1,0 +1,272 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ListOps = function (_React$Component) {
+    _inherits(ListOps, _React$Component);
+
+    function ListOps(props) {
+        _classCallCheck(this, ListOps);
+
+        var _this2 = _possibleConstructorReturn(this, (ListOps.__proto__ || Object.getPrototypeOf(ListOps)).call(this, props));
+
+        _this2.state = {};
+
+        _this2._bind.apply(_this2, ['doFirstCheck', 'doRecheck', 'doAdd', 'doDelete', 'checkReport', 'uncheckReport', 'showToast', 'closeToast']);
+        return _this2;
+    }
+
+    _createClass(ListOps, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {}
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'doDelete',
+        value: function doDelete() {
+            this.props.opFun.doDelete();
+        }
+    }, {
+        key: 'doFirstCheck',
+        value: function doFirstCheck() {
+            this.props.opFun.doCheck(11);
+        }
+    }, {
+        key: 'doRecheck',
+        value: function doRecheck() {
+            this.props.opFun.doCheck(30);
+        }
+    }, {
+        key: 'checkReport',
+        value: function checkReport() {
+            this.props.opFun.doCheck(40);
+        }
+    }, {
+        key: 'doAdd',
+        value: function doAdd() {
+            this.props.opFun.showAddAdModal();
+        }
+    }, {
+        key: 'uncheckReport',
+        value: function uncheckReport() {
+            this.props.opFun.doCheck(80);
+        }
+    }, {
+        key: 'showToast',
+        value: function showToast() {
+            var text = arguments.length <= 0 || arguments[0] === undefined ? '未选中任何数据项' : arguments[0];
+            var showAlways = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
+            /*if (this.state.showToast) {
+                return;
+            }*/
+
+            this.setState({
+                showToast: true,
+                toastText: text
+            });
+
+            var _this = this;
+
+            !showAlways && setTimeout(function () {
+                _this.setState({
+                    showToast: false
+                });
+            }, 2000);
+        }
+    }, {
+        key: 'closeToast',
+        value: function closeToast() {
+            this.setState({
+                showToast: false
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var btnGroup = [],
+                oaUser = _util2.default.getOaUser(),
+                rights = oaUser ? oaUser.operations.split('+') : []; //1查看2编辑3初审4复审5上线
+
+            switch (this.props.colName) {
+                case 'infoManage':
+                    rights.indexOf('2') >= 0 && btnGroup.push(_react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'warning', key: 'del', onClick: this.doDelete },
+                        '删除'
+                    ));
+                    rights.indexOf('3') >= 0 && btnGroup.push(_react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'success', key: 'check', onClick: this.doFirstCheck },
+                        '通过初审'
+                    ));
+                    rights.indexOf('4') >= 0 && btnGroup.push(_react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'success', key: 'recheck', onClick: this.doRecheck },
+                        '通过复审'
+                    ));
+
+                    break;
+
+                case 'draftManage':
+                    rights.indexOf('2') >= 0 && btnGroup.push(_react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'warning', key: 'del', onClick: this.doDelete },
+                        '删除'
+                    ));
+
+                    break;
+
+                //举报管理和评论管理，必须管理员才能进，权限都存在
+                case 'reportManage':
+                    btnGroup = [_react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'warning', key: 'del', onClick: this.doDelete },
+                        '删除'
+                    ), _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'success', key: 'pass', onClick: this.checkReport },
+                        '通过'
+                    ), _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'success', key: 'unpase', onClick: this.uncheckReport },
+                        '不通过'
+                    )];
+
+                    break;
+
+                case 'commentManage':
+                    btnGroup = [_react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'warning', key: 'del', onClick: this.doDelete },
+                        '删除'
+                    ), _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'success', key: 'in', onClick: this.doFirstCheck },
+                        '移入精选'
+                    ), _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'success', key: 'out', onClick: this.doRecheck },
+                        '移出精选'
+                    )];
+
+                    break;
+                case 'adsManage':
+                    btnGroup = [
+                    // <Button bsStyle="success" key='edit' onClick={this.doEdit}>修改</Button>,
+                    _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'success', key: 'add', onClick: this.doAdd },
+                        '添加'
+                    ), _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'warning', key: 'del', onClick: this.doDelete },
+                        '删除'
+                    )];
+
+                    break;
+
+                case 'homeNavManage':
+                    btnGroup = [
+                    // <Button bsStyle="success" key='edit' onClick={this.doEdit}>修改</Button>,
+                    _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'success', key: 'add', onClick: this.doAdd },
+                        '添加'
+                    ), _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'warning', key: 'del', onClick: this.doDelete },
+                        '删除'
+                    )];
+                    break;
+
+                case 'hotQuesManage':
+                    btnGroup = [_react2.default.createElement(
+                        _reactBootstrap.Button,
+                        { bsStyle: 'warning', key: 'del', onClick: this.doDelete },
+                        '删除'
+                    )];
+                    if (this.props.showAddBtn) {
+                        btnGroup.unshift(_react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'success', key: 'add', onClick: this.doAdd },
+                            '添加'
+                        ));
+                    }
+                    break;
+
+                default:
+                    btnGroup = 'listOps';
+            }
+            return _react2.default.createElement(
+                _reactBootstrap.Form,
+                { componentClass: 'fieldset', inline: true, className: 'list-ops' },
+                btnGroup,
+                this.state.showToast ? _react2.default.createElement(
+                    'div',
+                    { className: 'op-toast' },
+                    _react2.default.createElement('div', { className: 'right-arrow' }),
+                    _react2.default.createElement(
+                        _reactBootstrap.Button,
+                        null,
+                        this.state.toastText
+                    )
+                ) : null
+            );
+        }
+    }]);
+
+    return ListOps;
+}(_react2.default.Component);
+
+;
+
+ListOps.defaultProps = {
+    opFun: {}
+};
+
+exports.default = ListOps;

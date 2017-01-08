@@ -1,0 +1,10 @@
+.list-ops {
+    & > * {margin-right: 12px;}
+    button {min-width: 88px; margin-bottom: 15px;}
+
+    .op-toast {
+        position: relative; display: inline-block; margin-left: 12px; top: 0; left: 0; 
+        .right-arrow {position: absolute; left: -16px; top: 9px; border: 8px solid transparent; border-right-color: rgba(255, 0, 0, 0.4);}
+        button {height: 34px; background: rgba(255, 0, 0, 0.4); box-shadow:0 5px 10px rgba(255, 0, 0, 0.2); border: none; color: #333;} 
+    }
+}

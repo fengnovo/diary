@@ -1,0 +1,25 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var NotLogin = function NotLogin(props) {
+    return _react2.default.createElement(
+        'section',
+        { className: 'not-login' },
+        _react2.default.createElement(
+            'p',
+            { className: 'not-login-hint' },
+            '请使用oa账号登录'
+        )
+    );
+};
+
+exports.default = NotLogin;

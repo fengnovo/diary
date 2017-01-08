@@ -1,0 +1,34 @@
+{
+  "data": [
+    {
+      "id": "5823b6811bfbea731d7513fb",
+      "list": "0",
+      "name": "省流量",
+      "link": "http://10.2.122.58/test/5823b6811bfbea731d7513fb",
+      "showType": "当前页",
+      "pic": "http://10.2.130.19:9000/public/file/5823b72ad22126000a76c7bd.jpg"
+    },
+    {
+      "id": "5823b02d1bfbea731d750738",
+      "list": "1",
+      "name": "省流量",
+      "link": "http://10.2.122.58/test/5823b02d1bfbea731d750738",
+      "showType": "当前页",
+      "pic": "http://10.2.130.19:9000/public/file/5823b72ad22126000a76c7bb.jpg"
+    },
+    {
+      "id": "58210be31bfbea731d739e4e",
+      "list": "2",
+      "name": "省流量",
+      "link": "http://10.2.122.58/test/58210be31bfbea731d739e4e",
+      "showType": "当前页",
+      "pic": "http://10.2.130.19:9000/public/file/58210df4d22126000a76b447.jpg"
+    }
+  ],
+  "errCode": 0,
+  "errMsg": "",
+  "page": 1,
+  "pageCount": 1,
+  "pageSize": 10,
+  "total": 3
+}

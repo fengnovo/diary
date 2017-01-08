@@ -1,0 +1,808 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
+
+var _reactBootstrapDaterangepicker = require('react-bootstrap-daterangepicker');
+
+var _reactBootstrapDaterangepicker2 = _interopRequireDefault(_reactBootstrapDaterangepicker);
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ListFilter = function (_React$Component) {
+    _inherits(ListFilter, _React$Component);
+
+    function ListFilter(props) {
+        _classCallCheck(this, ListFilter);
+
+        var _this = _possibleConstructorReturn(this, (ListFilter.__proto__ || Object.getPrototypeOf(ListFilter)).call(this, props));
+
+        _this.state = {
+            startDate: (0, _moment2.default)().subtract(29, 'days').startOf('day'),
+            endDate: (0, _moment2.default)().endOf('day'),
+            btnColor: [true, false, false, false, false, false]
+        };
+        _this.ranges = {
+            '今天': [(0, _moment2.default)().startOf('day'), (0, _moment2.default)().endOf('day')],
+            '最近7天': [(0, _moment2.default)().subtract(6, 'days').startOf('day'), (0, _moment2.default)().endOf('day')],
+            '最近30天': [(0, _moment2.default)().subtract(29, 'days').startOf('day'), (0, _moment2.default)().endOf('day')],
+            '本月': [(0, _moment2.default)().startOf('month').startOf('day'), (0, _moment2.default)().endOf('month')]
+        };
+
+        _this._bind.apply(_this, ['handleEvent', 'doQuery', '_renderForm', 'onInfoStatusSelect', 'onColTypeSelect', 'onColStatusSelect', 'onRepStatusSelect', 'onSearchSourceSelect']);
+        return _this;
+    }
+
+    _createClass(ListFilter, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this2 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this2[method] = _this2[method].bind(_this2);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var autoGet = this.props.autoGet;var oaUser = _util2.default.getOaUser();
+
+            autoGet && oaUser && this.doQuery(this.props.pageName || this.props.colName);
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {}
+    }, {
+        key: 'handleEvent',
+        value: function handleEvent(event, picker) {
+            this.setState({
+                startDate: picker.startDate,
+                endDate: picker.endDate
+            });
+        }
+    }, {
+        key: 'onInfoStatusSelect',
+        value: function onInfoStatusSelect(key, evt) {
+            var select = _globalConfig2.default.dropdown.infoStatus[key],
+                dropdownTitle = select.name,
+                status = select.key;
+
+            this.setState({ dropdownTitle: dropdownTitle, status: status });
+        }
+    }, {
+        key: 'onColTypeSelect',
+        value: function onColTypeSelect(key, evt) {
+            var title = ['全部', '固定栏目', '非固栏目'][key],
+                fixed = ['-1', '1', '0'][key];
+
+            this.setState({ colTypeTitle: title, fixed: fixed });
+        }
+    }, {
+        key: 'onColStatusSelect',
+        value: function onColStatusSelect(key, evt) {
+            var title = ['全部', '已上线', '已下线'][key],
+                status = ['-1', '40', '80'][key];
+
+            this.setState({ colStatusTitle: title, status: status });
+        }
+    }, {
+        key: 'onRepStatusSelect',
+        value: function onRepStatusSelect(key, evt) {
+            var title = ['全部', '未审核', '已核实', '不实举报'][key],
+                status = ['-1', '0', '40', '80'][key];
+
+            this.setState({ repStatusTitle: title, status: status });
+        }
+    }, {
+        key: 'onSearchSourceSelect',
+        value: function onSearchSourceSelect(key, evt) {
+            var select = _globalConfig2.default.dropdown.searchSource[key],
+                title = select.name,
+                source = select.key;
+
+            this.setState({ searchSourceTitle: title, source: source });
+        }
+    }, {
+        key: 'doQuery',
+        value: function doQuery(label, index) {
+            if ('function' != typeof this.props.getTableData) {
+                return null;
+            }
+            // 取查询条件
+            var option,
+                $form = (0, _jquery2.default)(this.refs.listFilter);
+            var id, title, author, status, fixed, beginTime, endTime;
+
+            switch (label) {
+                case 'infoManage':
+                    beginTime = this.state.startDate.unix();
+                    endTime = this.state.endDate.unix(); // unix返回的时间是s，不是ms
+
+                    id = $form.find('#infoId').val();
+                    title = $form.find('#infoTitle').val();
+                    status = this.state.status || -1;
+
+                    option = {
+                        id: id, title: title, status: status, //1草稿中等
+                        beginTime: beginTime, endTime: endTime,
+                        page: 1,
+                        pageSize: _globalConfig2.default.pageSize || 20
+                    };
+
+                    // !id && delete option.id;
+                    // !title && delete option.title;
+                    // !status && delete option.status;
+
+                    this.props.getTableData(option);
+                    break;
+
+                case 'colsManage':
+                    id = $form.find('#colId').val();
+                    title = $form.find('#colTitle').val();
+                    status = this.state.status || -1;
+                    fixed = this.state.fixed || -1;
+
+                    option = {
+                        id: id, title: title, status: status, fixed: fixed,
+                        // status: null,    null全部, 40 已上线, 80 已下线
+                        // fixed: null,      null全部, 1 固定栏目, 0 非固栏目
+                        page: 1,
+                        pageSize: _globalConfig2.default.pageSize || 20
+                    };
+                    this.props.getTableData(option);
+                    break;
+
+                case 'infoSearch':
+                    title = $form.find('#titleKey').val();
+                    author = $form.find('#author').val();
+                    beginTime = this.state.startDate.unix();
+                    endTime = this.state.endDate.unix(); // unix返回的时间是s，不是ms
+
+                    var grade,
+                        source = this.state.source || 0;
+
+                    if ('null' == source) {
+                        source = undefined;
+                    } else if (0 == source) {
+                        grade = 1;
+                        source = undefined;
+                    }
+
+                    option = {
+                        title: title, author: author, source: source,
+                        grade: grade, status: 40, // null全部, 40 已上线, 80 已下线
+                        beginTime: beginTime, endTime: endTime,
+                        page: 1,
+                        pageSize: 50
+                    };
+                    this.props.getTableData(option);
+                    break;
+
+                case 'reportManage':
+                    beginTime = this.state.startDate.unix();
+                    endTime = this.state.endDate.unix(); // unix返回的时间是s，不是ms
+
+                    id = $form.find('#reportId').val();
+                    title = $form.find('#articleId').val();
+                    status = this.state.status || -1;
+
+                    option = {
+                        id: id, articleId: title, status: status,
+                        beginTime: beginTime, endTime: endTime,
+                        page: 1,
+                        pageSize: _globalConfig2.default.pageSize || 20
+                    };
+                    this.props.getTableData(option);
+                    break;
+
+                case 'commentManage':
+                    option = {
+                        // status: null,    null全部, 40 已上线, 80 已下线
+                        // type: null,      null全部, 40 固定栏目, 80 非固栏目
+                        page: 1,
+                        pageSize: _globalConfig2.default.pageSize || 20
+                    };
+                    this.props.getTableData(option);
+                    break;
+
+                case 'adsManage':
+                    if (index !== undefined) {
+                        var temArr = [false, false, false, false, false, false];
+                        temArr[index] = true;
+                        this.setState({
+                            btnColor: temArr
+                        });
+                    }
+                    /*
+                        const (
+                            AD_CATEGORY_BANNER    = 1 //轮播图广告
+                            AD_CATEGORY_TEXT      = 2 //文字条广告
+                            AD_CATEGORY_FOURGRIDS = 3 //四方格广告
+                        ) 
+                    */
+                    option = {
+                        category: index || 0,
+                        page: 1,
+                        pageSize: _globalConfig2.default.pageSize || 20
+                    };
+                    this.props.getTableData(option);
+                    break;
+
+                case 'homeNavManage':
+                    option = {
+                        // status: null,    null全部, 40 已上线, 80 已下线
+                        // type: null,      null全部, 40 固定栏目, 80 非固栏目
+                        page: 1,
+                        pageSize: _globalConfig2.default.pageSize || 20
+                    };
+                    this.props.getTableData(option);
+                    break;
+
+                case 'hotQuesManage':
+                    option = {
+                        // status: null,    null全部, 40 已上线, 80 已下线
+                        // type: null,      null全部, 40 固定栏目, 80 非固栏目
+                        page: 1,
+                        pageSize: _globalConfig2.default.pageSize || 20
+                    };
+                    this.props.getTableData(option);
+                    break;
+
+                default:
+                    // statements_def
+                    break;
+            }
+        }
+    }, {
+        key: '_renderForm',
+        value: function _renderForm() {
+            var state = this.state;
+            var start = state.startDate.format('YYYY-MM-DD');
+            var end = state.endDate.format('YYYY-MM-DD');
+            var dateRangeStr = start + ' - ' + end;
+
+            if (start === end) {
+                dateRangeStr = start;
+            }
+
+            var switchLabel = this.props.pageName || this.props.colName,
+                form;
+
+            switch (switchLabel) {
+                case 'infoManage':
+                    var infoStatus = _globalConfig2.default.dropdown.infoStatus;
+                    var dropdown = _react2.default.createElement(
+                        _reactBootstrap.DropdownButton,
+                        { bsStyle: 'default', id: 'infoStatusDropdown', onSelect: this.onInfoStatusSelect, title: state.dropdownTitle || infoStatus[0].name },
+                        infoStatus.map(function (item, i) {
+                            return _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { key: item.key, eventKey: i },
+                                item.name
+                            );
+                        })
+                    );
+
+                    form = _react2.default.createElement(
+                        _reactBootstrap.Form,
+                        { componentClass: 'fieldset', inline: true, className: 'list-filter' },
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'infoId' },
+                            _react2.default.createElement(
+                                _reactBootstrap.ControlLabel,
+                                null,
+                                '资讯ID：'
+                            ),
+                            ' ',
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text' })
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'infoTitle' },
+                            _react2.default.createElement(
+                                _reactBootstrap.ControlLabel,
+                                null,
+                                '资讯标题：'
+                            ),
+                            ' ',
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text' })
+                        ),
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            '创建日期：'
+                        ),
+                        ' ',
+                        _react2.default.createElement(
+                            _reactBootstrapDaterangepicker2.default,
+                            { className: 'date-picker', startDate: state.startDate, endDate: state.endDate, ranges: this.ranges, onEvent: this.handleEvent },
+                            _react2.default.createElement(
+                                _reactBootstrap.Button,
+                                { className: 'date-picker-btn' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'pull-left' },
+                                    _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'calendar' })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'pull-right' },
+                                    _react2.default.createElement(
+                                        'span',
+                                        null,
+                                        dateRangeStr
+                                    ),
+                                    _react2.default.createElement('span', { className: 'caret' })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            '状态：'
+                        ),
+                        ' ',
+                        dropdown,
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'info', onClick: this.doQuery.bind(this, 'infoManage') },
+                            '查询'
+                        )
+                    );
+                    break;
+
+                case 'colsManage':
+                    form = _react2.default.createElement(
+                        _reactBootstrap.Form,
+                        { componentClass: 'fieldset', inline: true, className: 'list-filter' },
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'colId' },
+                            _react2.default.createElement(
+                                _reactBootstrap.ControlLabel,
+                                null,
+                                '栏目ID：'
+                            ),
+                            ' ',
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text' })
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'colTitle' },
+                            _react2.default.createElement(
+                                _reactBootstrap.ControlLabel,
+                                null,
+                                '栏目标题：'
+                            ),
+                            ' ',
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text' })
+                        ),
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            '类别：'
+                        ),
+                        ' ',
+                        _react2.default.createElement(
+                            _reactBootstrap.DropdownButton,
+                            { bsStyle: 'default', id: 'colTypeDropdown', onSelect: this.onColTypeSelect, title: state.colTypeTitle || '全部' },
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '0' },
+                                '全部'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '1' },
+                                '固定栏目'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '2' },
+                                '非定栏目'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            '状态：'
+                        ),
+                        ' ',
+                        _react2.default.createElement(
+                            _reactBootstrap.DropdownButton,
+                            { bsStyle: 'default', id: 'colStatusDropdown', onSelect: this.onColStatusSelect, title: state.colStatusTitle || '全部' },
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '0' },
+                                '全部'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '1' },
+                                '已上线'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '2' },
+                                '已下线'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'info', onClick: this.doQuery.bind(this, 'colsManage') },
+                            '查询'
+                        )
+                    );
+                    break;
+
+                case 'infoSearch':
+                    var searchSource = _globalConfig2.default.dropdown.searchSource;
+
+                    dropdown = _react2.default.createElement(
+                        _reactBootstrap.DropdownButton,
+                        { bsStyle: 'default', id: 'searchSourceDropdown', onSelect: this.onSearchSourceSelect, title: state.searchSourceTitle || '精选资讯' },
+                        searchSource.map(function (item, i) {
+                            return _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { key: item.key, eventKey: i },
+                                item.name
+                            );
+                        })
+                    );
+                    form = _react2.default.createElement(
+                        _reactBootstrap.Form,
+                        { componentClass: 'fieldset', inline: true, className: 'list-filter' },
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'titleKey' },
+                            _react2.default.createElement(
+                                _reactBootstrap.ControlLabel,
+                                null,
+                                '标题关键字：'
+                            ),
+                            ' ',
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text' })
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'author' },
+                            _react2.default.createElement(
+                                _reactBootstrap.ControlLabel,
+                                null,
+                                '作者：'
+                            ),
+                            ' ',
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text' })
+                        ),
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            '创建日期：'
+                        ),
+                        ' ',
+                        _react2.default.createElement(
+                            _reactBootstrapDaterangepicker2.default,
+                            { className: 'date-picker', startDate: state.startDate, endDate: state.endDate, ranges: this.ranges, onEvent: this.handleEvent },
+                            _react2.default.createElement(
+                                _reactBootstrap.Button,
+                                { className: 'date-picker-btn' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'pull-left' },
+                                    _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'calendar' })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'pull-right' },
+                                    _react2.default.createElement(
+                                        'span',
+                                        null,
+                                        dateRangeStr
+                                    ),
+                                    _react2.default.createElement('span', { className: 'caret' })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            '资讯来源：'
+                        ),
+                        ' ',
+                        dropdown,
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'info', onClick: this.doQuery.bind(this, 'infoSearch') },
+                            '查询'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'info', style: { margin: 0 }, onClick: this.props.filterCancel },
+                            '取消'
+                        )
+                    );
+                    break;
+
+                case 'reportManage':
+                    form = _react2.default.createElement(
+                        _reactBootstrap.Form,
+                        { componentClass: 'fieldset', inline: true, className: 'list-filter' },
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'reportId' },
+                            _react2.default.createElement(
+                                _reactBootstrap.ControlLabel,
+                                null,
+                                '举报ID：'
+                            ),
+                            ' ',
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text' })
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'articleId' },
+                            _react2.default.createElement(
+                                _reactBootstrap.ControlLabel,
+                                null,
+                                '资讯ID：'
+                            ),
+                            ' ',
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text' })
+                        ),
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            '举报日期：'
+                        ),
+                        ' ',
+                        _react2.default.createElement(
+                            _reactBootstrapDaterangepicker2.default,
+                            { className: 'date-picker', startDate: state.startDate, endDate: state.endDate, ranges: this.ranges, onEvent: this.handleEvent },
+                            _react2.default.createElement(
+                                _reactBootstrap.Button,
+                                { className: 'date-picker-btn' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'pull-left' },
+                                    _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'calendar' })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'pull-right' },
+                                    _react2.default.createElement(
+                                        'span',
+                                        null,
+                                        dateRangeStr
+                                    ),
+                                    _react2.default.createElement('span', { className: 'caret' })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            '状态：'
+                        ),
+                        ' ',
+                        _react2.default.createElement(
+                            _reactBootstrap.DropdownButton,
+                            { bsStyle: 'default', id: 'repStatusDropdown', onSelect: this.onRepStatusSelect, title: state.repStatusTitle || '全部' },
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '0' },
+                                '全部'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '1' },
+                                '未审核'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '2' },
+                                '已核实'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '3' },
+                                '不实举报'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'info', onClick: this.doQuery.bind(this, 'reportManage') },
+                            '查询'
+                        )
+                    );
+                    break;
+
+                case 'commentManage':
+                    form = _react2.default.createElement(
+                        _reactBootstrap.Form,
+                        { componentClass: 'fieldset', inline: true, className: 'list-filter' },
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'infoId' },
+                            _react2.default.createElement(
+                                _reactBootstrap.ControlLabel,
+                                null,
+                                '资讯ID：'
+                            ),
+                            ' ',
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text' })
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.FormGroup,
+                            { controlId: 'infoTitle' },
+                            _react2.default.createElement(
+                                _reactBootstrap.ControlLabel,
+                                null,
+                                '资讯标题：'
+                            ),
+                            ' ',
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text' })
+                        ),
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            '创建日期：'
+                        ),
+                        ' ',
+                        _react2.default.createElement(
+                            _reactBootstrapDaterangepicker2.default,
+                            { className: 'date-picker', startDate: state.startDate, endDate: state.endDate, ranges: this.ranges, onEvent: this.handleEvent },
+                            _react2.default.createElement(
+                                _reactBootstrap.Button,
+                                { className: 'date-picker-btn' },
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'pull-left' },
+                                    _react2.default.createElement(_reactBootstrap.Glyphicon, { glyph: 'calendar' })
+                                ),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'pull-right' },
+                                    _react2.default.createElement(
+                                        'span',
+                                        null,
+                                        dateRangeStr
+                                    ),
+                                    _react2.default.createElement('span', { className: 'caret' })
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'label',
+                            null,
+                            '状态：'
+                        ),
+                        ' ',
+                        _react2.default.createElement(
+                            _reactBootstrap.DropdownButton,
+                            { bsStyle: 'default', id: 'statusDropdown', title: '待审核' },
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '1' },
+                                '待审核'
+                            ),
+                            _react2.default.createElement(
+                                _reactBootstrap.MenuItem,
+                                { eventKey: '2' },
+                                '已核实'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: 'info', onClick: this.doQuery.bind(this, 'commentManage') },
+                            '查询'
+                        )
+                    );
+                    break;
+
+                case 'adsManage':
+                    form = _react2.default.createElement(
+                        _reactBootstrap.Form,
+                        { componentClass: 'fieldset', inline: true, className: 'list-filter' },
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: this.state.btnColor[0] ? "info" : "default",
+                                onClick: this.doQuery.bind(this, 'adsManage', 0) },
+                            '全部'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: this.state.btnColor[1] ? "info" : "default",
+                                className: 'btn-w3', onClick: this.doQuery.bind(this, 'adsManage', 1) },
+                            '轮播广告'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: this.state.btnColor[2] ? "info" : "default",
+                                className: 'btn-w3', onClick: this.doQuery.bind(this, 'adsManage', 2) },
+                            '文字条广告'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            { bsStyle: this.state.btnColor[3] ? "info" : "default",
+                                className: 'btn-w3', onClick: this.doQuery.bind(this, 'adsManage', 3) },
+                            '四方格广告'
+                        )
+                    );
+                    break;
+
+                case 'homeNavManage':
+                    form = _react2.default.createElement(_reactBootstrap.Form, { componentClass: 'fieldset', inline: true, className: 'list-filter' });
+                    break;
+
+                case 'hotQuesManage':
+                    form = _react2.default.createElement(_reactBootstrap.Form, { componentClass: 'fieldset', inline: true, className: 'list-filter' });
+                    break;
+
+                default:
+                    form = 'listFilter';
+                    break;
+            }
+
+            return form;
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { ref: 'listFilter' },
+                this._renderForm()
+            );
+        }
+    }]);
+
+    return ListFilter;
+}(_react2.default.Component);
+
+;
+
+ListFilter.defaultProps = {
+    autoGet: true
+};
+
+exports.default = ListFilter;

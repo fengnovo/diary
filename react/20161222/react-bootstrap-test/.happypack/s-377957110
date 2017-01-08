@@ -1,0 +1,198 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _maskModal = require('../components/maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Navigate = function (_React$Component) {
+    _inherits(Navigate, _React$Component);
+
+    function Navigate(props) {
+        _classCallCheck(this, Navigate);
+
+        var _this2 = _possibleConstructorReturn(this, (Navigate.__proto__ || Object.getPrototypeOf(Navigate)).call(this, props));
+
+        _this2.state = {};
+
+        _this2._bind.apply(_this2, ['navSwitch', 'showModal', 'closeModal', 'href', 'renderModal', 'getTableData']);
+        return _this2;
+    }
+
+    _createClass(Navigate, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            // this.getTableData({page: 1, pageSize: 1, status: 1});
+        }
+    }, {
+        key: '_bind',
+        value: function _bind() {
+            var _this3 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this3[method] = _this3[method].bind(_this3);
+            });
+        }
+    }, {
+        key: 'getTableData',
+        value: function getTableData(option) {
+            var _this = this,
+                url = _globalConfig2.default.baseUrl + '/api/articles';
+
+            _jquery2.default.getJSON(url, option, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+
+                _this.setState({
+                    draftNum: json.total
+                });
+            });
+        }
+    }, {
+        key: 'navSwitch',
+        value: function navSwitch(target) {
+            this.nextHref = target;
+
+            if (document.forms.newInfoForm) {
+                this.showModal();
+            } else {
+                this.href();
+            }
+        }
+    }, {
+        key: 'href',
+        value: function href() {
+            this.closeModal();
+            window.location.href = '#/' + this.nextHref;
+        }
+    }, {
+        key: 'showModal',
+        value: function showModal() {
+            this.refs.MaskModal && this.refs.MaskModal.open();
+        }
+    }, {
+        key: 'closeModal',
+        value: function closeModal() {
+            this.refs.MaskModal && this.refs.MaskModal.close();
+        }
+    }, {
+        key: 'renderModal',
+        value: function renderModal() {
+            var modalInfo = {
+                className: 'info-delete-modal',
+                title: '确定不保存并退出当前编辑吗？',
+                btns: [{ name: '取消', click: this.closeModal }, { name: '确定', bsStyle: 'primary', click: this.href }]
+            };
+
+            return _react2.default.createElement(_maskModal2.default, { ref: 'MaskModal', showModal: false, modalInfo: modalInfo });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var oaUser = _util2.default.getOaUser();
+            var adminNavs = void 0,
+                draftNum = this.state.draftNum,
+                draftNumStr = 'number' == typeof draftNum ? '(' + draftNum + ')' : '',
+                navs = [_react2.default.createElement(
+                _reactBootstrap.NavItem,
+                { eventKey: "infoManage", key: 'infoManage', onClick: this.navSwitch.bind(this, 'infoManage') },
+                '资讯管理'
+            ), _react2.default.createElement(
+                _reactBootstrap.NavItem,
+                { eventKey: "draftManage", key: 'draftManage', onClick: this.navSwitch.bind(this, 'draftManage') },
+                '草稿箱',
+                draftNumStr
+            )];
+
+            if (oaUser && 100 == oaUser.role) {
+                adminNavs = [_react2.default.createElement(
+                    _reactBootstrap.NavItem,
+                    { eventKey: "colsManage", key: 'colsManage', onClick: this.navSwitch.bind(this, 'colsManage') },
+                    '栏目管理'
+                ), _react2.default.createElement(
+                    _reactBootstrap.NavItem,
+                    { eventKey: "reportManage", key: 'reportManage', onClick: this.navSwitch.bind(this, 'reportManage') },
+                    '举报管理'
+                ), _react2.default.createElement(
+                    _reactBootstrap.NavItem,
+                    { eventKey: "authManage", key: 'authManage', onClick: this.navSwitch.bind(this, 'authManage') },
+                    '权限管理'
+                )];
+
+                navs = navs.concat(adminNavs);
+            }
+
+            var adsNavs = [];
+            if (true) {
+                adsNavs = [_react2.default.createElement(
+                    _reactBootstrap.NavItem,
+                    { className: 'fz', eventKey: "homeNavManage", key: 'homeNavManage', onClick: this.navSwitch.bind(this, 'homeNavManage') },
+                    '功能清单管理'
+                ), _react2.default.createElement(
+                    _reactBootstrap.NavItem,
+                    { className: 'fz', eventKey: "adsManage", key: 'adsManage', onClick: this.navSwitch.bind(this, 'adsManage') },
+                    '广告配置'
+                ), _react2.default.createElement(
+                    _reactBootstrap.NavItem,
+                    { className: 'fz', eventKey: "hotQuesManage", key: 'hotQuesManage', onClick: this.navSwitch.bind(this, 'hotQuesManage') },
+                    '必答热门问题管理'
+                )];
+            }
+            /*
+                <Nav className="navigate" bsStyle="pills" stacked activeKey={this.props.colName}>
+                    {navs}
+                </Nav>
+            */
+            return _react2.default.createElement(
+                'aside',
+                null,
+                _react2.default.createElement(
+                    _reactBootstrap.Nav,
+                    { className: 'navigate', bsStyle: 'pills', stacked: true, activeKey: this.props.colName },
+                    adsNavs
+                ),
+                this.renderModal()
+            );
+        }
+    }]);
+
+    return Navigate;
+}(_react2.default.Component);
+
+exports.default = Navigate;

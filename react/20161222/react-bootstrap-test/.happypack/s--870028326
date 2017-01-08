@@ -1,0 +1,135 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var oaUser = void 0;
+
+var getOaUser = function getOaUser() {
+    if (oaUser) {
+        return oaUser;
+    }
+
+    var key = 'APPADMIN_SESSION=',
+        cookie = document.cookie,
+        startIdx = cookie.indexOf(key),
+        endIdx = cookie.indexOf(';', startIdx);
+    var reg = /%00(.*?)%00/g,
+        fields = void 0;
+
+    if (-1 == startIdx) {
+        return undefined;
+    }
+
+    -1 == endIdx && (endIdx = cookie.length);
+    fields = cookie.substring(startIdx + key.length, endIdx).match(reg);
+
+    fields.length && (oaUser = {});
+
+    for (var i = 0, len = fields.length; i < len; i++) {
+        var field = decodeURIComponent(fields[i].replace(/%00/g, '')),
+            kv = field.split(':');
+
+        oaUser[kv[0]] = kv[1];
+    }
+
+    return oaUser;
+};
+
+var keyToName = function keyToName(keyArr, key) {
+    var it = keyArr.find(function (item) {
+        return item.key == key;
+    });
+
+    return it && it.name || '无效键值';
+};
+
+var dateStrFromUnix = function dateStrFromUnix(unixTime) {
+    var sep = arguments.length <= 1 || arguments[1] === undefined ? '-' : arguments[1];
+
+    var d = new Date(unixTime * 1000),
+        y = d.getFullYear(),
+        m = d.getMonth() + 1,
+        day = d.getDate();
+
+    m = m > 9 ? m : '0' + m;
+    day = day > 9 ? day : '0' + day;
+
+    return '' + y + sep + m + sep + day;
+};
+
+var timeStrFromUnix = function timeStrFromUnix(unixTime) {
+    var sep = arguments.length <= 1 || arguments[1] === undefined ? ':' : arguments[1];
+
+    var d = new Date(unixTime * 1000),
+        h = d.getHours(),
+        m = d.getMinutes(),
+        s = d.getSeconds();
+
+    h = h > 9 ? h : '0' + h;
+    m = m > 9 ? m : '0' + m;
+    s = s > 9 ? s : '0' + s;
+
+    return dateStrFromUnix(unixTime) + '  ' + h + sep + m + sep + s;
+};
+
+var changeToCategoryName = function changeToCategoryName(cg) {
+    var cgName = '';
+    switch (cg) {
+        case 1:
+            cgName = '轮播广告';
+            break;
+        case 2:
+            cgName = '文字条广告';
+            break;
+        case 3:
+            cgName = '四方格广告';
+            break;
+    }
+    return cgName;
+};
+
+var changeStatusToShow = function changeStatusToShow(linkUrl) {
+    var stName = '',
+        st = 0,
+        showUrl = '';
+    console.log(linkUrl);
+    switch (true) {
+        case linkUrl.startsWith('web:'):
+            stName = '指向h5页面';
+            st = 1;
+            showUrl = linkUrl.slice(4);
+            break;
+        case linkUrl.startsWith('native:'):
+            stName = '指向原生界面';
+            st = 2;
+            showUrl = linkUrl.slice(7);
+            break;
+        case linkUrl.startsWith('arms:'):
+            stName = '指向arms界面';
+            st = 3;
+            showUrl = linkUrl.slice(5);
+            break;
+    }
+    return { stName: stName, st: st, showUrl: showUrl };
+};
+
+var changeStatusToAction = function changeStatusToAction(st, linkUrl) {
+    var actionLinkUrl = '';
+    console.log(linkUrl);
+    st = parseInt(st);
+    switch (st) {
+        case 1:
+            actionLinkUrl = 'web:' + linkUrl;
+            break;
+        case 2:
+            actionLinkUrl = 'native:' + linkUrl;
+            break;
+        case 3:
+            actionLinkUrl = 'arms:' + linkUrl;
+            break;
+    }
+    return { actionLinkUrl: actionLinkUrl };
+};
+
+exports.default = { getOaUser: getOaUser, keyToName: keyToName, dateStrFromUnix: dateStrFromUnix, timeStrFromUnix: timeStrFromUnix, changeToCategoryName: changeToCategoryName, changeStatusToShow: changeStatusToShow, changeStatusToAction: changeStatusToAction };

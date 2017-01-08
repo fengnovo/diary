@@ -1,0 +1,626 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = require('react-bootstrap');
+
+var _immutable = require('immutable');
+
+var _immutable2 = _interopRequireDefault(_immutable);
+
+var _simditor = require('simditor');
+
+var _simditor2 = _interopRequireDefault(_simditor);
+
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _globalConfig = require('../../globalConfig.json');
+
+var _globalConfig2 = _interopRequireDefault(_globalConfig);
+
+var _util = require('../util');
+
+var _util2 = _interopRequireDefault(_util);
+
+var _maskModal = require('./maskModal');
+
+var _maskModal2 = _interopRequireDefault(_maskModal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NewInfo = function (_React$Component) {
+    _inherits(NewInfo, _React$Component);
+
+    function NewInfo(props) {
+        _classCallCheck(this, NewInfo);
+
+        var _this = _possibleConstructorReturn(this, (NewInfo.__proto__ || Object.getPrototypeOf(NewInfo)).call(this, props));
+
+        _this.editor = null;
+        _this.state = {
+            opts: props.opts
+        };
+
+        var detailData = props.detailData;
+
+        if (detailData && !_jquery2.default.isEmptyObject(detailData)) {
+            // 点‘编辑’进来，栏目下拉框的默认值
+            var dropdownTitle = detailData.columnsInfo[0].title,
+                dropdownKey = detailData.columnsInfo[0].id;
+
+            Object.assign(_this.state, { detailData: detailData, dropdownTitle: dropdownTitle, dropdownKey: dropdownKey });
+        }
+
+        _this._bind.apply(_this, ['getDetailData', 'getColumns', 'showToast', 'getInfoForm', 'blackListFilter', 'saveToBack', 'save', 'cancel', 'onColumnSelect', 'showModal', 'closeModal', 'renderModal']);
+        return _this;
+    }
+
+    _createClass(NewInfo, [{
+        key: '_bind',
+        value: function _bind() {
+            var _this2 = this;
+
+            for (var _len = arguments.length, methods = Array(_len), _key = 0; _key < _len; _key++) {
+                methods[_key] = arguments[_key];
+            }
+
+            methods.forEach(function (method) {
+                return _this2[method] = _this2[method].bind(_this2);
+            });
+        }
+    }, {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var $textarea = (0, _jquery2.default)(this.refs.textarea);
+            this.editor = new _simditor2.default(Object.assign({}, {
+                textarea: $textarea,
+                toolbar: [
+                // 'code', 'image', 'outdent'
+                'title', 'bold', 'italic', 'underline', 'strikethrough', 'fontScale', 'color', 'ol', 'ul', 'blockquote', 'table', 'link', 'hr', 'indent', 'alignment']
+            }, this.state.opts));
+
+            this.editor.setValue($textarea.val());
+            this.getColumns();
+
+            var _props = this.props;
+            var infoId = _props.infoId;
+            var detailData = _props.detailData;
+
+
+            if (infoId && !detailData) {
+                this.getDetailData(infoId);
+            }
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            this.editor.destroy();
+            this.editor = null;
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            // 在编辑时又点了‘新建’，清空输入框，重置默认栏目
+            if (nextProps.infoId) {
+                this.getDetailData(nextProps.infoId);
+            } else {
+                var $form = (0, _jquery2.default)(this.refs.newInfo);
+
+                $form.find('#title').val('');
+                $form.find('#subtitle').val('');
+                $form.find('#media').val('');
+                $form.find('#authorName').val('');
+                $form.find('#certiCode').val('');
+
+                this.editor.setValue('');
+
+                var col0 = this.state.column[0];var title = col0.title;
+                var id = col0.id;
+
+                this.setState({ dropdownTitle: title, dropdownKey: id });
+            }
+        }
+    }, {
+        key: 'getColumns',
+        value: function getColumns() {
+            var _this3 = this;
+
+            var url = _globalConfig2.default.baseUrl + '/api/columns';
+
+            _jquery2.default.getJSON(url, { page: 1, pageSize: 100 }, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+
+                var data = json.data;var len = data.length;var i = 0;var column = [];var item = void 0;var _state = _this3.state;
+                var dropdownTitle = _state.dropdownTitle;
+                var dropdownKey = _state.dropdownKey;
+
+
+                for (; i < len; i++) {
+                    item = data[i];
+                    item.title != '直播' && item.title != '投教基地' && column.push({ id: item.id, title: item.title }); // 产品说着两个栏目的内容不能自产，新建时要去掉
+                }
+
+                // 栏目列表取回后，生成下拉框，并设置默认值（编辑用草稿自己的，新建用第一个）
+                dropdownTitle = dropdownTitle || column[0].title;
+                dropdownKey = dropdownKey || column[0].id;
+                _this3.setState({ column: column, dropdownTitle: dropdownTitle, dropdownKey: dropdownKey });
+            });
+        }
+    }, {
+        key: 'getDetailData',
+        value: function getDetailData(infoId) {
+            var _this4 = this;
+
+            var url = _globalConfig2.default.baseUrl + '/api/article/' + infoId;
+
+            _jquery2.default.getJSON(url, function (json, textStatus) {
+                if (0 != json.errCode) {
+                    return;
+                }
+
+                var detailData = json.data,
+                    dropdownTitle = detailData.columnsInfo[0].title,
+                    dropdownKey = detailData.columnsInfo[0].id;
+
+                _this4.setState({ detailData: detailData, dropdownTitle: dropdownTitle, dropdownKey: dropdownKey }, function () {
+                    //input defaultValue 和value处理起来很麻烦，用jquery处理了
+                    var $form = (0, _jquery2.default)(_this4.refs.newInfo);
+                    var author = detailData.authors && detailData.authors[0] || {};
+
+                    $form.find('#title').val(detailData.title);
+                    $form.find('#subtitle').val(detailData.subtitle);
+                    $form.find('#media').val(detailData.media);
+                    $form.find('#authorName').val(author.name);
+                    $form.find('#certiCode').val(author.certiCode);
+
+                    _this4.editor.setValue(detailData.content);
+                });
+            });
+        }
+    }, {
+        key: 'showToast',
+        value: function showToast(toastText) {
+            var _this5 = this;
+
+            var showAlways = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+
+            /*if (this.state.showToast) {
+                return;
+            }*/
+
+            this.setState({ showToast: true, toastText: toastText });
+
+            !showAlways && setTimeout(function () {
+                _this5.setState({ showToast: false });
+            }, 2000);
+        }
+    }, {
+        key: 'getInfoForm',
+        value: function getInfoForm() {
+            var title = void 0,
+                subtitle = void 0,
+                media = void 0,
+                columns = [],
+                name = void 0,
+                certiCode = void 0,
+                authors = [],
+                content = void 0;
+            var $form = (0, _jquery2.default)(this.refs.newInfo);
+
+            title = $form.find('#title').val();
+            if (!title) {
+                this.showToast('标题是必填项哦~');
+                return false;
+            }
+
+            subtitle = $form.find('#subtitle').val();
+            media = $form.find('#media').val() || '广发证券';
+            name = $form.find('#authorName').val();
+            if (!name) {
+                this.showToast('作者是必填项哦~');
+                return false;
+            }
+
+            certiCode = $form.find('#certiCode').val();
+
+            columns.push(this.state.dropdownKey);
+            authors.push({ name: name, certiCode: certiCode });
+
+            content = this.editor.getValue();
+            if (!content) {
+                this.showToast('正文是必填项哦~');
+                return false;
+            }
+
+            var infoForm = {
+                title: title, subtitle: subtitle, media: media, columns: columns, authors: authors, content: content
+            };
+
+            return infoForm;
+        }
+    }, {
+        key: 'blackListFilter',
+        value: function blackListFilter(infoForm) {
+            var _this6 = this;
+
+            // http://10.2.130.200:/blacklist/v2?appId=finInfo&currentUser=maqinghua&userType=3&mode=2
+            var defer = _jquery2.default.Deferred(),
+                filterData = function filterData(data) {
+                var url = '/blacklist/v2?appId=finInfo&currentUser=maqinghua&userType=3&mode=2';
+                return _jquery2.default.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(data)
+                });
+            };
+
+            _jquery2.default.when(filterData(infoForm.title), filterData(infoForm.subtitle), filterData(infoForm.content)).done(function (tbl, sbl, cbl) {
+                var tl = tbl[0],
+                    sl = sbl[0],
+                    cl = cbl[0],
+                    html = '';
+                if (tl.length || sl.length || cl.length) {
+                    tl.length && (html += '<p class="line">标题含有如下敏感词：' + tl + '</p>');
+                    sl.length && (html += '<p class="line">副标题含有如下敏感词：' + sl + '</p>');
+                    cl.length && (html += '<p class="line">正文含有如下敏感词：' + cl + '</p>');
+
+                    _this6.setState({ showToast: false, showModal: true, modalName: 'black', modalBody: html }, function () {
+                        _this6.refs.MaskModal && _this6.refs.MaskModal.open();
+                    });
+
+                    defer.reject('黑匣子验证驳回');
+                } else {
+                    defer.resolve('黑匣子验证通过');
+                }
+            }).fail(function () {
+                var html = '<p class="line">黑匣子验证出错，请重新提交</p>';
+                _this6.setState({ showToast: false, showModal: true, modalName: 'black', modalBody: html }, function () {
+                    _this6.refs.MaskModal && _this6.refs.MaskModal.open();
+                });
+                defer.reject('黑匣子验证驳回');
+            });
+
+            return defer;
+        }
+    }, {
+        key: 'saveToBack',
+        value: function saveToBack(infoForm) {
+            var _this7 = this;
+
+            var infoId = this.props.infoId,
+                ajaxParam = { dataType: 'json', contentType: 'application/json', data: JSON.stringify(infoForm) };
+
+            if (infoId) {
+                // 点编辑进来，走修改接口
+                Object.assign(ajaxParam, { url: _globalConfig2.default.baseUrl + '/api/article/' + infoId, type: 'PUT' });
+            } else {
+                // 点新建进来，走新建接口
+                Object.assign(ajaxParam, { url: _globalConfig2.default.baseUrl + '/api/article', type: 'POST' });
+            }
+
+            _jquery2.default.ajax(ajaxParam).done(function (data) {
+                if (0 !== data.errCode) {
+                    _this7.showToast('保存失败，错误信息：' + data.errMsg);
+                } else {
+                    _this7.showToast('保存成功，页面将在2秒后自动跳转');
+                    setTimeout(function () {
+                        window.location.href = '#/infoManage';
+                    }, 2000);
+                }
+            }).fail(function () {
+                _this7.showToast('保存失败，请重新提交');
+            });
+        }
+    }, {
+        key: 'save',
+        value: function save() {
+            var _this8 = this;
+
+            var nextStatus = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+            // 1保存草稿，10保存并提交审核
+            if (this.state.showToast) return; // 避免重复保存
+
+            var infoForm = this.getInfoForm();
+
+            if (!infoForm) {
+                return;
+            }
+
+            var toastText = 1 == nextStatus ? '正在保存草稿，请稍候...' : '正在提交审核，请稍候...';
+
+            this.showToast(toastText, true);
+
+            infoForm.status = nextStatus; // 审核中
+            if (1 == nextStatus) {
+                this.saveToBack(infoForm);
+            } else {
+                this.blackListFilter(infoForm).done(function (arg) {
+                    console.log(arg);
+                    _this8.saveToBack(infoForm);
+                });
+            }
+        }
+    }, {
+        key: 'cancel',
+        value: function cancel() {
+            var _props2 = this.props;
+            var path = _props2.path;
+            var back = _props2.back;
+
+
+            if (path.indexOf('infoDetail') >= 0) {
+                back ? back() : window.location.href = '#/infoManage';
+            } else {
+                // 点新建进来
+                window.location.href = '#/draftManage';
+                // window.close();
+            }
+        }
+    }, {
+        key: 'onColumnSelect',
+        value: function onColumnSelect(key, evt) {
+            var select = this.state.column[key],
+                dropdownKey = select.id,
+                dropdownTitle = select.title;
+
+            this.setState({ dropdownKey: dropdownKey, dropdownTitle: dropdownTitle });
+        }
+    }, {
+        key: 'showModal',
+        value: function showModal() {
+            var _this9 = this;
+
+            this.setState({
+                showModal: true,
+                modalName: 'cancel'
+            }, function () {
+                _this9.refs.MaskModal && _this9.refs.MaskModal.open();
+            });
+        }
+    }, {
+        key: 'closeModal',
+        value: function closeModal() {
+            this.refs.MaskModal && this.refs.MaskModal.close();
+        }
+    }, {
+        key: 'renderModal',
+        value: function renderModal(modalName) {
+            if (!this.state.showModal || !modalName) {
+                return null;
+            }
+
+            var modalInfo = void 0,
+                modalBody = void 0;
+
+            if ('black' == modalName) {
+                modalInfo = {
+                    className: 'black-list-modal',
+                    title: '黑匣子驳回原因',
+                    btns: [{ name: '确定', click: this.closeModal }]
+                };
+
+                modalBody = _react2.default.createElement('div', { className: '', dangerouslySetInnerHTML: { __html: this.state.modalBody } });
+            } else {
+                modalInfo = {
+                    className: 'info-delete-modal',
+                    title: '确定不保存并退出当前编辑吗？',
+                    btns: [{ name: '取消', click: this.closeModal }, { name: '确定', bsStyle: 'primary', click: this.cancel }]
+                };
+            }
+
+            return _react2.default.createElement(
+                _maskModal2.default,
+                { ref: 'MaskModal', showModal: true, modalInfo: modalInfo },
+                modalBody
+            );
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _state2 = this.state;
+            var _state2$detailData = _state2.detailData;
+            var detailData = _state2$detailData === undefined ? {} : _state2$detailData;
+            var _state2$column = _state2.column;
+            var column = _state2$column === undefined ? [] : _state2$column;
+            var _state2$dropdownTitle = _state2.dropdownTitle;
+            var dropdownTitle = _state2$dropdownTitle === undefined ? '要闻' : _state2$dropdownTitle;
+            var author = detailData.authors && detailData.authors[0] || {};
+            var dropdown = _react2.default.createElement(
+                _reactBootstrap.DropdownButton,
+                { bsStyle: 'default', id: 'dropdown', onSelect: this.onColumnSelect, title: dropdownTitle },
+                column.map(function (item, i) {
+                    return _react2.default.createElement(
+                        _reactBootstrap.MenuItem,
+                        { key: item.id, eventKey: i },
+                        item.title
+                    );
+                })
+            );
+
+            var btnGroup = [],
+                oaUser = _util2.default.getOaUser(),
+                rights = oaUser ? oaUser.operations.split('+') : []; //1查看2编辑3初审4复审5上线
+
+            if (rights.indexOf('2') >= 0) {
+                btnGroup = [_react2.default.createElement(
+                    _reactBootstrap.Button,
+                    { bsStyle: 'success', key: 'check', onClick: this.save.bind(this, 10) },
+                    '保存并提交审核'
+                ), _react2.default.createElement(
+                    _reactBootstrap.Button,
+                    { bsStyle: 'success', key: 'save', onClick: this.save.bind(this, 1) },
+                    '保存草稿'
+                )];
+            }
+
+            btnGroup.push(_react2.default.createElement(
+                _reactBootstrap.Button,
+                { bsStyle: 'success', key: 'cancel', onClick: this.showModal },
+                '取消'
+            ));
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'new-info', ref: 'newInfo' },
+                _react2.default.createElement(
+                    _reactBootstrap.Form,
+                    { horizontal: true, name: 'newInfoForm', className: 'form' },
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        { controlId: 'title' },
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 1 },
+                            '标题',
+                            _react2.default.createElement(
+                                'strong',
+                                null,
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 11 },
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: '请输入标题', defaultValue: detailData.title })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        { controlId: 'subtitle' },
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 1 },
+                            '副标题'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 11 },
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: '请输入副标题', defaultValue: detailData.subtitle })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        { controlId: 'media' },
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 1 },
+                            '来源'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 11 },
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: '来源', defaultValue: detailData.media })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        { controlId: 'column' },
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 1 },
+                            '栏目'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 11 },
+                            dropdown
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        { controlId: 'authorName' },
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 1 },
+                            '作者',
+                            _react2.default.createElement(
+                                'strong',
+                                null,
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 11 },
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: '作者', defaultValue: author.name })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        { controlId: 'certiCode' },
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 1 },
+                            '执业编号'
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 11 },
+                            _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: '执业编号', defaultValue: author.certiCode })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactBootstrap.FormGroup,
+                        null,
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { componentClass: _reactBootstrap.ControlLabel, sm: 1 },
+                            '正文',
+                            _react2.default.createElement(
+                                'strong',
+                                null,
+                                '*'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            _reactBootstrap.Col,
+                            { sm: 11 },
+                            _react2.default.createElement('textarea', { ref: 'textarea', defaultValue: detailData.content })
+                        )
+                    ),
+                    this.state.showToast ? _react2.default.createElement(
+                        'div',
+                        { className: 'toast-like' },
+                        _react2.default.createElement(
+                            _reactBootstrap.Button,
+                            null,
+                            this.state.toastText
+                        )
+                    ) : null
+                ),
+                _react2.default.createElement(
+                    _reactBootstrap.Form,
+                    { componentClass: 'fieldset', inline: true, className: 'form-ops' },
+                    btnGroup
+                ),
+                this.renderModal(this.state.modalName)
+            );
+        }
+    }]);
+
+    return NewInfo;
+}(_react2.default.Component);
+
+;
+
+exports.default = NewInfo;
