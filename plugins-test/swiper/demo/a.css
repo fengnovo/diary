@@ -1,0 +1,79 @@
+
+html, body {
+    position: relative;
+    height: 100%;
+}
+body {
+    background: #000;
+    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color:#000;
+    margin: 0;
+    padding: 0;
+}
+.swiper-container {
+    width: 100%;
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.swiper-slide {
+    background-size: cover;
+    background-position: center;
+}
+.gallery-top {
+    height: 80%;
+    width: 100%;
+}
+.gallery-thumbs {
+    height: 20%;
+    box-sizing: border-box;
+    padding: 10px 0;
+}
+.gallery-thumbs .swiper-slide {
+    
+    opacity: 0.4;
+}
+.gallery-thumbs .swiper-slide-active {
+    opacity: 1;
+}
+
+
+.c {
+	position:relaitve;
+	margin-left: 20%;
+}
+
+.a {
+	position:absolute; 
+	z-index:2;
+}
+
+.b {
+	position:absolute; 
+	z-index:3;
+	top: 23%;
+}
+
+.d {
+	border: 5px solid #fff;
+	width: 25%;
+    height: 80px; 
+}
+
+.e {
+	top: 30%;
+	background:#666;
+	background-size:20px 20px;
+	background-repeat:no-repeat;
+	background-position:center; 
+}
+
+
+.swiper-container {
+    width: 900px;
+    height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+    
