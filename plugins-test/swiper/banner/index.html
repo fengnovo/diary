@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <!-- m vp-->
+    <meta name="viewport"
+          content="width=device-width,user-scalable=no,initial-scale=1.0"
+            />
+    <title>首页</title>
+    <link rel="stylesheet" href="css/swiper.min.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <!-- 引用css文件，html rel：relationship的英文缩写·
+REL属性用于定义链接的文件和HTML文档之间的关系。StyleSheet，
+的意思就是样式调用，REL=StyleSheet指定一个固定或首选的样式
+而REL="Alternate StyleSheet"定义一个交互样式。-->
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+<div class="jd_layout">
+    <!--搜索头部-->
+    <header class="jd_header header-wrapper">
+        <div class="jd_header_box" id="s-header">
+            <a href="#" class="icon_logo"></a>
+
+            <!--把调用出来的小键盘按钮enter 改变成 搜索 按钮-->
+            <form action="#">
+                <span class="icon_search"></span>
+                <input type="search" placeholder="提示占位" />
+            </form>
+            <a href="#" class="login">登录</a>
+        </div>
+    </header>
+    <!-- 轮播图-->
+    <div class="jd_banner">
+        <!--clearfix清除浮动-->
+        <div class="swiper-container" id="a">
+            <ul class="swiper-wrapper">
+                <li class="swiper-slide"><a href="#"><img src="images/l1.png" alt="" /></a></li>
+                <li class="swiper-slide"><a href="#"><img src="images/l2.png" alt="" /></a></li>
+                <li class="swiper-slide"><a href="#"><img src="images/l3.png" alt="" /></a></li>
+                <li class="swiper-slide"><a href="#"><img src="images/l4.png" alt="" /></a></li>
+            </ul>
+            <div class="swiper-pagination"></div>
+        </div>
+        <!--  -->
+    </div>
+    <!--导航栏-->
+    <div class="jd_nav">
+        <ul class="clearfix">
+            <li>
+                <a href="#">
+                    <img src="images/nav1.png" alt="" />
+                    <p>京东超市</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="images/nav2.png" alt="" />
+                    <p>全球购</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="images/nav3.png" alt="" />
+                    <p>充值中心</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="images/nav4.png" alt="" />
+                    <p>服装城</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="images/nav5.png" alt="" />
+                    <p>京东金融</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="images/nav6.png" alt="" />
+                    <p>领券</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="images/nav7.png" alt="" />
+                    <p>分类查询</p>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="images/nav8.png" alt="" />
+                    <p>物流查询</p>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+    <!--商品-->
+    <main class="jd_product">
+        <!--商品盒子的子类-->
+        <section class="product_box jd_sk">
+            <!--头部-->
+            <div class="product_box_tit no_border">
+                <div class="f_left m_l10">
+                    <span class="sk_icon"></span>
+                    <span class="sk_name">掌上秒杀</span>
+                    <div class="sk_time m_l10">
+                        <span>0</span>
+                        <span>0</span>
+                        <span>:</span>
+                        <span>0</span>
+                        <span>0</span>
+                        <span>:</span>
+                        <span>0</span>
+                        <span>0</span>
+                    </div>
+                </div>
+                <div class="f_right m_r10"><a href="#">更多></a></div>
+            </div>
+            <!--内容-->
+            <div class="product_box_con">
+                <ul class="clearfix">
+                    <li>
+                        <a href="#"><img src="images/detail01.png" alt="" /></a>
+                        <p>&yen;10.00</p>
+                        <p>&yen;100.00</p>
+                    </li>
+                    <li>
+                        <a href="#"><img src="images/detail03.png" alt="" /></a>
+                        <p>&yen;10.00</p>
+                        <p>&yen;100.00</p>
+                    </li>
+                    <li>
+                        <a href="#"><img src="images/detail02.png" alt="" /></a>
+                        <p>&yen;10.00</p>
+                        <p>&yen;100.00</p>
+                    </li>
+                </ul>
+            </div>
+        </section><!--块-->
+
+        <!--商品盒子的子类-->
+        <section class="product_box">
+            <!--头部-->
+            <div class="product_box_tit"><h3>京东超市</h3></div>
+            <!--内容-->
+            <div class="product_box_con clearfix">
+                <a href="#" class="f_left w_50 b_right"><img src="images/cp1.png" alt="" /></a>
+                <a href="#" class="f_right w_50 b_bottom"><img src="images/cp2.png" alt="" /></a>
+                <a href="#" class="f_right w_50"><img src="images/cp3.png" alt="" /></a>
+            </div>
+        </section><!--块-->
+
+        <!--商品盒子的子类-->
+        <section class="product_box">
+            <!--头部-->
+            <div class="product_box_tit"><h3>京东超市</h3></div>
+            <!--内容-->
+            <div class="product_box_con clearfix">
+                <a href="#" class="f_right w_50 b_left"><img src="images/cp4.png" alt="" /></a>
+                <a href="#" class="f_left w_50 b_bottom"><img src="images/cp5.png" alt="" /></a>
+                <a href="#" class="f_left w_50"><img src="images/cp6.png" alt="" /></a>
+            </div>
+        </section><!--块-->
+
+        <!--商品盒子的子类-->
+        <section class="product_box">
+            <!--头部-->
+            <div class="product_box_tit"><h3>京东超市</h3></div>
+            <!--内容-->
+            <div class="product_box_con clearfix">
+                <a href="#" class="f_left w_50 b_right"><img src="images/cp7.png" alt="" /></a>
+                <a href="#" class="f_right w_50 b_bottom"><img src="images/cp8.png" alt="" /></a>
+                <a href="#" class="f_right w_50"><img src="images/cp9.png" alt="" /></a>
+            </div>
+        </section><!--块-->
+
+    </main>
+</div>
+<script type="text/javascript" src="js/swiper.min.js"></script>
+<script type="text/javascript" src="js/a.js"></script>
+</body>
+</html>

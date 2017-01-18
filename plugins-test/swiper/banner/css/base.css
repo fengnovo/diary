@@ -1,0 +1,79 @@
+/*重置样式css*/
+*,
+::before,
+::after{
+    /* 选择所有的标签 padding:内边距*/
+    margin: 0;
+    padding: 0;
+
+    /*清楚移动端默认的点击高亮效果*/
+    -webkit-tap-highlight-color: transparent;
+    /* 设置所有的都是以边框开始计算宽度  百分比*/
+    -webkit-box-sizing: border-box;/*兼容*/
+    box-sizing: border-box;
+
+}
+body
+{
+    font-size: 14px;
+    font-family: "Microsoft YaHei",sans-serif;/*微软雅黑，设备默认字体*/
+    color: #333;
+}
+a
+{
+    color: #333;
+    text-decoration: none;/*不要下划线*/
+}
+a:hover
+{
+    text-decoration: none;/*不要下划线*/
+}
+ul,ol
+{
+    list-style: none;
+}
+input
+{
+    border: none;
+    outline: none;
+    /*清除移动端默认的表单样式*/
+    -webkit-appearance: none;
+}
+.f_left
+{
+    float: left;
+}
+.f_right
+{
+    float: right;
+}
+.clearfix:before,
+.clearfix:after
+{
+    content: "";
+    height: 0;
+    line-height: 0;
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+[class^="jd_"]
+{
+
+}
+.m_l10
+{
+    margin-left: 10px;
+}
+.m_r10
+{
+    margin-right: 10px;
+}
+.m_t10
+{
+    margin-top: 10px;
+}
+.m_b10
+{
+    margin-bottom: 10px;
+}

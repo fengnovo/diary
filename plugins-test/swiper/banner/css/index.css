@@ -1,0 +1,376 @@
+body
+{
+    background: #f5f5f5;
+    height: 100%;
+}
+/*主体盒子*/
+.jd_layout{
+    width: 100%;
+    max-width: 640px;/*设计图的原因， 不让他放大*/
+    min-width: 300px;/*为了更好的布局显示*/
+    margin: 0 auto;/*居中*/
+    position: relative;
+}
+
+/*头部*/
+.jd_header
+{
+    /*position: fixed;浮动定位  以 window 最外层容器计算的*/
+    left: 0;
+    top: 0;
+    height: 40px;
+    width: 100%;
+
+}
+.jd_header > .jd_header_box
+{
+    width: 100%;
+    max-width: 640px;/*设计图的原因， 不让他放大*/
+    min-width: 300px;/*为了更好的布局显示*/
+    margin: 0 auto;/*居中*/
+    height: 40px;
+    /*background: rgba(201,21,35,0.85);*/
+    position: relative;
+}
+.jd_header > .jd_header_box > .icon_logo
+{
+    width: 60px;
+    height: 36px;
+    position: absolute;
+    background: url("../images/jd_logo.png") no-repeat;
+    background-size: 50px 20px;
+    background-position: 0px 0px;
+    top: 10px;
+    left: 10px;
+}
+.jd_header > .jd_header_box > .login
+{
+    width: 50px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    font-size: 15px;
+}
+.jd_header > .jd_header_box > form
+{
+    width: 100%;
+    padding-left: 75px;
+    padding-right: 50px;
+    height: 40px;
+    position: relative;
+}
+.jd_header > .jd_header_box > form > input
+{
+    width: 100%;
+    height: 30px;
+    border-radius: 15px;
+    margin-top: 3px;
+    padding-left: 30px;
+}
+.jd_header > .jd_header_box > form > .icon_search
+{
+    background: url("../images/jd_search.png") no-repeat;
+    background-size: 19px 19px;
+    width: 19px;
+    height: 19px;
+    position: absolute;
+    background-position: 0px 0px;
+    top: 10px;
+    left: 85px;
+}
+/*轮播图*/
+.jd_banner
+{
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+.jd_banner > ul:first-child
+{
+    width: 1000%;
+    /*尽可能做webkit内核的兼容*/
+    -webkit-transform: translateX(-10%);
+    transform: translateX(-10%);
+}
+.jd_banner > ul:first-child > li
+{
+    width: 10%;
+    float: left;
+}
+.jd_banner > ul:first-child > li > a
+{
+    width: 100%;
+    display: block;
+    font-size: 0;
+}
+.jd_banner > ul:first-child > li > a > img
+{
+    width: 100%;
+    /*
+    font-size 0
+    display: block;
+    vertical-align: middle;
+
+    */
+    display: block;/*清除图片下面的间隙*/
+
+}
+.jd_banner > ul:last-child
+{
+    width: 118px;
+    height: 6px;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    margin-left: -59px;
+
+}
+.jd_banner > ul:last-child > li
+{
+    width: 6px;
+    height: 6px;
+    float: left;
+    border-radius: 3px;
+    border: 1px solid #ffffff;
+    margin-left: 10px;
+}
+.jd_banner > ul:last-child > li.now
+{
+    background: #ffffff;
+}
+.jd_banner > ul:last-child > li:nth-child(1)
+{
+    margin-left: 0px;
+
+}
+/*导航栏模块*/
+.jd_nav
+{
+    width: 100%;
+    background: #ffffff;
+    border-bottom: 1px solid #e0e0e0;/*底部边框1px，颜色灰色*/
+}
+.jd_nav > ul
+{
+    width: 100%;
+    padding: 10px 0;/*上下10px。左右0px*/
+}
+.jd_nav > ul > li
+{
+    width: 25%;
+    float: left;
+}
+.jd_nav > ul > li > a
+{
+    display: block;/*块级元素*/
+}
+.jd_nav > ul > li > a > img
+{
+    width: 35px;
+    height: 35px;
+    display: block;/*没有间隙*/
+    margin: 0 auto;/*左右居中*/
+}
+.jd_nav > ul > li > a > p
+{
+    text-align: center;
+    color: #666;
+    font-size: 12px;
+    padding: 6px 0;/*上下间隔6px。左右0px*/
+}
+/*商品主盒子*/
+.jd_product
+{
+    padding: 0 5px;
+}
+.jd_product > .product_box
+{
+    width: 100%;
+    background: #ffffff;
+    margin-top: 10px;/*向上间距*/
+    box-shadow: 0 0 1px #e0e0e0;/*阴影*/
+}
+.jd_product > .product_box > .product_box_tit
+{
+    height: 32px;
+    line-height: 32px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.jd_product > .product_box > .product_box_tit.no_border
+{
+    border-bottom: none;
+}
+.jd_product > .product_box > .product_box_tit > h3
+{
+    font-weight: normal;
+    font-size: 15px;
+    padding-left: 15px;
+
+    position: relative;
+    color: #666666;
+}
+.jd_product > .product_box > .product_box_tit > h3:before
+{
+    /*伪类转块
+    display block
+    position absoult
+    float left
+    */
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 3px;
+    height: 12px;
+    background: #d8505c;
+}
+/*掌上秒杀 second kill*/
+.jd_sk
+{
+
+}
+.jd_sk .sk_icon
+{
+    background: url("../images/sk_icon.png") no-repeat;
+    background-size: 16px 20px;
+    width: 16px;
+    height: 20px;
+    float: left;
+    margin-top: 4px;
+}
+.jd_sk .sk_name
+{
+    color: #d8505c;
+    font-size: 15px;
+    float: left;
+    margin-left: 10px;
+}
+.jd_sk .sk_time
+{
+    float: left;
+    margin-top: 8px;
+}
+.jd_sk .sk_time > span
+{
+    float: left;
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+    text-align: center;
+    background: #333333;
+    color: #ffffff;
+    margin-left: 3px;
+}
+.jd_sk .sk_time > span:nth-child(3n)
+{
+    background: #ffffff;
+    color: #333333;
+    width: 5px;
+}
+.jd_sk > .product_box_con > ul
+{
+    width: 100%;
+    font-size: 12px;
+    padding: 10px 0;
+}
+
+.jd_sk > .product_box_con > ul > li
+{
+    width: 33.3333%;
+    float: left;
+    text-align: center;
+}
+.jd_sk > .product_box_con > ul > li > a
+{
+    display: block;
+    width: 100%;
+    border-right: 1px solid #e0e0e0;
+}
+.jd_sk > .product_box_con > ul > li:last-child > a
+{
+    border-right: 0;
+}
+.jd_sk > .product_box_con > ul > li > a > img
+{
+    width: 64%;
+    display: block;
+    margin: 0 auto;
+}
+/*
+选择器
+E：first-of-type:选择E同类型的同级 第一个元素
+E：last-of-type:选择E同类型的同级 最后一个元素
+E：nth-of-type(n):选择E同类型的同级 第n个元素
+*/
+.jd_sk > .product_box_con > ul > li > p:first-of-type
+{
+    color: #d8505c;
+    padding-top: 5px;
+}
+.jd_sk > .product_box_con > ul > li > p:last-of-type
+{
+    text-decoration: line-through;/*删除线*/
+    color: #666666;
+    padding-top: 5px;
+}
+
+/*组合样式*/
+.w_50
+{
+    width: 50%;
+    display: block;
+}
+.w_50 > img
+{
+    display: block;
+    width: 100%;
+}
+.b_left
+{
+    border-left: 1px solid #e0e0e0;
+}
+.b_right
+{
+    border-right: 1px solid #e0e0e0;
+}
+.b_bottom
+{
+    border-bottom: 1px solid #e0e0e0;
+}
+
+
+.swiper-container {
+    width: 100%;
+    height: 10rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+.swiper-slide {
+    background-size: cover;
+    background-position: center;
+}
+.swiper-slide img {
+    height: 100%;
+    width: 100%;
+}
+.header-wrapper {  
+    left: 0;  
+    position: fixed;  
+    top: 0;  
+    width: 100%;  
+    z-index: 1000; 
+    -webkit-tap-highlight-color: rgba(255,255,255,0);
+} 
+
+.swiper-pagination-bullet-active {
+    background: #8aa7c5;
+}
+
+.swiper-pagination-bullet {
+    width: 5px;
+    height: 5px;
+}
