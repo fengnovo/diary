@@ -1,0 +1,166 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html, body {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body, #app{
+    height: 100%;
+}
+.cannot-scroll {
+    height: 100%;
+    overflow: hidden;
+}
+
+.am-share {
+    font-size: 14px;
+    border-radius: 0;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    text-align: center;
+    -webkit-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+    transform: translateY(100%);
+    -webkit-transition: -webkit-transform 300ms;
+    transition: transform 300ms;
+    width: 100%;
+    z-index: 1110;
+}
+
+.am-modal-active {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0)
+}
+
+.am-modal-out {
+    z-index: 1109;
+    -webkit-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+    transform: translateY(100%)
+}
+
+.am-share-title {
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #fff;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    color: #555;
+    font-weight: 400;
+    margin: 0 10px;
+    padding: 10px 0 0;
+    text-align: center;
+}
+
+.am-share-title::after {
+    border-bottom: 1px solid #dfdfdf;
+    content: "";
+    display: block;
+    height: 0;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.am-share-footer {
+    margin: 10px;
+}
+
+.am-share-footer .share_btn {
+    color: #555;
+    display: block;
+    width: 100%;
+    background-color: #e6e6e6;
+    border: 1px solid #e6e6e6;
+    border-radius: 0;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.2;
+    padding: 0.625em 0;
+    text-align: center;
+    transition: background-color 300ms ease-out 0s, border-color 300ms ease-out 0s;
+    vertical-align: middle;
+    white-space: nowrap;
+    font-family: "微软雅黑";
+}
+
+.am-share-sns {
+    background-color: #f8f8f8;
+    border-radius: 0 0 2px 2px;
+    margin: 0 10px;
+    padding-top: 15px;
+    height: auto;
+    zoom: 1;
+    overflow: auto;
+}
+
+.am-share-sns li {
+    margin-bottom: 15px;
+    display: block;
+    float: left;
+    height: auto;
+    width: 25%;
+}
+
+.am-share-sns a {
+    color: #555;
+    display: block;
+    text-decoration: none;
+}
+
+.am-share-sns span {
+    display: block;
+}
+
+.am-share-sns li i {
+    background-position: center 50%;
+    background-repeat: no-repeat;
+    background-size: 36px 36px;
+    background-color: #ccc;
+    color: #fff;
+    display: inline-block;
+    font-size: 18px;
+    height: 36px;
+    line-height: 36px;
+    margin-bottom: 5px;
+    width: 36px;
+}
+
+.am-share-sns .share-icon-weibo {
+    background-image: url(./../img/favor.png);
+}
+
+.sharebg {
+    background-color: rgba(0, 0, 0, 0.6);
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    opacity: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1100;
+    display: none;
+}
+
+.sharebg-active {
+    opacity: 1;
+    display: block;
+}
+
+.share-click-btn {
+    border: dotted 1px #ddd;
+    display: block;
+    width: 100px;
+    text-align: center;
+    margin: 20px auto 0 auto;
+    cursor: pointer;
+    height: 60px;
+    line-height: 60px;
+}

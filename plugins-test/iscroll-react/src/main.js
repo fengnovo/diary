@@ -1,16 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
+import React from 'react';
+import ReactDom from 'react-dom';
+// import 'react-fastclick';
+import './css/app.scss';
+import App from './js/App.jsx';
 
-import routes from './routes'
-import configureStore from './store'
+ReactDom.render( <App />, document.getElementById('app'));
 
-
-let store = configureStore()
-
-ReactDOM.render(
-    <Provider store={store}>
-        {routes}
-    </Provider>,
-    document.getElementById('app')
-)
