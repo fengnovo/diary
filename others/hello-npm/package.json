@@ -1,0 +1,11 @@
+{
+  "name": "hello-fengnovo",
+  "version": "1.0.0",
+  "description": "just test",
+  "main": "hello-fengnovo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "fengnovo",
+  "license": "ISC"
+}

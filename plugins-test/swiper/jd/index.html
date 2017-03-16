@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html><head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>新闻列表</title>
+</head>
+<body>
+    
+<script>
+fetch('http://api.m.jd.com/client.action?functionId=jdDiscoveryArticleDetail&body={%22id%22:%22106914%22}&client=wh5&clientVersion=1.0.0').then(
+        function(res) {
+            return res.json();
+        }
+    )
+        .then(
+        function(data) {
+            console.log(data);
+        }
+    );
+</script>
+</body></html>
