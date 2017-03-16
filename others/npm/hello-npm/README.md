@@ -44,4 +44,4 @@ $ npm publish hello-npm/
 + hello-fengnovo@1.0.0  
 ```
 
-8.登录https://www.npmjs.com/~fengnovo可以看到自己刚发布的npm包
+8.登录https://www.npmjs.com/~fengnovo 可以看到自己刚发布的npm包
