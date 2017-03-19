@@ -1,4 +1,4 @@
-# 用npm发布一个吧npm包   
+# 用npm发布一个npm包   
 1.新建一个目录hello-npm，这是要发布包的放的目录（不是包的名称）。
 
 2.hello-npm目录下新建hello-fengnovo.js，这是要发布npm包的名称。
