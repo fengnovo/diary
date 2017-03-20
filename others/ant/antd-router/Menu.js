@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-export default class App extends Component {
+export default class MenuList extends Component {
     render() {
         return (
             <div> 

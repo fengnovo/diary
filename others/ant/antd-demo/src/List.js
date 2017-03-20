@@ -5,6 +5,8 @@ import moment from 'moment';
 import reqwest from 'reqwest';
 import './List.css';
 
+let tabType;
+
 const columns = [{
   title: '图片',
   dataIndex: 'top_image',
@@ -20,20 +22,24 @@ const columns = [{
   title: '时间',
   key: 'edit_time',
   dataIndex: 'edit_time',
-  render: (text, record) => (
-    <span>
-      <a href="#">{ 
-      	record.edit_time ? moment(record.edit_time*1000).format('YYYY-MM-DD HH:mm:ss') 
-      		: moment()}</a>
-    </span>
-  ),
+  render: (text, record) => {
+  	let openUrl = (news_id) =>{
+	  	window.open(location.href+'detail/'+tabType+'/'+news_id)
+	 };
+  	return (
+	    <span>
+	      <a href="javascript:void(0);" onClick={openUrl.bind(this,record.news_id)}>{ 
+	      	record.edit_time ? moment(record.edit_time*1000).format('YYYY-MM-DD HH:mm:ss') 
+	      		: moment()}</a>
+	    </span>
+	  )},
 }, {
   title: '简介',
   key: 'digest',
   
   render: (text, record) => {
 	  let openUrl = (news_id) =>{
-	  	window.open('http://api.dagoogle.cn/news/single-news?callback=?&tableNum=1&news_id='+news_id);
+	  	window.open(location.href+'detail/'+tabType+'/'+news_id)
 	  };
 	  return (
 	    <span>
@@ -57,6 +63,7 @@ class List extends Component {
 	}
 
 	componentDidMount () {
+		tabType = this.props.tabType;
 		this.fetchData({
 	      tableNum: this.props.tabType,
 	      pagesize: this.state.pagination.pageSize || 10
@@ -64,7 +71,7 @@ class List extends Component {
 	}
 
 	fetchData (params) {
-		console.log('params:', params);
+		// console.log('params:', params);
     	this.setState({ loading: true });
 		// fetchJsonp('http://api.dagoogle.cn/news/get-news',
 		// 	{
