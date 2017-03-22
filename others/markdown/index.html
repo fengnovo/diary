@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<title>测试</title>
+<script src="./marked.js"></script>
+<link rel="stylesheet" href="./typo.css"/>
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimim-scale=1.0">
+<style>
+#content {
+  padding: 1rem;
+}
+img {
+  max-width: 100%;  
+}
+</style>
+<body>
+<div id="content">
+# fengnovo的博客
+**fengnovo**
+
+hello world!
+
+<img src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1490830081&di=21ce98c06eebe48e13ad08f50861a6bd&imgtype=jpg&er=1&src=http%3A%2F%2Fimgsrc.baidu.com%2Fforum%2Fw%253D580%2Fsign%3D331d509e76094b36db921be593cd7c00%2Fa8e4acc27d1ed21b0c4480a4ad6eddc450da3f55.jpg'>
+</div>
+
+<script>
+var content = document.getElementById('content');
+var md = content.innerHTML;
+var html = marked(md);
+content.innerHTML = html;
+
+</script>
+
+</body>
+</html>
