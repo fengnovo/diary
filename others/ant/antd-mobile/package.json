@@ -1,0 +1,25 @@
+{
+  "name": "antd-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "antd": "^2.8.2",
+    "jquery": "^3.2.1",
+    "moment": "^2.18.0",
+    "rc-queue-anim": "^0.13.2",
+    "rc-tween-one": "^1.1.2",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-router": "^3.0.0",
+    "reqwest": "^2.0.5"
+  },
+  "devDependencies": {
+    "react-scripts": "0.9.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
