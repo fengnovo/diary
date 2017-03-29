@@ -1,0 +1,60 @@
+.content{
+    width: 100%;
+    overflow: scroll;
+}
+
+.tab-nav{
+    height: 100%;
+    position: relative;
+    float: left;
+    width: 20%;
+    background-color: #000;
+}
+.tab-nav a {
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    height: 3rem;
+    margin: 1.2rem 0;
+    font-size: 1rem;
+    color: #fff;
+    border-left: .5rem solid transparent;
+}
+
+.tab-nav a.active {
+    border-color: #2b89ea;
+    color: #2b89ea!important;
+    font-size: 1.2rem;
+}
+
+.list-ul{
+    background: #f1f5f8;
+    float: right;
+    width: 80%;
+}
+
+.list-ul li{
+    margin-top: 1rem;
+    padding: .5rem;
+    background: #fff;
+    height: 5rem;
+    font-size: 20px;
+}
+
+.list-ul img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 4rem;
+    float: left;
+}
+
+.list-ul li .row {
+    margin-left: 4.5rem;
+    margin-top: .5rem;
+}
+.list-ul li .title {
+    font-size: 1rem;
+}
+.list-ul li .dec{
+    font-size: .8rem;
+}

@@ -1,0 +1,83 @@
+.broadcast {
+    height: 13rem;
+    width: 100%;
+    padding: 0.6rem 0 0.2rem;
+    background-size: 100% 100%;
+    text-align: center;
+    font-size: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.broadcast .corner {
+    position: absolute;
+    top: -1.2rem;
+    right: -4rem;
+    font-size: 1rem;
+    width: 9rem;
+    text-align: center;
+    line-height: 2rem;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    background: #ff9c00;
+    color: #fff;
+    padding-top: 2rem;
+}
+
+.broadcast>.audio-info {
+    height: 10.2rem;
+    margin: 2rem 1.5rem 0;
+}
+
+.broadcast>.audio-info .title {
+    font-size: 1.2rem;
+    line-height: 1.4rem;
+    height: 1.4rem;
+    color: #fff;
+}
+
+.broadcast>.audio-info .title, .overOne, .provider-comment .provider, .provider-comment .title, .provider-info .episode-title, .provider-info .provider>.provider-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.broadcast>.audio-info .profile, .provider-info .create-time {
+    font-size: 1.2rem;
+    color: #999;
+    padding-top: .6rem;
+    opacity: .72;
+    height: 1.6rem;
+}
+
+.broadcast>.audio-info .title, .overOne, .provider-comment .provider, .provider-comment .title, .provider-info .episode-title, .provider-info .provider>.provider-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.broadcast>.audio-info .btn-listen {
+    display: inline-block;
+    color: #f15a4a!important;
+    padding: 0 2rem 0 2rem;
+    font-size: 1rem;
+    border-radius: 21em;
+    border: 1px solid #f15a4a;
+    background: url(../img/arrow-left.png) 6.6rem 8px no-repeat;
+    background-size: 1rem 1rem;
+    margin-top: 3.3rem;
+    line-height: 2rem;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.audio-info h5 {
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+}
+
+.audio-info h3, .audio-info h5 {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #fff;
+}

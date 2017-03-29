@@ -1,0 +1,112 @@
+.player{
+    width: 100%;
+    height: 100vh;
+    flex: 1;
+    box-flex: 1;
+    -webkit-box-flex: 1;
+    background: url(../img/bg-pic.png) repeat-y;
+    background-size: cover;
+    background-image: url(../img/bg-pic.png);
+}
+
+
+.player .cover {
+    width: 18rem;
+    height: 18rem;
+    margin: 0 auto;
+    padding-top: 3rem;
+}
+
+.player .roller {
+    background: url(../img/disk.png) no-repeat;
+    background-size: contain;
+    width: 17.6rem;
+    height: 17.6rem;
+    border: .4rem solid rgba(255,255,255,.5);
+    border-radius: 20rem;
+}
+
+.player .frame {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 10rem;
+    margin: 3.6rem 3.6rem;
+    background: url(../img/chl.png) no-repeat;
+    background-size: cover;
+}
+
+.player .control-bar {
+    position: relative;
+    margin-top: 5rem;
+}
+
+.player .progress-control {
+    margin-top: 1rem;
+    position: relative;
+    height: .2rem;
+}
+
+.player .control-bar .btn-control {
+    width: 70%;
+    margin: 4rem auto 0;
+    text-align: center;
+}
+
+.control-bar .time-bar {
+    position: absolute;
+    left: 15%;
+    right: 19.5%;
+    height: .2rem;
+}
+
+.control-bar .time-count {
+    font-size: 1rem;
+    line-height: .5rem;
+}
+
+.control-bar .left {
+    color: #fff;
+    opacity: .72;
+    float: left;
+    margin-left: 1rem;
+}
+
+.control-bar .right {
+    color: #fff;
+    margin-right: 1rem;
+    float: right;
+}
+
+.control-bar .btn-control .pre {
+    background: url(../img/prev.png) no-repeat;
+    background-size: cover;
+    margin-left: 1rem;
+    margin-top: .5rem;
+    float: left;
+}
+
+.control-bar .btn-control>i.btn-switch {
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+
+.control-bar .btn-control .btn-start {
+    background: url(../img/start.png) no-repeat;
+    background-size: cover;
+}
+
+
+.control-bar .btn-control .next {
+    background: url(../img/next.png) no-repeat;
+    background-size: cover;
+    margin-right: 1rem;
+    margin-top: .5rem;
+    float: right;
+}
+
+.control-bar .btn-control>i {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+}
