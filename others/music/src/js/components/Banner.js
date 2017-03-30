@@ -5,11 +5,20 @@ import '../../css/banner.css';
 class Banner extends React.Component {
     constructor (...args) {
         super(...args);
+        this.handleClick = this.handleClick.bind(this);
+        window.back = ()=>{
+            window.history.go(-1);
+            return true;
+        }
+    }
+
+    handleClick () {
+        location.href = location.origin+'/#/Detail';
     }
 
     render() {
         return <ReactSwipe className="carousel" swipeOptions={{continuous: true,speed: 400,auto: 2000,}}>
-                <div className="broadcast" style={{ 'background': 'url(../src/img/cover1.jpg) no-repeat'}}>
+                <div className="broadcast" onClick={this.handleClick} style={{ 'background': 'url(../src/img/cover1.jpg) no-repeat'}}>
                     <p className="corner">推荐</p>
                         <div className="audio-info">
                             <p className="title">陈慧琳：记事本</p>
@@ -27,7 +36,7 @@ class Banner extends React.Component {
                             <h3>敬请期待哦~</h3>
                         </div>*/}
                 </div>
-                <div className="broadcast" style={{ 'background': 'url(../src/img/cover2.png) no-repeat'}}>
+                <div className="broadcast"  onClick={this.handleClick}  style={{ 'background': 'url(../src/img/cover2.png) no-repeat'}}>
                     <div className="audio-info">
                         <p className="title">陈慧琳：记事本</p>
                         <p className="profile">
@@ -40,7 +49,7 @@ class Banner extends React.Component {
                         </p>
                     </div>
                 </div>
-                <div className="broadcast" style={{ 'background': 'url(../src/img/cover3.png) no-repeat'}}>
+                <div className="broadcast"  onClick={this.handleClick} style={{ 'background': 'url(../src/img/cover3.png) no-repeat'}}>
                     <div className="audio-info">
                         <p className="title">陈慧琳：记事本</p>
                         <p className="profile">

@@ -1,0 +1,99 @@
+.musicbox {
+  background-color: gainsboro;
+  font-family: cursive, microsoft Yahei;
+  font-size: 16px;
+  color: #f06d6a;
+  border: 1px solid #76dba3;
+  width: 340px;
+  height: 20rem;
+  padding: 20px 20px 5px 20px;
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1), 0px 2px 10px 0px rgba(0, 0, 0, 0.05);
+  -webkit-font-smoothing: antialiased;
+}
+
+.musicbox .info {
+  margin-left: 120px;
+}
+
+.musicbox .info .title {
+  font-size: 18px;
+}
+
+.musicbox .info .auther {
+  font-size: 13px;
+}
+
+.musicbox .progress {
+  width: 260px;
+}
+
+.musicbox .progress .bar {
+  height: 3px;
+  margin-top: 5px;
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.musicbox .progress .progress-now {
+  background-color: #ee8a87;
+  height: 3px;
+  width: 0;
+  position: relative;
+}
+
+.musicbox .time {
+  text-align: right;
+}
+
+.musicbox:after,
+.musicbox .music:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.music .btn-control {
+    height: 10rem;
+    width: 70%;
+    margin: 4rem auto 0;
+    text-align: center;
+}
+
+.music .btn-control .pre {
+background: url(../img/prev.png) no-repeat;
+background-size: cover;
+margin-left: 1rem;
+margin-top: .5rem;
+float: left;
+}
+
+.music .btn-control>i.btn-switch {
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+
+.music .btn-control .btn-start {
+    background: url(../img/start.png) no-repeat;
+    background-size: cover;
+}
+
+.music .btn-control .btn-pause {
+    background: url(../img/pause.png) no-repeat;
+    background-size: cover;
+}
+
+
+.music .btn-control .next {
+    background: url(../img/next.png) no-repeat;
+    background-size: cover;
+    margin-right: 1rem;
+    margin-top: .5rem;
+    float: right;
+}
+
+.music .btn-control>i {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+}
