@@ -120,7 +120,7 @@ class Play extends React.Component {
 
         function getMusic(callback) {
             var xhr = new XMLHttpRequest()
-            xhr.open('get', 'http://10.2.238.117:3000/src/music.json', true)
+            xhr.open('get', './src/music.json', true)
             xhr.send()
             xhr.onload = function() {
                 if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {

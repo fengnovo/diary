@@ -96,6 +96,11 @@
     background-size: cover;
 }
 
+.control-bar .btn-control .btn-pause {
+    background: url(../img/pause.png) no-repeat;
+    background-size: cover;
+}
+
 
 .control-bar .btn-control .next {
     background: url(../img/next.png) no-repeat;
