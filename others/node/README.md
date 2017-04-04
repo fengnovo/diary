@@ -1,0 +1,1 @@
+nodejs对es6的支持程度参考：http://node.green
