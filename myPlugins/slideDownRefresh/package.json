@@ -2,7 +2,7 @@
   "name": "sdrefresh",
   "version": "1.0.0",
   "description": "",
-  "main": "zepto.min.js",
+  "main": "index.js",
   "scripts": {
     "start": "http-server",
     "test": "echo \"Error: no test specified\" && exit 1"
