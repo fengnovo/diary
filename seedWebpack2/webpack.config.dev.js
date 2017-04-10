@@ -106,5 +106,6 @@ module.exports = {
 	      chunks: ['app', 'vendors'],
 	      inject: 'body'
 	    }),
+	    new ExtractTextPlugin('css/[name]-[hash:8].css')
 	  ]
 }
