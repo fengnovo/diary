@@ -1,5 +1,5 @@
 {
-  "name": "wangeditor",
+  "name": "wangeditorreacttest",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,10 +12,12 @@
   "author": "fengnovo",
   "license": "ISC",
   "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
     "react": "^15.5.3",
     "react-dom": "^15.5.3",
     "react-redux": "^5.0.4",
-    "redux": "^3.6.0"
+    "redux": "^3.6.0",
+    "wangeditor": "^2.1.23"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",

@@ -68,7 +68,8 @@ module.exports = {
 	        query: {
 	          //添加两个presents 使用这两种presets处理js或者jsx文件
 	          presets: ['react','es2015','stage-0']
-	        }
+	        },
+			exclude: /node_modules/
 	      },
           {
             test: /\.(css|scss)$/,
