@@ -3199,7 +3199,7 @@ _e(function (E, $) {
     E.config.zindex = 10000;
 
     // 是否打印log
-    E.config.printLog = true;
+    E.config.printLog = false;
 
     // 菜单吸顶：false - 不吸顶；number - 吸顶，值为top值
     E.config.menuFixed = 0;
@@ -6952,7 +6952,7 @@ _e(function (E, $) {
         var filename = file.name || '';
         var fileType = file.type || '';
         var uploadImgFns = editor.config.uploadImgFns;
-        var uploadFileName = editor.config.uploadImgFileName || 'wangEditorH5File';
+        var uploadFileName = editor.config.uploadImgFileName || 'file';
         var onload = uploadImgFns.onload;
         var ontimeout = uploadImgFns.ontimeout;
         var onerror = uploadImgFns.onerror;

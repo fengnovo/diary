@@ -1,101 +1,148 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import plupload from 'plupload' 
 // import './css/wangEditor.css'
-// import $ from 'jquery'
+import $ from 'jquery'
 
 import wangEditor from './wangEditor'
 
 class Editor extends React.Component {
     constructor(...args) {
         super(...args)
+        this.uploadInit = this.uploadInit.bind(this)
         this.getContent = this.getContent.bind(this)
-        this.upfile = this.upfile.bind(this)
     }
 
+    // 获取内容
     getContent () {
-        let content = this.editor.$txt.html();
+        var content = this.editor.$txt.html();
         console.log(content);
     }
 
-    upfile () {
-        let _this = this;
-        $(this.refs.fileUpload).unbind().bind('change', function() { 
-            let file = this.files[0];
-            
-            if (!file || file.type.indexOf('image') < 0) {
-                _this.refs.Toast.show('请选择图片格式的文件');
-                return;
-            };
+    // ------- 配置上传的初始化事件 -------
+    uploadInit (editor) {
+        console.log('uploadInit');
+        // this 即 editor 对象
+        // var editor = editor;
+        // 编辑器中，触发选择图片的按钮的id
+        var btnId = editor.customUploadBtnId;
+        // 编辑器中，触发选择图片的按钮的父元素的id
+        var containerId = editor.customUploadContainerId;
 
-            if (file.size > 1000000) {
-                _this.refs.Toast.show('图片大小超过1M');
-                return;
+        //实例化一个上传对象
+        var uploader = new plupload.Uploader({
+            browse_button: btnId,  // 选择文件的按钮的id
+            url: '/api/upload',  // 服务器端的上传地址
+            flash_swf_url: 'lib/plupload/plupload/Moxie.swf',
+            sliverlight_xap_url: 'lib/plupload/plupload/Moxie.xap',
+            filters: {
+                mime_types: [
+                    //只允许上传图片文件 （注意，extensions中，逗号后面不要加空格）
+                    { title: "图片文件", extensions: "jpg,gif,png,bmp" }
+                ]
             }
-            var reader = new FileReader();
-            reader.onload = function(e){
-                var img = document.createElement('img');
-                img.title = file.name;
-                img.src = e.target.result;
-                img.onload = function() {
-                    console.log('selectCategory-----upfile-------'+selectCategory);
-                    let uploadImgFunc = () => {
-                        var formdata = new FormData();  
-                        formdata.append("file", file); 
-                        $.ajax({ 
-                            url : `${globalConfig.baseUrl}/api/upload`, 
-                            type : 'post', 
-                            data : formdata, 
-                            cache : false, 
-                            contentType : false, 
-                            processData : false, 
-                            dataType : "json", 
-                            success : function(json) { 
-                                
-                                if(json.errCode == '0'){
-                                    console.log(json.data.url);
-                                    console.log(json);
-                                    $(_this.refs.adImgInput).attr('src',json.data.url);
-                                    _this.setState({
-                                        picUrl: json.data.url
-                                    })
-                                }
-                            } 
-                        });  
-                    }
-                    if (selectCategory==3) {        //3是四方格广告
-                        if(this.width != 144 || this.height != 84){
-                            _this.refs.Toast.show('图片尺寸不符合144*84规格');
-                        }else{
-                            uploadImgFunc();
-                        }
-                    }else{
-                        if(this.width != 750 || this.height != 260){
-                            _this.refs.Toast.show('图片尺寸不符合750*260规格');
-                        }else{
-                            uploadImgFunc();
-                        }
-                    }
-                }
-            };
-            reader.readAsDataURL(file);
+        });
 
-            this.value = '';    // 清除本次选定的文件，否则下次选择同样文件时，不触发onchange事件
-            
-            return false; 
+        //存储所有图片的url地址
+        var urls = [];
+
+        //初始化
+        uploader.init();
+
+        //绑定文件添加到队列的事件
+        uploader.bind('FilesAdded', function (uploader, files) {
+            //显示添加进来的文件名
+            $.each(files, function(key, value){
+                console.log('添加文件' + value.name);
+            });
+
+            // 文件添加之后，开始执行上传
+            uploader.start();
+        });
+
+        //单个文件上传之后
+        uploader.bind('FileUploaded', function (uploader, file, responseObject) {
+            //注意，要从服务器返回图片的url地址，否则上传的图片无法显示在编辑器中
+            var url = responseObject.response;
+            //先将url地址存储来，待所有图片都上传完了，再统一处理
+            urls.push(url);
+
+            console.log('一个图片上传完成，返回的url是' + url);
+        });
+
+        //全部文件上传时候
+        uploader.bind('UploadComplete', function (uploader, files) {
+            console.log('所有图片上传完成');
+            console.log(uploader, files);
+            // 用 try catch 兼容IE低版本的异常情况
+            try {
+                //打印出所有图片的url地址
+                $.each(urls, function (key, value) {
+                    console.log('即将插入图片');
+                    var res = JSON.parse(value);
+                    console.log(res);
+                    console.log(res.data.url);
+                    editor.command(null, 'insertHtml', '<img src="' + res.data.url + '" style="max-width:100%;"/>');
+                });
+            } catch (ex) {
+                // 此处可不写代码
+            } finally {
+                //清空url数组
+                urls = [];
+                // 隐藏进度条
+                editor.hideUploadProgress();
+            }
+        });
+
+        // 上传进度条
+        uploader.bind('UploadProgress', function (uploader, file) {
+            // 显示进度条
+            editor.showUploadProgress(file.percent);
         });
     }
 
     componentDidMount () {
+        var id = this.props.id;
+        // wangEditor.config.printLog = false;
+        this.editor = new window.wangEditor(id);
+        this.editor.config.menus = [
+            // 'source',
+            // '|',
+            'undo',
+            'redo',
+            '|',
+            'bold',
+            'underline',
+            'italic',
+            'strikethrough',
+            'eraser',
+            'forecolor',
+            'bgcolor',
+            '|',
+            'quote',
+            // 'fontfamily',
+            // 'fontsize',
+            'unorderlist',
+            'orderlist',
+            'alignleft',
+            'aligncenter',
+            'alignright',
+            '|',
+            'unlink',
+            'table',
+            '|',
+            'img',
+            'fullscreen'
+        ];
         
-        // 创建编辑器
-        var editor = new wangEditor('editor-trigger');
-        editor.config.uploadImgUrl = '/upload';
-        editor.config.uploadParams = {
-        };
-        editor.config.uploadHeaders = {
-            // 'Accept' : 'text/x-json'
-        }
-        editor.create();
+        this.editor.config.customUpload = true;  // 配置自定义上传的开关
+        // 配置上传事件，uploadInit方法已经在上面定义了
+        this.editor.config.customUploadInit = this.uploadInit.bind(this,this.editor);  
+        this.editor.config.hideLinkImg = true;
+        this.editor.create();
+
+        // 初始化内容
+        this.editor.$txt.html(this.props.content);
     }
 
     render() {
@@ -112,6 +159,6 @@ class Editor extends React.Component {
 
 
 ReactDOM.render(
-    <Editor id="editor1" content="<p>在react中使用wangEditor</p>"/>,
+    <Editor id="editor1" content=""/>,
     document.getElementById('app')
 );

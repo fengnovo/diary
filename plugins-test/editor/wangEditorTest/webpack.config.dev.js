@@ -52,9 +52,10 @@ module.exports = {
 		historyApiFallback:true,
 		hot:true,
 		inline:true,
+		host: '0.0.0.0',
 		proxy:{
 			'/api/*':{
-				target:'http://localhost:8080',
+				target:'http://10.2.122.58:91',
 				secure:false
 			}
 		}
@@ -64,7 +65,6 @@ module.exports = {
 	      {
 	        test: /\.jsx?$/,
 	        loader: 'babel-loader',
-	        include: APP_PATH,
 	        query: {
 	          //添加两个presents 使用这两种presets处理js或者jsx文件
 	          presets: ['react','es2015','stage-0']
@@ -72,8 +72,11 @@ module.exports = {
 			exclude: /node_modules/
 	      },
           {
+            test: /\.less$/,
+            loader: ['style-loader','css-loader', 'less-loader']
+          },
+		  {
             test: /\.(css|scss)$/,
-            include: APP_PATH,
             use: ExtractTextPlugin.extract({
                 fallbackLoader: 'style-loader',
                 loader: ['css-loader', 'sass-loader']
@@ -82,7 +85,6 @@ module.exports = {
             {
                 test: /\.(jpg|jpeg|png|gif)$/,
                 loader: 'url-loader',
-				include: APP_PATH,
                 query: {
                     limit: 8192,
                     name: '[name]-[hash:8].[ext]'
@@ -91,7 +93,6 @@ module.exports = {
             {
                 test: /\.(ico|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
                 loader: 'file-loader',
-				include: APP_PATH,
                 query: {
                     name: '[name]-[hash:8].[ext]',
                 },
