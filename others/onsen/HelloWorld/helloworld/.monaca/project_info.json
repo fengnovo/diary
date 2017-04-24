@@ -1,0 +1,19 @@
+{
+    "framework_version": "3.5",
+    "cordova_version": "6.2",
+    "plugins": [
+        "mobi.monaca.plugins.Monaca"
+    ],
+    "external_plugins": [
+        "cordova-plugin-whitelist@1.2.2",
+        "cordova-plugin-splashscreen@3.2.2",
+        "cordova-custom-config@2.0.3"
+    ],
+    "template-type": "react",
+    "build": {
+        "transpile": {
+            "enabled": true
+        }
+    },
+    "xcode_version": "7"
+}

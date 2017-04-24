@@ -1,0 +1,11 @@
+{
+  "name": "onsenui-v2-react-tabbar",
+  "version": "2.2.7+20170324.1",
+  "description": "",
+  "dependencies": {
+    "onsenui": "2.2.x",
+    "react": "15.4.2",
+    "react-dom": "15.4.2",
+    "react-onsenui": "1.2.x"
+  }
+}
