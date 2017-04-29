@@ -27,7 +27,35 @@
             text-align: center;
             margin-top: 0.25rem;
         }
+
+        .row::after {
+            display: block;
+            content: '';
+            clear: both;
+        }
+
+        .xx {
+            border: 1px solid red;
+        }
     </style>
+    <script>
+        (function(window,document){
+            function completed () {
+                var ww = window.document.documentElement.clientWidth;
+                console.log(ww);
+                window.document.documentElement.style.fontSize = ww/10 + 'px';
+            }
+            
+            if ( document.readyState === "complete"){
+                completed();
+            } else {
+                document.addEventListener( "DOMContentLoaded", completed );
+                window.addEventListener( "load", completed );
+            }
+            window.addEventListener('resize',completed)
+
+        })(window,document);
+    </script>
 </head>
 <body>
     <div class="container">
@@ -80,7 +108,9 @@
                     <p>分类</p>
                 </div>
             </div>
+            <p class="xx"> ddd</p>
         </div>
+        <footer></footer>
     </div>
 </body>
 </html>
