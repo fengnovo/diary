@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,15 +12,46 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        
+        nav {
+            position: fixed;
+            width: 100%;
+            height: 1rem;
+            background-color: #FF5000;
+            /*background: url(data:image/png;base64,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) no-repeat;*/
+            padding: 0.1rem;
+        }
+        
+        nav img {
+            display: inline-block;
+            width: 0.8rem;
+            float: left;
+        }
+        
+        nav input {
+            width: 90%;
+            height: 77%;
+            display: block;
+            margin: 0.1rem 0 0 0.9rem;
+            border-radius: 0.1rem;
+            background-color: #B52600;
+            color: #fff;
+            text-align: center;
+            border-style: none;
+        }
+        
+        .main {
+            padding-top: 1rem;
+        }
+        
         .container {
             font-size: 20px;
         }
-
+        
         img {
             max-width: 100%;
         }
-
+        
         .item {
             width: 2rem;
             float: left;
@@ -27,39 +59,95 @@
             text-align: center;
             margin-top: 0.25rem;
         }
-
+        
         .row::after {
             display: block;
             content: '';
             clear: both;
         }
-
-        .xx {
-            border: 1px solid red;
+        
+        .fav {
+            font-size: 0.35rem;
+            line-height: 0.6rem;
+            text-align: center;
+            font-weight: normal;
+            background-color: #EEE;
+            padding: 0.4rem 0.2rem 0.2rem 0.2rem;
+            margin-top: 0.35rem;
+        }
+        
+        .fav img {
+            display: inline-block;
+            margin: 0 0.2rem -0.1rem 0;
+            height: 0.6rem;
+        }
+        
+        .fav h3 {
+            display: inline-block;
+        }
+        
+        .fav h4 {
+            color: rgb(120, 120, 120);
+            font-size: 0.3rem;
+        }
+        
+        .list {
+            background-color: #EEE;
+        }
+        
+        .goods {
+            background-color: #fff;
+            width: 4.9rem;
+            margin: 0.05rem 0.05rem;
+            float: left;
+            font-size: 0.35rem;
+            padding-bottom: 0.3rem;
+        }
+        
+        .goods p {
+            padding: 0 0.2rem;
+            margin: .2rem 0;
+            font-size: 0.35rem;
+            line-height: 1.5em!important;
+            word-break: break-all;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .price {
+            padding: .2rem;
+            font-size: 0.5rem;
+            color: #FF6813;
+            font-family: '微软雅黑', '黑体', sans-serif;
         }
     </style>
     <script>
-        (function(window,document){
-            function completed () {
+        (function (window, document) {
+            function completed() {
                 var ww = window.document.documentElement.clientWidth;
                 console.log(ww);
-                window.document.documentElement.style.fontSize = ww/10 + 'px';
+                window.document.documentElement.style.fontSize = ww / 11 + 'px';
             }
-            
-            if ( document.readyState === "complete"){
+
+            if (document.readyState === "complete") {
                 completed();
             } else {
-                document.addEventListener( "DOMContentLoaded", completed );
-                window.addEventListener( "load", completed );
+                document.addEventListener("DOMContentLoaded", completed);
+                window.addEventListener("load", completed);
             }
-            window.addEventListener('resize',completed)
+            window.addEventListener('resize', completed)
 
-        })(window,document);
+        })(window, document);
     </script>
 </head>
+
 <body>
     <div class="container">
         <nav>
+            <img src="./taobao/tao.png" alt="">
             <input type="text" placeholder="搜索你喜欢的宝贝" />
         </nav>
         <div class="main">
@@ -108,9 +196,62 @@
                     <p>分类</p>
                 </div>
             </div>
-            <p class="xx"> ddd</p>
+            <div class="row fav">
+                <img src="./taobao/like.png" alt="">
+                <h3>猜你喜欢</h3>
+                <h4>帮你推荐喜欢的商品</h4>
+            </div>
+
+            <div class="row list">
+                <div class="goods">
+                    <img src="./taobao/p1.jpg" alt="">
+                    <p>
+                        [为您推荐]床垫，床单，被子褥子，价格实惠，质量合格。绝对不错的选择，欢迎进店选购。
+                    </p>
+                    <span class="price">
+                        &yen;120.50
+                    </span>
+                </div>
+                <div class="goods">
+                    <img src="./taobao/p2.jpg" alt="">
+                    <p>
+                        [为您推荐]床垫，床单，被子褥子，价格实惠，质量合格。绝对不错的选择，欢迎进店选购。
+                    </p>
+                    <span class="price">
+                        &yen;120.50
+                    </span>
+                </div>
+                <div class="goods">
+                    <img src="./taobao/p3.jpg" alt="">
+                    <p>
+                        [为您推荐]床垫，床单，被子褥子，价格实惠，质量合格。绝对不错的选择，欢迎进店选购。
+                    </p>
+                    <span class="price">
+                        &yen;120.50
+                    </span>
+                </div>
+                <div class="goods">
+                    <img src="./taobao/p4.jpg" alt="">
+                    <p>
+                        [为您推荐]床垫，床单，被子褥子，价格实惠，质量合格。绝对不错的选择，欢迎进店选购。
+                    </p>
+                    <span class="price">
+                        &yen;120.50
+                    </span>
+                </div>
+                <div class="goods">
+                    <img src="./taobao/p5.jpg" alt="">
+                    <p>
+                        [为您推荐]床垫，床单，被子褥子，价格实惠，质量合格。绝对不错的选择，欢迎进店选购。
+                    </p>
+                    <span class="price">
+                        &yen;120.50
+                    </span>
+                </div>
+            </div>
         </div>
         <footer></footer>
     </div>
 </body>
+
 </html>
