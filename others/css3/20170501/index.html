@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>弹小球</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #main {
+            width: 400px;
+            height: 400px;
+            background: grey;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        #ball {
+            width: 30px;
+            height: 30px;
+            background: yellow;
+            border-radius: 100%;
+            position: absolute;
+        }
+
+        #board {
+            width: 60px;
+            height: 20px;
+            background: red;
+            position: absolute;
+            bottom: 0;
+            left: 170px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <div id="main">
+       <div id="ball" style="left:0px;top:30px;"></div>
+       <div id="board"></div>
+    </div>
+</body>
+<script>
+    var main = document.getElementById('main');
+    var ball = document.getElementById('ball');
+    var board = document.getElementById('board');
+
+    ball.speedX = 5;
+    ball.speedY = 5;
+
+
+    ball.run = function(){
+        var left = parseInt(this.style.left) + this.speedX;
+        var top = parseInt(this.style.top) + this.speedY;
+
+        this.style.left = left + 'px';
+        this.style.top = top + 'px';
+
+        this.check(left,top);
+    }
+
+    ball.check = function(left,top){
+        if(left <= 0 || left >= 370){   //球撞到左/右边了
+            this.turnX();
+        }
+
+        if(top <= 0){   //球撞到上/下边了
+            this.turnY();
+        }
+        if(top >= 370){
+            clearInterval(clock);
+            alert('输了');
+            this.turnY();
+        }
+
+        //检测碰到木板
+        var bleft = parseInt(board.style.left); //木板的左边距
+        var btop = parseInt(board.style.top); //木板的上边距
+        
+        if(left+15 >= bleft && left+15 <= bleft+60 && top+30 >= btop){
+            this.turnY();
+        }
+    }
+
+    ball.turnX = function(){
+        this.speedX = -this.speedX;
+    }
+
+     ball.turnY = function(){
+        this.speedY = -this.speedY;
+    }
+
+    var clock = setInterval(function(){
+        ball.run();
+    },20);
+
+    main.onmousemove = function(e){
+        console.log(e);
+        if(e.srcElement != main){
+            return
+        }
+
+        board.style.left = e.offsetX - 30 + 'px'; 
+        board.style.top = e.offsetY - 20 + 'px';  
+        
+    }
+
+
+
+</script>
+
+</html>

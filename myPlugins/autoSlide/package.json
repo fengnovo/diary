@@ -1,0 +1,17 @@
+{
+  "name": "autoslide",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "http-server": "^0.9.0",
+    "zepto": "^1.2.0"
+  }
+}
