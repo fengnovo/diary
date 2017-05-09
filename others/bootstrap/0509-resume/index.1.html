@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>resume</title>
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <script src="bootstrap-3.3.7-dist/js/jquery.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+</head>
+<body class="container">
+    <header>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <div class="navbar-brand">个人简历</div>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#divNav">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="divNav">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <button type="button" class="btn btn-success navbar-btn" data-toggle="modal" data-target="#divModal" title="打印">打印</button>
+                            <div class="modal fade" id="divModal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                <span>&times;</span>
+                                            </button>
+                                            <h4 class="modal-title">弹框</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            确认打印吗？
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                            <button type="button" class="btn btn-primary">确认</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <footer>
+        <nav class="navbar-default navbar-fixed-bottom text-center">
+            版权所有 &copy; fengnovo
+        </nav>
+    </footer>
+</body>
+</html>
