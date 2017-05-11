@@ -19,6 +19,19 @@
         .m-r-5 {
             margin-right: 5%;
         }
+        .m-p-small {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-right: 30px !important;
+            padding-left: 30px !important;
+        }
+        .f-l {
+            float: right;
+        }
+        .m-t-5{
+            margin-top: -5px;
+        }
+
     </style>
     <script src="bootstrap-3.3.7-dist/js/jquery.js"></script>
     <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
@@ -54,116 +67,76 @@
     <div class="row">
         
         <div class="col-sm-9">
-            <div class="jumbotron">
-                <p class="text-right small">
-                    参与制作超过10个以上的小项目，详情请点击<a href="#">demo网站</a><br/>
-                    参与制作超过10个以上的小项目，详情请点击<a href="#">demo网站</a><br/>
-                    参与制作超过10个以上的小项目，详情请点击<a href="#">demo网站</a><br/>
-                    参与制作超过10个以上的小项目，详情请点击<a href="#">demo网站</a>
+            <div class="jumbotron m-p-small">
+                <p>
+                    <h4 class="text-center">我是标题1 h1. <br/><small>我是副标题1 h1</small></h4>
+                    <p>
+                        <h5>
+                        这是一个演示引导主体副本用法的实例。
+                        这是一个演示引导主体副本用法的实例。这是一个演示引导主体副本用法的实例 ...
+                        </h5>
+                        <br />
+                        <button type="button" class="btn btn-primary" onclick="submitTryit()" id="submitBTN"><span class="glyphicon glyphicon-send"></span> 查看详情</button>
+                    </p>
                 </p>
             </div>
-
-            <div class="panel-group" id="accordion">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="panel-title">
-                            <a href="#collapseOne" data-toggle="collapse" data-parent="#accordion">工作经验</a>
-                        </div>
-                    </div>
-                    <div class="panel-collapse collapse" id="collapseOne">
-                        <div class="panel-body">
-                            <ul class="list-group">
-                                <li class="list-group-item list-group-item-success">
-                                    <div class="row">
-                                        <div class="col-sm-4">2014/07-2015/07</div>
-                                        <div class="col-sm-4">XX公司</div>
-                                        <div class="col-sm-4">软件工程师</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-warning">
-                                    <div class="row">
-                                        <div class="col-sm-4">2015/07-206/07</div>
-                                        <div class="col-sm-4">XX公司</div>
-                                        <div class="col-sm-4">软件工程师</div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item list-group-item-info">
-                                    <div class="row">
-                                        <div class="col-sm-4">2016/07-至今</div>
-                                        <div class="col-sm-4">XX公司</div>
-                                        <div class="col-sm-4">前端工程师</div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="panel-title">
-                            <a href="#collapseTwo" data-toggle="collapse" data-parent="#accordion">教育经历</a>
-                        </div>
-                    </div>
-                    <div class="panel-collapse collapse" id="collapseTwo">
-                        <div class="panel-body">
-                            <ul class="list-group">
-                                <li class="list-group-item list-group-item-success">
-                                    <div class="row">
-                                        <div class="col-sm-4">2010/09-2014/07</div>
-                                        <div class="col-sm-4">XX大学</div>
-                                        <div class="col-sm-4">软件工程</div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="panel-title">
-                            <a href="#collapseThree" data-toggle="collapse" data-parent="#accordion">项目展示</a>
-                        </div>
-                        <div id="collapseThree" class="panel-collapse collapse">
-                            <div class="panel-body">
-                                <div id="divCarousel" class="carousel slide" data-ride="carousel">
-                                    <ol class="carousel-indicators">
-                                        <li data-target="divCarousel" data-slide-to="0" class="ative"></li>
-                                        <li data-target="divCarousel" data-slide-to="1"></li>
-                                        <li data-target="divCarousel" data-slide-to="2"></li>
-                                    </ol>
-                                    <div class="carousel-inner">
-                                        <div class="item active">
-                                            <img src="imgs/1.png" alt="项目一" class="img-responsive img-rounded" />
-                                            <div class="carousel-caption">项目一</div>
-                                        </div>
-                                        <div class="item">
-                                            <img src="imgs/2.png" alt="项目二" class="img-responsive img-rounded" />
-                                            <div class="carousel-caption">项目二</div>
-                                        </div>
-                                        <div class="item">
-                                            <img src="imgs/3.png" alt="项目三" class="img-responsive img-rounded" />
-                                            <div class="carousel-caption">项目三</div>
-                                        </div>
-                                    </div>
-                                    <a href="#divCarousel" class="left carousel-control" data-slide="prev">
-                                        <span class="glyphicon glyphicon-chevron-left"></span>
-                                    </a>
-                                    <a href="#divCarousel" class="right carousel-control" data-slide="next">
-                                        <span class="glyphicon glyphicon-chevron-right"></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
+            <div class="jumbotron m-p-small">
+                <p>
+                    <h4 class="text-center">我是标题1 h1. <br/><small>我是副标题1 h1</small></h4>
+                    <p>
+                        <h5>
+                        这是一个演示引导主体副本用法的实例。
+                        这是一个演示引导主体副本用法的实例。这是一个演示引导主体副本用法的实例 ...
+                        </h5>
+                        <br />
+                        <button type="button" class="btn btn-primary" onclick="submitTryit()" id="submitBTN"><span class="glyphicon glyphicon-send"></span> 查看详情</button>
+                    </p>
+                </p>
             </div>
+            <div class="jumbotron m-p-small">
+                <p>
+                    <h4 class="text-center">我是标题1 h1. <br/><small>我是副标题1 h1</small></h4>
+                    <p>
+                        <h5>
+                        这是一个演示引导主体副本用法的实例。
+                        这是一个演示引导主体副本用法的实例。这是一个演示引导主体副本用法的实例 ...
+                        </h5>
+                        <br />
+                        <button type="button" class="btn btn-primary" onclick="submitTryit()" id="submitBTN"><span class="glyphicon glyphicon-send"></span> 查看详情</button>
+                    </p>
+                </p>
+            </div>
+            <div class="jumbotron m-p-small">
+                <p>
+                    <h4 class="text-center">我是标题1 h1. <br/><small>我是副标题1 h1</small></h4>
+                    <p>
+                        <h5>
+                        这是一个演示引导主体副本用法的实例。
+                        这是一个演示引导主体副本用法的实例。这是一个演示引导主体副本用法的实例 ...
+                        </h5>
+                        <br />
+                        <button type="button" class="btn btn-primary" onclick="submitTryit()" id="submitBTN"><span class="glyphicon glyphicon-send"></span> 查看详情</button>
+                    </p>
+                </p>
+            </div>
+            <div class="text-center">
+                <ul class="pagination">
+                    <li><a href="#">&laquo;</a></li>
+                    <li class="active"><a href="#">1</a></li>
+                    <li class="disabled"><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#">&raquo;</a></li>
+                </ul>
+            </div>
+
         </div>
 
         <div class="col-sm-3">
-            <div class="panel panel-default dsn">
+            <div class="panel panel-default">
                 <div class="panel-heading">
-                    个人信息
+                    个人信息    <a href="#" class="btn f-l m-t-5">退出</a>
                 </div>
                 <div class="panel-body">
                     <img src="imgs/avatar.png" class="img-responsive img-rounded img-thumbnail" alt="me" />
@@ -175,6 +148,8 @@
                         <span class="glyphicon glyphicon-phone" title="Mobile">&nbsp;1**********</span><br />
                         <span class="glyphicon glyphicon-envelope" title="Email">&nbsp;fengnoku@126.com</span>
                     </address>
+                    <br />
+                    
                 </div>
             </div>
             <div class="panel panel-primary">
@@ -231,6 +206,20 @@
                     </form>
                 </div>
             </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading" id="login-text">
+                    社区
+                </div>
+                <div class="panel-body">
+                    <p><a href="#">github</a></p>
+                    <p><a href="#">nodejs</a></p>
+                    <p><a href="#">react</a></p>
+                    <p><a href="#">reactNative</a></p>
+                </div>
+            </div>
+
+
         </div>
 
 
