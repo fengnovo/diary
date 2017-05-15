@@ -6,6 +6,7 @@
 [自写插件](https://github.com/fengnovo/diary/tree/master/myPlugins/)  
 [前端工具或插件使用](https://github.com/fengnovo/diary/tree/master/others)  
 [react学习](https://github.com/fengnovo/diary/tree/master/react)  
+[eruda调试工具](https://github.com/fengnovo/diary/tree/master/others/eruda)
 
 # development 运行练习例子
 
