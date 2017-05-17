@@ -83,6 +83,8 @@ class Editor extends React.Component {
                     console.log(res);
                     console.log(res.data.url);
                     editor.command(null, 'insertHtml', '<img src="' + res.data.url + '" style="max-width:100%;"/>');
+                                // debugger
+                    editor.undoRecord();
                 });
             } catch (ex) {
                 // 此处可不写代码
@@ -148,7 +150,7 @@ class Editor extends React.Component {
     render() {
        let style = {
             width: '100%',
-            height: '200px'
+            height: '600px'
         };
         return <div>
             <div id={this.props.id} style={style} contentEditable="true"></div>
