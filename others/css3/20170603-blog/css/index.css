@@ -1,0 +1,45 @@
+body
+{
+    margin: 0;
+    padding: 0;
+}
+
+nav
+{
+    background: #ccc;
+    height: 4rem;
+}
+
+#banner
+{
+    background: #777;
+    height: 70rem;
+}
+
+nav ul
+{
+    margin: 0;
+    list-style: none;
+}
+
+nav ul li
+{   
+    
+    display: inline-block;
+    list-style: none;
+    float: right;
+    line-height: 4rem;
+    margin-right: 2rem;
+}
+nav li a 
+{
+    text-decoration: none;
+    display: inline-block;
+    line-height: 4rem;
+    height: inherit;
+}
+    
+nav ul li.logo
+{
+    float: left;
+}

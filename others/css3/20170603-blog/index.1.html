@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul {
+            list-style: none outside none;
+            padding: 10px;
+            background: green;
+            text-align: center;
+        }
+        ul li {
+            display: inline-block;
+            *display: inline;
+            zoom: 1;
+            background: orange;
+            padding: 5px;
+            margin-right: -4px; /*关键*/
+            *margin-right: 0; 
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li>item1</li>
+        <li>item2</li>
+        <li>item3</li>
+        <li>item4</li>
+        <li>item5</li>
+    </ul>
+</body>
+</html>
