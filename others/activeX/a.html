@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html>
+<head>  
+	<meta charset="utf8">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    
+    <title>知道</title>
+</head>
+<body>
+<script type="text/javascript">
+function readFile(filename){
+	var s = "";
+	if(window.ActiveXObject){
+		var fso = new ActiveXObject("Scripting.FileSystemObject");
+		var f = fso.OpenTextFile(filename,1,false);	
+		while (!f.AtEndOfStream)
+		s += f.ReadLine()+"<br/>";
+		f.Close();
+	}else if(window.File && window.FileList && window.FileReader && window.Blob) {
+            var reader = new FileReader();  
+            // reader.readAsText('C:\Users\dell\Desktop\1.txt"');  
+            reader.readAsText("C:\\Users\\dell\\Desktop\\1.txt",["utf-8"]); 
+    }
+	
+	return s;
+}
+
+var x = readFile("C:\\Users\\dell\\Desktop\\1.txt");
+console.log(x);
+document.write(x)
+</script>
+
+ 
+ 
+ 
+</body>
+</html>
