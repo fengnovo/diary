@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<script src="https://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+<title>读取文件</title>
+</head>
+<body>
+<script type="text/javascript">
+    document.write(navigator.userAgent);
+    function actionTest () {
+        if (typeof window.ActiveXObject != 'undefined'){
+            try {
+                var fso, ts, s="";
+                fso = new ActiveXObject("Scripting.FileSystemObject");
+                ts = fso.OpenTextFile("C:\\test.txt",1,false);
+                while (!ts.AtEndOfLine)
+                {
+                  s += ts.Read(1);
+                }
+                alert('读取成功')
+                document.getElementById('TextBox').innerHTML = s;
+                ts.Close();
+            }catch (e) {
+                // alert('没有该文件或者其他错误')
+                alert(e.message)
+            }
+        }else{
+            alert('非低版本ie，不支持ActiveXObject')
+            alert(window.ActiveXObject)
+        }
+    }
+
+</script>
+<br />
+<p>在设置-internet选项-安全-自定义级别-ActiveX控件和插件</p>
+<p>对未标记为可安全执行的ActiveX控件初始化并执行脚本 --> 提示</p>
+<p>下载未签名的ActiveX控件 --> 提示</p>
+
+<p>window用户在C盘下新建一个test.txt文件，写些文字并保存。<button onClick="javascript:actionTest();">保存完读取内容，下面读取的就是文件内容</button></p>
+<p id="TextBox"></p>
+
+</body>
+</html>
