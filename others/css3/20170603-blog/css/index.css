@@ -7,7 +7,7 @@ body
 nav
 {
     background: #ccc;
-    height: 4rem;
+    height: 3.4rem;
 }
 
 #banner
@@ -20,26 +20,80 @@ nav ul
 {
     margin: 0;
     list-style: none;
+    float: right;
 }
 
-nav ul li
+nav ul li, nav .logo
 {   
-    
     display: inline-block;
-    list-style: none;
-    float: right;
-    line-height: 4rem;
+    line-height: 3.4rem;
     margin-right: 2rem;
 }
-nav li a 
+nav .logo
+{   
+    margin-left: 2rem;
+}
+
+nav .logo a 
+{
+    text-decoration: none;
+}
+
+nav ul li a 
 {
     text-decoration: none;
     display: inline-block;
-    line-height: 4rem;
+    line-height: 3.4rem;
     height: inherit;
+    color: #fff; 
 }
-    
-nav ul li.logo
+
+#banner .inner
 {
-    float: left;
+    max-width: 30rem;
+    text-align: center;
+    margin: 0 auto;
+    position: relative;
+    top: 10rem;
+}
+
+#banner .inner h1
+{
+    margin: 0;
+}
+
+button 
+{
+    border: none;
+    background: #333;
+    color: #eee;
+    padding: 1rem;
+}
+
+#banner button
+{
+    padding: 1rem 3rem;
+}
+
+#banner .inner .more 
+{
+    margin-top: 14rem;
+}
+
+#banner .sub-heading 
+{
+    line-height: 2rem;
+    margin: 2rem;
+}
+
+.logo 
+{
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.logo a
+{
+    color: #fff; 
 }
