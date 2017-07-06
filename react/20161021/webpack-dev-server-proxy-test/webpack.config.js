@@ -24,12 +24,17 @@ module.exports = {
 	        	changeOrigin: true
 	        },
 
-	        //	/categories -->http://pod.gf.com.cn/api/information/podcastserver/1.0.0/categories
+	        	// /categories -->http://pod.gf.com.cn/api/information/podcastserver/1.0.0/categories
 	        '/categories': {
 	        	target: 'http://pod.gf.com.cn/api/information/podcastserver/1.0.0',
 	        	pathRewrite: {'^/': '/'},
 	        	changeOrigin: true
-	        }
+	        },
+			'/topics': {
+				target: 'https://cnodejs.org/api/v1',
+				secure: false,
+				changeOrigin: true
+			}
 	     }
 	},
 	plugins: [new webpack.ProvidePlugin({

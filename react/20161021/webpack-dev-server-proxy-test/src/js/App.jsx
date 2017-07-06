@@ -8,7 +8,7 @@ let App = React.createClass({
         } 
     },
     componentDidMount: function(){
-        fetch('/categories')
+        fetch('/topics')
             .then((response) => {
                 return response.json();
             })
