@@ -19,7 +19,7 @@
     "react-redux": "^5.0.4",
     "react-umeditor": "^1.0.0-rc5",
     "redux": "^3.6.0",
-    "wangeditor": "^2.1.23"
+    "wangeditor": "^3.0.4"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
