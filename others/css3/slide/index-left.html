@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    nav{
+            width: 100%;
+            height: 50px;
+            background-color: rgba(26,188, 156, 0.75);
+            position: relative;
+        }
+        div{
+            position: absolute;
+            height: 100%;
+            width: 50px;
+            left: 20px;
+            cursor: pointer;
+            -webkit-transition: transform 1s;
+            -moz-transition: transform 1s;
+            -ms-transition: transform 1s;
+            -o-transition: transform 1s;
+            transition: transform 1s;
+        }
+        #hide,#show{
+            display: block;
+            height: 3px;
+            background-color: #FFF;
+            position: absolute;
+            top: 50%;
+            -webkit-transition: opacity .5s;
+            -moz-transition: opacity .5s;
+            -ms-transition: opacity .5s;
+            -o-transition: opacity .5s;
+            transition: opacity .5s;
+        }
+        #show{
+            width: 20px;
+            left: 15px;
+            opacity: 0;
+        }
+        #hide{
+            width: 30px;
+            left: 10px;
+            margin-top: -1.5px;
+        }
+        #hide::before,#hide::after,#show::before,#show::after{
+            content: "";
+            display: block;
+            height: 3px;
+            background-color: #FFF;
+            position: absolute;
+        }
+        #hide::before,#hide::after{
+            width: 30px;
+        }
+        #show::before,#show::after{
+            width: 25px;
+        }
+        #hide::before,#show::before{
+            top: -10px;
+        }
+        #hide::after,#show::after{
+            top: 10px;
+        }
+        #show::before{
+             -webkit-transform: rotate(35deg) translateX(5px);
+             -moz-transform: rotate(35deg) translateX(5px);
+             -ms-transform: rotate(35deg) translateX(5px);
+             -o-transform: rotate(35deg) translateX(5px);
+             transform: rotate(35deg) translateX(5px);
+        }
+        #show::after{
+              -webkit-transform: rotate(-35deg) translateX(5px);
+             -moz-transform: rotate(-35deg) translateX(5px);
+             -ms-transform: rotate(-35deg) translateX(5px);
+             -o-transform: rotate(-35deg) translateX(5px);
+             transform: rotate(-35deg) translateX(5px);
+        }
+        #list{
+            list-style: none;
+            background-color: #455552;
+            position: absolute;
+            top: 34px;
+            left: -200px;
+            width: 74px;
+            -webkit-transition: all .5s ease-in-out;
+            -moz-transition: all .5s ease-in-out;
+            -ms-transition: all .5s ease-in-out;
+            -o-transition: all .5s ease-in-out;
+            transition: all .5s ease-in-out;
+        }
+        #list li{
+            margin: 0;
+            padding: 0;
+            position: relative;
+            left: -40px;
+            text-align: center;
+            width: 112px;
+        }
+        #list a{
+            text-decoration: none;
+            color:#FFF;
+            display: inline-block;
+            height: 40px;
+            line-height: 40px; 
+        }
+        #list li:hover{
+            background-color: rgba(26,188, 156, 0.75);
+        }
+
+        </style>
+</head>
+<body>
+    <nav>
+        <div id="toggleMenu">
+            <span id="hide"></span>
+            <span id="show"></span>
+        </div>
+        <ul id="list">
+            <li>
+                <a href="#">首页</a>
+            </li>
+            <li>
+                <a href="#">问题</a>
+            </li>
+            <li>
+                <a href="#">文章</a>
+            </li>
+            <li>
+                <a href="#">关注</a>
+            </li>
+            <li>
+                <a href="#">发现</a>
+            </li>
+        </ul>
+    </nav>
+    <script>
+        var toggle = document.getElementById("toggleMenu");
+        var list = document.getElementById("list");
+        var hide = document.getElementById("hide");
+        var show = document.getElementById("show");
+        var isHidden = true;
+
+        window.onload = function() {
+            toggle.onclick=function(){
+                if(isHidden){
+                    list.style.left="0px";
+                    isHidden = false;
+                    hide.style.opacity=0;
+                    this.style.mozTransform = "rotate(180deg)";
+                    this.style.msTransform = "rotate(180deg)";
+                    this.style.oTransform = "rotate(180deg)";
+                    this.style.webkitTransform = "rotate(180deg)";
+                    this.style.transform = "rotate(180deg)";
+                    show.style.opacity=1;
+                }else{
+                    list.style.left="-200px";
+                    isHidden = true;
+                    hide.style.opacity=1;
+                    this.style.mozTransform = "rotate(0deg)";
+                    this.style.msTransform = "rotate(0deg)";
+                    this.style.oTransform = "rotate(0deg)";
+                    this.style.webkitTransform = "rotate(0deg)";
+                    this.style.transform = "rotate(0deg)";
+                    show.style.opacity=0;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

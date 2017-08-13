@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+ <meta charset="UTF-8">
+ <title>滑入滑出动画</title>
+ 
+ <style type="text/css">
+ <!--
+  body {
+   margin:0; padding:10px 40px; 
+   background:#F1EFE2;
+   font-size: 1.4em;
+   font-family: georgia, "trebuchet ms", arial, serif;
+   height: 3000px; /* test fixed + scroll */
+  }
+  h1 {
+   margin-top: 20px; margin-bottom: 40px;
+   color: #345;
+   text-shadow: 1px 1px 1px #fff;
+  }
+  h2 {
+   color: #678;
+   text-shadow: 1px 1px 1px #fff; 
+   font-size:1.1em
+  }
+
+  /* code du tutoriel ci-dessous */
+
+  #volet {
+   width: 250px;
+   padding: 10px;
+   background: #6B9A49; color: #fff; 
+  }
+  
+  #volet a.ouvrir,
+  #volet a.fermer {
+   padding: 10px 25px;
+   background: #555;
+   color: #fff;
+   text-decoration: none;
+  }
+
+  #volet {
+   position: absolute;
+   left: -270px;  /* test fixed + scroll, on retire la position top */
+   -webkit-transition: all .5s ease-in;
+   -moz-transition: all .5s ease-in;
+   transition: all .5s ease-in;
+  }
+  #volet a.ouvrir,
+  #volet a.fermer {
+   position: absolute;
+   right: -88px;
+   top: 150px;
+   -webkit-transform: rotate(270deg);
+   -moz-transform: rotate(270deg);
+   -o-transform: rotate(270deg);
+   -ms-transform: rotate(270deg);
+   -moz-radius: 0 0 8px 8px;
+   border-radius: 0 0 8px 8px;
+  }
+  #volet a.fermer {
+   display: none;
+  }
+  #volet:target {
+   left: 10px;
+  }
+
+  /* code pour la fermeture */
+
+  #volet:target a.fermer {
+   display: block;
+  }
+  #volet:target a.ouvrir {
+   display: none;
+  }
+  #volet_clos:target #volet {
+   left: -270px;
+  }
+  
+   /* test fixed + scroll */
+  #volet_clos {
+   position: fixed; 
+   top: 55px; left: 0;
+  }
+ -->
+ </style>
+</head>
+<body>
+ <h1>滑入滑出</h1>
+ <h2>点击出来，再点击隐藏</h2>
+ 
+ <div id="volet_clos">
+  <div id="volet">
+   <p>Lorem Elsass ipsum r茅chime amet sed bissame so libero. DNA, leo Richard?Schirmeck tellus</p>
+   <p>Wurscht elementum semper tellus s'guelt Pfourtz?!</p>
+   
+   <a href="#volet" class="ouvrir" aria-hidden="true">滑出</a>
+   <a href="#volet_clos" class="fermer" aria-hidden="true">滑入</a>
+  </div>
+ </div>
+
+</body>
+</html>

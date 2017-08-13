@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>  
+    <style>
+    body{  
+        padding: 0px;  
+        margin: 0px;
+    }  
+    .sidebar{  
+        width: 220px;  
+        height: 100%;  
+        min-width: 120px;  
+        display: inline-block;  
+        margin: 0px;  
+        top: 0;
+        right: -200px;  
+        position: fixed; 
+        z-index: 2; 
+    }  
+    .sidebar .sidebar-left{  
+        width: 20px;  
+        height: 100%;  
+        display: inline-flex;  
+        display: -webkit-inline-flex;  
+        flex-flow:column nowrap;  
+        justify-content:center;  
+        align-items:center;  
+        float: left;  
+        z-index: 2;
+    }  
+    .sidebar .sidebar-right{  
+        width: 200px;  
+        display: inline-block;  
+        height: 100%;  
+        float: left;  
+        z-index: 2;
+    }  
+    .sidebar .sidebar-pull-button{ 
+        display: none; 
+        width: 100%;  
+        height: 100px;  
+        flex:0 0 auto;  
+        line-height: 25px;  
+        text-align: center;  
+        overflow: hidden;  
+        cursor: pointer;
+        z-index: 2;  
+    }  
+  
+  
+  
+    .btn{  
+        background-color: green; 
+        z-index: 2; 
+    }  
+    .bk{  
+        background-color: red; 
+        overflow: auto;
+        z-index: 2;
+    }  
+  
+    .slideLeft{  
+        transform: translate(-200px,0px);  
+        transition-delay: 0s;  
+        transition-timing-function: ease;  
+        transition-duration: .5s;  
+        z-index: 2; 
+    }  
+    .slideRight{  
+        transform: translate(-0px,0px);  
+        transition-delay: 0s;  
+        transition-timing-function: ease;  
+        transition-duration: .5s;  
+        z-index: 2; 
+    }  
+
+    .div-pop{ 
+        position: fixed;
+        top:0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background-color:rgba(0,0,0,0.5); 
+        z-index: 1; 
+        display: none;
+    }
+        </style>
+</head>
+<body>
+    <ul>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+        <li><button class="btn">按钮</button></li>
+    </ul>    
+    <div class="sidebar">
+        <div class="sidebar-left">  
+            <div class="btn sidebar-pull-button">  
+                关闭  
+            </div>  
+        </div>  
+        <div class="bk sidebar-right">  
+                <ul>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                    <li><button class="btn">按钮</button></li>
+                </ul>    
+        </div>  
+    </div> 
+    <div class="div-pop"></div>
+    <script>
+        
+        $('.btn').on('click',function(){  
+            if(!$('.sidebar').hasClass('slideLeft'))  
+            {  
+                $('.div-pop').show(); 
+                $('.sidebar-pull-button').show(); 
+                $('.sidebar').addClass('slideLeft').removeClass('slideRight');
+            }  
+            else  
+            {  
+                $('.div-pop').hide();
+                $('.sidebar-pull-button').hide();
+                $('.sidebar').removeClass('slideLeft').addClass('slideRight');  
+            }  
+        }); 
+
+        $('.div-pop').on('click',function(){ 
+            console.log('0');
+            $('.div-pop').hide();
+            $('.sidebar-pull-button').hide();
+            $('.sidebar').removeClass('slideLeft').addClass('slideRight');  
+        });
+    </script>
+</body>
+</html>
