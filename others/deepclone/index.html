@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>js对象深拷贝</title>
+</head>
+<body>
+	<p>
+		对象的深拷贝与浅拷贝的区别如下：
+		浅拷贝：仅仅复制对象的引用，而不是对象本身；
+		深拷贝：把复制的对象所引用的全部对象都复制一遍。
+	</p>
+<pre name="code" class="javascript" style="font-size: 14px; line-height: 26.25px;">
+	/* ================ 浅拷贝 ================ */
+	function simpleClone(initalObj) {
+		var obj = {};
+		for ( var i in initalObj) {
+			obj[i] = initalObj[i];
+		}
+		return obj;
+	}
+	/* ================ 客户端调用 ================ */
+	var obj = {
+		a: "hello",
+		b: {
+			a: "world",
+			b: 21
+		},
+		c: ["Bob", "Tom", "Jenny"],
+		d: function() {
+			alert("hello world");
+		}
+	}
+	var cloneObj = simpleClone(obj); // 对象拷贝
+	console.log(cloneObj.b); // {a: "world", b: 21}
+	console.log(cloneObj.c); // ["Bob", "Tom", "Jenny"]
+	console.log(cloneObj.d); // function() { alert("hello world"); }
+	// 修改拷贝后的对象
+	cloneObj.b.a = "changed";
+	cloneObj.c = [1, 2, 3];
+	cloneObj.d = function() { alert("changed"); };
+	console.log(obj.b); // {a: "changed", b: 21} // // 原对象所引用的对象被修改了
+	console.log(obj.c); // ["Bob", "Tom", "Jenny"] // 原对象所引用的对象未被修改
+	console.log(obj.d); // function() { alert("hello world"); } // 原对象所引用的函数未被修改
+
+	二. 深拷贝的实现
+
+
+	要实现深拷贝有很多办法，有最简单的 JSON.parse() 方法，也有常用的递归拷贝方法，和ES5中的 Object.create() 方法。
+	2.1 方法一：使用 JSON.parse() 方法
+	要实现深拷贝有很多办法，比如最简单的办法是使用 JSON.parse()：
+	/* ================ 深拷贝 ================ */
+	function deepClone(initalObj) {
+		var obj = {};
+		try {
+			obj = JSON.parse(JSON.stringify(initalObj));
+		}
+		return obj;
+	}
+	/* ================ 客户端调用 ================ */
+	var obj = {
+		a: {
+			a: "world",
+			b: 21
+		}
+	}
+	var cloneObj = deepClone(obj);
+	cloneObj.a.a = "changed";
+	console.log(obj.a.a); // "world"
+	这种方法简单易用。
+	但是这种方法也有不少坏处，譬如它会抛弃对象的constructor。也就是深拷贝之后，不管这个对象原来的构造函数是什么，在深拷贝之后都会变成Object。
+	这种方法能正确处理的对象只有 Number, String, Boolean, Array, 扁平对象，即那些能够被 json 直接表示的数据结构。RegExp对象是无法通过这种方式深拷贝。
+	2.2 方法二：递归拷贝
+	代码如下：
+	/* ================ 深拷贝 ================ */
+	function deepClone(initalObj, finalObj) {
+		var obj = finalObj || {};
+		for (var i in initalObj) {
+			if (typeof initalObj[i] === 'object') {
+				obj[i] = (initalObj[i].constructor === Array) ? [] : {};
+				arguments.callee(initalObj[i], obj[i]);
+			} else {
+				obj[i] = initalObj[i];
+			}
+		}
+		return obj;
+	}
+	上述代码确实可以实现深拷贝。但是当遇到两个互相引用的对象，会出现死循环的情况。
+	为了避免相互引用的对象导致死循环的情况，则应该在遍历的时候判断是否相互引用对象，如果是则退出循环。
+	改进版代码如下：
+	/* ================ 深拷贝 ================ */
+	function deepClone(initalObj, finalObj) {
+		var obj = finalObj || {};
+		for (var i in initalObj) {
+			var prop = initalObj[i];
+			// 避免相互引用对象导致死循环，如initalObj.a = initalObj的情况
+			if(prop === obj) {
+				continue;
+			}
+			if (typeof prop === 'object') {
+				obj[i] = (prop.constructor === Array) ? [] : {};
+				arguments.callee(prop, obj[i]);
+			} else {
+				obj[i] = prop;
+			}
+		}
+		return obj;
+	}
+	2.3 方法三：使用Object.create()方法
+	直接使用var newObj = Object.create(oldObj)，可以达到深拷贝的效果。
+	/* ================ 深拷贝 ================ */
+	function deepClone(initalObj, finalObj) {
+		var obj = finalObj || {};
+		for (var i in initalObj) {
+			var prop = initalObj[i];
+			// 避免相互引用对象导致死循环，如initalObj.a = initalObj的情况
+			if(prop === obj) {
+				continue;
+			}
+			if (typeof prop === 'object') {
+				obj[i] = (prop.constructor === Array) ? [] : Object.create(prop);
+			} else {
+				obj[i] = prop;
+			}
+		}
+		return obj;
+	}
+</pre>
+<br>
+<br>
+<hr style="border: 1px solid red;"/>
+<pre name="code" class="javascript" style="font-size: 14px; line-height: 26.25px;">
+	var obj={			
+		a:10
+	};
+	function copy(obj){
+		var newobj={};
+		for(var attr in obj){
+			newobj[attr]=obj[attr];
+		}
+		return newobj;
+	}
+	var obj2=copy(obj);
+	obj2.a=100;
+	alert(obj.a);
+	alert(obj2.a);
+	var obj={
+		
+		a:10
+	};
+	
+	function copy(obj){
+		
+		var newobj={};
+		
+		for(var attr in obj){
+			
+			newobj[attr]=obj[attr];
+		}
+		
+		return newobj;
+	}
+	
+	var obj2=copy(obj);
+	
+	obj2.a=100;
+	alert(obj.a);
+	alert(obj2.a);
+</pre>
+</body>
+</html>
