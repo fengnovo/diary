@@ -13,7 +13,8 @@ function createWindow() {
   win = new BrowserWindow({width: 800, height: 600});
 
   // 并且装载应用的index.html页面
-  win.loadURL(`file://${__dirname}/index.html`);
+  win.loadURL(`http://mail.126.com/`);
+
 
   // 打开开发工具页面
   win.webContents.openDevTools();
@@ -23,6 +24,10 @@ function createWindow() {
     // 解除窗口对象的引用，通常而言如果应用支持多个窗口的话，你会在一个数组里
     // 存放窗口对象，在窗口关闭的时候应当删除相应的元素。
     win = null;
+  });
+
+  win.webContents.on('did-finish-load', () => {
+     console.log('加载完');
   });
 }
 
