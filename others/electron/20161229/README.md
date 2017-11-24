@@ -10,5 +10,15 @@ npm start
 3.添加"start": "electron .",到package.json里面的"scripts"里面。这句话是让项目可以用
 npm start 运行，当运行npm start 时，会实际运行electron . 这句，这句是用electron命令运行electron项目，如果sudo npm install electron -g全局安装了electron，可以直接electron .启动项目。
 
+## tray最小化到托盘
+https://github.com/demopark/electron-api-demos-Zh_CN
+
+## 打包参考  
+http://m.blog.csdn.net/u014563989/article/details/75045052  
+
+```
+electron-packager . HelloElectron --win --out=release --arch=x64 --version=1.0.0 --electron-version=1.7.5 --overwrite
+```
+
 运行如下图：  
 ![electron.png](./electron.png)
