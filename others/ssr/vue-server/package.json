@@ -1,0 +1,17 @@
+{
+  "name": "vue-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node ./src/index.js"
+  },
+  "author": "fengnovo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "vue": "^2.5.13",
+    "vue-server-renderer": "^2.5.13"
+  }
+}
