@@ -1,0 +1,1 @@
+console.log("fengnovo's webpack test");

@@ -9,6 +9,7 @@
   "author": "fengnovo",
   "license": "MIT",
   "devDependencies": {
+    "ejs": "^2.6.1",
     "webpack": "^4.17.2",
     "webpack-cli": "^3.1.0"
   }

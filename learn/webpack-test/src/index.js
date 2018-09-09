@@ -1,2 +1,2 @@
-import './a.js';
-console.log("fengnovo's webpack test");
+var result = require('./a.js');
+console.log(result);
