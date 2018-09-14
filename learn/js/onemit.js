@@ -1,15 +1,15 @@
 function Bell() {
-    this.eventPool = {};
+    this._eventPool = {};
 }
 Bell.prototype.on = function (eventName, callBack) {
-    if (this.eventPool[eventName]) {
-        this.eventPool[eventName].push(callBack);
+    if (this._eventPool[eventName]) {
+        this._eventPool[eventName].push(callBack);
     } else {
-        this.eventPool[eventName] = [callBack];
+        this._eventPool[eventName] = [callBack];
     }
 }
 Bell.prototype.emit = function (eventName) {
-    this.eventPool[eventName].forEach(function(callback) {
+    this._eventPool[eventName].forEach(function(callback) {
         callback();
     });
 }

@@ -1,19 +1,20 @@
 function Girl() {
-    this.eventPool = {};
+    this._events = {};
 }
 Girl.prototype.on = function (eventName, callBack) {
-    if (this.eventPool[eventName]) {
-        this.eventPool[eventName].push(callBack);
+    if (this._events[eventName]) {
+        this._events[eventName].push(callBack);
     } else {
-        this.eventPool[eventName] = [callBack];
+        this._events[eventName] = [callBack];
     }
 }
 Girl.prototype.emit = function (eventName) {
-    var args = Array.prototype.slice.call(arguments);
-    args = args.slice(1);
-    this.eventPool[eventName].forEach((callback) => {
+    // var args = Array.prototype.slice.call(arguments);
+    // args = args.slice(1);
+    var args = [].slice.call(arguments, 1);
+    this._events[eventName].forEach((callback) => {
         // 匿名函数this指向全局对象， 箭头匿名函数this指向Girl
-        callback.call(this, args);
+        callback.apply(this, args);
         // callback.call(null, args); // 指定null (匿名函数this)(箭头匿名函数this)都指向全局对象
     });
 }
