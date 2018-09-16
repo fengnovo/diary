@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>MVVM</title>
+</head>
+<script src="Util.js"></script>
+<script src="proxyData.js"></script>
+<script src="Compile.js"></script>
+<script src="Watcher.js"></script>
+<script src="Observer.js"></script>
+<script src="MVVM.js"></script>
+<body>
+    <div id="app">
+        姓名：<input type="text" f-model="person.name" /><br />
+        年龄：<input type="text" f-model="person.age" />
+        <div><span>{{ person.name }}的年龄是：{{ person.age }}岁</span></div>
+    </div>
+    <script>
+        var vm = new MVVM({
+            el: '#app',
+            data: {
+                person: {
+                    name: '小明',
+                    age: 28
+                }
+            }
+        });
+    </script>
+</body>
+</html>
