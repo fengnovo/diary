@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style type="text/css">
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #banner {
+        width: 400px;
+        margin: 30px auto 0;
+        position: relative;
+    }
+
+    #tab {
+        width: 400px;
+        height: 320px;
+        margin: 0px auto;
+        overflow: hidden;
+    }
+
+    #banner ul li {
+        list-style: none;
+    }
+
+    #tab>li:not(:first-child) {
+        display: none;
+    }
+
+    #list {
+        position: absolute;
+        z-index: 2;
+        bottom: 10px;
+        /*left:50%; margin-left: -(list宽度的一半)px; */
+        left: 50%;
+        margin-left: -100px; 
+    }
+
+    #list li {
+        display: inline-block;
+        height: 1px;
+        width: 20px;
+        background: #969696;
+        /* border: 1px solid #666666; */
+        margin-left: 5px;
+        /* color: #000000; */
+        line-height: 10px;
+        font-size: 8px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    #list .on {
+        background: #FFFFFF;
+        color: #FFFFFF
+    }
+
+    #btn {
+        z-index: 3;
+        display: none;
+    }
+
+    #btn a {
+        width: 40px;
+        height: 60px;
+        position: absolute;
+        top: 130px;
+        opacity: 0.5;
+    }
+
+    #btn .prev {
+        left: 20px;
+        background: url(//i1.mifile.cn/f/i/2014/cn/icon/icon-slides.png) no-repeat 0px -4px;
+    }
+
+    #btn .next {
+        right: 20px;
+        background: url(//i1.mifile.cn/f/i/2014/cn/icon/icon-slides.png) no-repeat -42px -4px;
+    }
+</style>
+<script type="text/javascript">
+    window.onload = function () {
+        var oBanner = document.getElementById('banner'); //获取图片列表id
+        var oTab = document.getElementById('tab'); //获取图片列表id
+        var aPic = oTab.getElementsByTagName('li'); //将图片li定义为数组
+        var oList = document.getElementById('list'); //获取编号列表id
+        var aList = oList.getElementsByTagName('li'); //将编号列表Li定义为数组
+        var oBtn = document.getElementById('btn');
+        var oPrev = document.getElementById("prev");
+        var oNext = document.getElementById("next");
+
+        var index = 0;
+        var timer = null;
+
+        //自动播放
+        timer = setInterval(autoPlay, 2000); //此处调用autoPlay函数时，（）不能带，带就出错
+
+        //鼠标悬浮时，停止轮播
+        oBanner.onmousemove = function () {
+            oBtn.style.display = 'block';
+            clearInterval(timer);
+        }
+
+        //鼠标离开，继续轮播
+        oBanner.onmouseout = function () {
+            oBtn.style.display = 'none';
+            timer = setInterval(autoPlay, 2000); //此处必须重新设置定时器
+        }
+
+        //点击左边按钮，上一页
+        oPrev.onclick = function () {
+            index = index - 1;
+            if (index < 0) {
+                index = aPic.length - 1;
+            }
+            changePic(index);
+        }
+
+        //点击右边按钮，下一页
+        oNext.onclick = function () {
+            index = index + 1;
+            if (index == aPic.length) {
+                index = 0;
+            }
+            changePic(index);
+        }
+
+        //播放函数
+        function autoPlay() {
+
+            index = index + 1;
+            if (index == aPic.length) {
+                index = 0;
+            }
+            changePic(index);
+        }
+
+        //把数字与图片对应起来
+        for (var i = 0; i < aList.length; i++) {
+            aList[i].onmouseover = function () {
+                clearInterval(timer);
+                index = +this.getAttribute('data-index') - 1;
+                changePic(index);
+            }
+        }
+
+        //图片、编号切换
+        function changePic(curIndex) {
+            for (var i = 0; i < aPic.length; i++) {
+                aPic[i].style.display = 'none';
+                aList[i].className = '';
+            }
+            aPic[curIndex].style.display = 'block';
+            aList[curIndex].className = 'on';
+        }
+
+    }
+</script>
+
+<body>
+    <div id="banner">
+        <ul id="tab">
+            <li><img src="//img1.360buyimg.com/pop/jfs/t1/724/34/15448/61393/5bde4bb3E9027ac09/8a03a7b879919fde.jpg"
+                    width="400" height="320" /></li>
+            <li><img src="//img1.360buyimg.com/da/jfs/t1/2360/16/9657/54047/5bad33c8Ec192950b/0160a10c7783cc05.jpg"
+                    width="400" height="320" /></li>
+            <li><img src="//m.360buyimg.com/babel/jfs/t1/28976/34/1449/94240/5c1219b4Ebc6e25ff/2d64b3087b817b62.jpg"
+                    width="400" height="320" /></li>
+            <li><img src="//m.360buyimg.com/babel/jfs/t1/18748/27/899/99410/5c0ddcb5E155a8cb9/2009c7d3287cf75c.jpg"
+                    width="400" height="320" /></li>
+            <li><img src="//img1.360buyimg.com/pop/jfs/t1/7509/33/2989/69274/5bd51aa0E68ef9509/504e4351c2a360b2.jpg"
+                    width="400" height="320" /></li>
+            <li><img src="//m.360buyimg.com/babel/jfs/t1/9021/39/9140/26241/5c136b40Ec19cf7ce/3dc4b1b25c6fb006.jpg"
+                    width="400" height="320" /></li>
+        </ul>
+        <ul id="list">
+            <li class="on" data-index="1"></li>
+            <li data-index="2"></li>
+            <li data-index="3"></li>
+            <li data-index="4"></li>
+            <li data-index="5"></li>
+            <li data-index="6"></li>
+        </ul>
+        <div id="btn">
+            <a href="javascript:void(0);" class="prev" id="prev"></a>
+            <a href="javascript:void(0);" class="next" id="next"></a>
+        </div>
+    </div>
+
+</body>
+
+</html>
