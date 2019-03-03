@@ -1,0 +1,41 @@
+.content {
+  background-color: #3A3A3A;
+  min-height: 100%;
+}
+
+.image {
+  display: flex;
+  justify-content: center;
+}
+.casts {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.casts image {
+  width: 180rpx;
+  margin-right: 20rpx;
+  margin-left: 20rpx;
+}
+
+.detail {
+  padding: 10px 20px 30px;
+  color: white;
+  font-size: 14px;
+  line-height: 20px;
+}
+.desc {
+  display: flex;
+  justify-content: center;
+  padding: 10px 20px 0px;
+}
+
+.hr {
+  height: 2px;
+  width: 100%;
+  background-color: black;
+  border-top: white solid 1px;
+  border-bottom: white solid 1px;
+  opacity: 0.2;
+}

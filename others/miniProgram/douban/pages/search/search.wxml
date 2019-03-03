@@ -1,0 +1,15 @@
+<view class='content'>
+  <view class='search'>
+    <input class='input' bindinput='bindKeyInput' />
+    <button bindtap='search' hover-class='btn-click'>搜索</button>
+  </view>
+  <text class='input-show'>你要搜索：{{inputValue}}</text>
+  <import src='../template/movietpl' />
+  <template is='movies' data='{{movies}}' />
+</view>
+
+<view class='bady-view'>
+  <loading hidden='{{hide}}' bindchange='loadingChange'>
+    加载中...
+  </loading>
+</view>

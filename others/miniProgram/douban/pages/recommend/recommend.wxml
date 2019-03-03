@@ -1,0 +1,10 @@
+<view class='content'>
+  <import src='../template/movietpl' />
+  <template is='movies' data='{{movies}}' />
+</view>
+
+<view class='bady-view'>
+  <loading hidden='{{hide}}' bindchange='loadingChange'>
+    加载中...
+  </loading>
+</view>

@@ -1,0 +1,25 @@
+<view class='content'>
+  <view class='image'>
+    <image src='{{movie.images.large}}'  bindtap='openImg' data-src='{{movie.images.large}}' mode='aspectFit'></image>
+  </view>
+  <view class='hr'></view>
+  <view class='detail desc'>
+    <text>{{movie.text}}</text>
+  </view>
+  <view class='casts'>
+    <block wx:for='{{movie.casts}}' wx:key='{{movie.casts}}'>
+      <image src='{{item.avatars.medium}}' bindtap='openImg' data-src='{{item.avatars.medium}}' mode='aspectFit'></image>
+    </block>
+  </view>
+  <view class='hr'></view>
+  <view class='detail'>
+    <text>{{movie.summary}}</text>
+  </view>
+
+</view>
+
+<view class='bady-view'>
+  <loading hidden='{{hide}}' bindchange='loadingChange'>
+    加载中...
+  </loading>
+</view>
